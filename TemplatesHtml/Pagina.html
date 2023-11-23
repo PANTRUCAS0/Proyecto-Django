@@ -22,8 +22,13 @@
                 <a href="#" id="barraopcion"> <img src="{% static 'Carrito.webp' %}" class="carrito" alt="carrito" alt=""></a>
             </div> 
             <div inicioS>
-                <button id="botonesI"><a href="{% url 'Login' %}">Iniciar sesion</a></button>
-                <button id="botonesI"><a href="{% url 'Registro' %}">Registrarce</a></button>
+                {% if user.is_authenticated %}
+                    <button id="botonesI"><a href="{% url 'logout' %}">Cerrar sesión</a></button>
+                    <button id="botonesI"><a href="{% url 'Perfil' %}">Ver perfil</a></button>
+                {% else %}
+                    <button id="botonesI"><a href="{% url 'Login' %}">Iniciar sesión</a></button>
+                    <button id="botonesI"><a href="{% url 'Registro' %}">Registrarse</a></button>
+                {% endif %}
             </div>
         </nav>
         <div id="cajatitulo">

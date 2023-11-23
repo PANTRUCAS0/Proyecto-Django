@@ -1,7 +1,49 @@
-<form method="post">
-    {% csrf_token %}
-    {{ form }}
-    <input type="text" name="Usuario" placeholder="Usuario">
-    <input type="password" name="Contraseña" placeholder="Contraseña">
-    <button type="submit">Iniciar sesión</button>
-</form>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <!-- Tu CSS y otras inclusiones -->
+</head>
+<body>
+    <h1>Login</h1>
+    <form method="post" id="loginForm">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="Usuario" class="form-label">Usuario</label>
+            <input type="text" class="form-control" id="Usuario" name="Usuario" placeholder="Usuario" required>
+        </div>
+        <div class="mb-3">
+            <label for="Contraseña" class="form-label">Contraseña</label>
+            <input type="password" class="form-control" id="Contraseña" name="Contraseña" placeholder="Contraseña" required>
+        </div>
+        <button type="submit">Iniciar sesión</button>
+    </form>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var formData = new FormData(this);
+            
+            fetch('{% url "Login" %}', {
+                method: 'POST',
+                body: formData,
+                credentials: 'same-origin' // Asegura que las credenciales se envíen junto con la solicitud
+            })
+            .then(response => {
+                if (response.redirected) {
+                    // Inicio de sesión exitoso
+                    alert('Inicio de sesión exitoso');
+                    window.location.href = response.url;
+                } else {
+                    // Credenciales inválidas o error en inicio de sesión
+                    alert('Credenciales inválidas o error al iniciar sesión');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -20,7 +20,7 @@
         {% csrf_token %}
         <center>
             <p>Usuario: <input type="text" id="Usuario" name="Usuario"></p>
-            <p>Contraseña: <input type="text" id="Contraseña" name="Contraseña"></p>
+            <p>Contraseña: <input type="password" id="Contraseña" name="Contraseña"></p>
             <p>Email:  <input type="text" id="Email" name="Email"></p>
             <p>Telefono: <input type="text" id="Telefono" name="Telefono"></p>
 
@@ -69,6 +69,7 @@
     function validarFormulario() {
         return ValidarTelefono() && ValidarEmail();
     }
+
 </script>
 
 </body>
