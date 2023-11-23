@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'CssHtml/Inicio.css' %}">
+</head>
+
+<body background="{% static 'Logo.png' %}">
+
+    <center>
+        <h1> Ingrese sus Datos </h1>
+        <h1> Para Realizar el Registro </h1>
+        <h1> En nuestra Tienda Virtual </h1>
+    </center>
+
+    <form method="post" onsubmit="return validarFormulario()">
+        {% csrf_token %}
+        <center>
+            <p>Usuario: <input type="text" id="Usuario" name="Usuario"></p>
+            <p>Contraseña: <input type="text" id="Contraseña" name="Contraseña"></p>
+            <p>Email:  <input type="text" id="Email" name="Email"></p>
+            <p>Telefono: <input type="text" id="Telefono" name="Telefono"></p>
+
+            <button type="submit">Registrarse</button>
+            <button><a href="{% url 'Inicio' %}">Continuar</a></button>
+        </center>
+    </form>
+    
+    <center>
+        <h1> Luego de colocar los datos </h1>
+        <h1> da click al botón </h1>
+        <h1> Registrarse antes de Continuar </h1>
+    </center>
+
+<!-- Script de Validación -->
+
+<script>
+    function AlertaTelefono() {
+        alert("El número de teléfono debe tener al menos 9 dígitos.");
+    }
+
+    function AlertaEmail(){
+        alert("El email tiene que contener @")
+    }
+
+    function ValidarTelefono() {
+        var telefono = document.getElementById("Telefono").value;
+        if (telefono.length < 9) {
+            AlertaTelefono(); 
+            return false; 
+        }
+        return true; 
+    }
+
+    function ValidarEmail(){
+        var email = document.getElementById("Email").value;
+
+        if(email.indexOf('@') === -1){
+            AlertaEmail();
+            return false;
+        }
+        return true;
+    }
+    
+
+    function validarFormulario() {
+        return ValidarTelefono() && ValidarEmail();
+    }
+</script>
+
+</body>
+</html>

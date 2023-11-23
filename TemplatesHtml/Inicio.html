@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="% static 'Inicio.css' %">
+</head>
+
+<body background="{% static 'Logo.png' %}">
+
+    <center>
+        <h1> Bienvenido a la Tienda Virtual </h1>
+        <h1> De Zapateria Thomys </h1>
+        <h1> Eliga la opcion con la que desea entrar</h1>
+    </center>
+
+    <center>
+        <Button> <a href="{% url 'Registro' %}" id="Registro">Registro</a>  </Button>
+        <Button> <a href="{% url 'Login' %}" id="Registro">Iniciar Sesion</a>  </Button>
+        <Button><a href="{% url 'Pagina' %}" id="invitado">Invitado</a></Button>
+    </center>
+
+</body>
+
+</html>

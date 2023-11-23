@@ -1,0 +1,204 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css.css' %}">
+    
+</head>
+<body class="body">
+    <div>
+        <nav id="barrasup">
+            <div><h1 id="texto">¿Que buscas hoy?</h1></div>
+            <div id="barraizq">
+                <input id="btnbarra" type="text" placeholder="Buscar">
+                
+            </div>
+            <div id="barrader">     
+                
+                <a href="#" id="barraopcion">Productos</a>
+                <a href="#" id="barraopcion"> <img src="{% static 'Carrito.webp' %}" class="carrito" alt="carrito" alt=""></a>
+            </div> 
+            <div inicioS>
+                <button id="botonesI"><a href="{% url 'Login' %}">Iniciar sesion</a></button>
+                <button id="botonesI"><a href="{% url 'Registro' %}">Registrarce</a></button>
+            </div>
+        </nav>
+        <div id="cajatitulo">
+            
+            <h1 id="titulo"><a href=""><img src="{% static 'Logo.png' %}" alt="" class="logo"></a>Zapatillas tomy's</h1>
+        </div>
+
+        <div id="guiador">
+            <a href="#seccionN" id="guia" class="niñocolor">De Vestir</a>
+            <a href="#seccionA" id="guia" class="adultocolor">Trekking</a>
+            <a href="#seccionAM" id="guia" class="adultoMcolor">Deportivas</a>
+
+
+        </div>
+
+        <div id="colorfondoN">
+            <article id="seccionN">
+                <header><h2>Zapatillas de vestir</h2></header>
+                <img src="{% static 'Zapatilla1.jpg' %}" id="imagenes" alt="">
+                <div>
+                    <div>$100.000</div>
+                    <div><span>Yeezy Foam Runner </span></div>
+                    <button onclick="agregar()">Agregar</button> <button href="#">Ver</button>
+                </div>
+            </article>    
+
+            <article id="seccionN">
+                <img src="{% static 'Zapatilla2.jpg' %}" id="imagenes" alt="">
+                <div>
+                    <div>$250.000</div>
+                    <div><span>Nike panda black</span></div>
+                    <button onclick="agregar()">Agregar</button> <button href="#">Ver</button>
+                </div>
+            </article>     
+            
+            <article id="seccionN">
+                <img src="{% static 'Zapatilla3.jpg' %}" id="imagenes" alt="">
+                <div>
+                    <div>$85.000</div>
+                    <div><span>Jordan 4 negras</span></div>
+                    <button onclick="agregar()">Agregar</button> <button href="#">Ver</button>
+                </div>
+            </article>  
+            
+            <article id="seccionN">
+                <img src="{% static 'Zapatilla4.jpg' %}" id="imagenes" alt="">
+                <div>
+                    <div>$490.990</div>
+                    <div><span>Puma rojo</span></div>
+                    <button onclick="agregar()">Agregar</button> <button href="#">Ver</button>
+                </div>
+            </article>              
+        </div>
+        <div id="colorfondoA">
+            <article id="seccionA">
+                <header><h2>Seccion Trekking</h2></header>
+                <img src="{% static 'Trekking1.png' %}" id="imagenes" alt="">
+                <div>
+                    <div>$75.000</div>
+                    <div><span>Trekking Reforzadas </span></div>
+                    <button onclick="agregar()">Agregar</button> <button href="#">Ver</button>
+                </div>
+            </article>
+
+            <article id="seccionA">
+
+                <img src="{% static 'Trekking2.png' %}" id="imagenes" alt="">
+                <div>
+                    <div>$123.990</div>
+                    <div><span>Trekking naranjas </span></div>
+                    <button onclick="agregar()">Agregar</button> <button href="#">Ver</button>
+                </div>
+            </article>
+
+            <article id="seccionA">
+
+                <img src="{% static 'Trekking3.png' %}" id="imagenes" alt="">
+                <div>
+                    <div>$329.690</div>
+                    <div><span>Trekking negras </span></div>
+                    <button onclick="agregar()">Agregar</button> <button href="#">Ver</button>
+                </div>
+            </article>
+
+            <article id="seccionA">
+
+                <img src="{% static 'Trekking4.png' %}" id="imagenes" alt="">
+                <div>
+                    <div>$578.990</div>
+                    <div><span>Trekking turquesa</span></div>
+                    <button onclick="agregar()">Agregar</button> <button href="#">Ver</button>
+                </div>
+            </article>
+
+        </div>
+        <div id="colorfondoAM">
+            <article id="seccionAM">
+                <header><h2>Seccion Deportivas</h2></header>
+                <img src="{% static 'deportivas1.png' %}" id="imagenes" alt="">
+                <div>
+                    <div>$329.000</div>
+                    <div><span>Nike mercurrial</span></div>
+                    <button onclick="agregar()">Agregar</button> <button href="#">Ver</button>
+                </div>
+
+            </article>
+
+            <article id="seccionAM">
+                <img src="{% static 'deportivas2.png' %}" id="imagenes" alt="">
+                <div>
+                    <div>$75.500</div>
+                    <div><span>Nike negras y verde</span></div>
+                    <button onclick="agregar()">Agregar</button> <button href="#">Ver</button>
+                </div>
+
+            </article>
+
+            <article id="seccionAM">
+                <img src="{% static 'deportivas3.png' %}" id="imagenes" alt="">
+                <div>
+                    <div>$187.000</div>
+                    <div><span>Pumas blancas y rojas</span></div>
+                    <button onclick="agregar()">Agregar</button> <button href="#">Ver</button>
+                </div>
+
+            </article>
+
+            <article id="seccionAM">
+                <img src="{% static 'deportivas4.png' %}" id="imagenes" alt="">
+                <div>
+                    <div>$769.840</div>
+                    <div><span id="producto">Pumas rojas</span></div>
+                    <button onclick="agregar()">Agregar</button> <button href="#">Ver</button>
+                </div>
+
+            </article>
+        </div>
+
+
+    
+        <div id="recuadroA">
+
+            <div id="metodopago">
+                <h2>Contactanos</h2>
+                <ul>
+                    <li id="SepAbajo"><img src="{% static 'Logowhatsapp.jpg' %}" id="imagenesAbajo" href="#" alt=""> +569 1122 3344</li>
+                    <li id="SepAbajo"> <img src="{% static 'IGlogo.png' %}" id="imagenesAbajo" alt=""> @tomys.com</li>
+                    <li id="SepAbajo"><img src="{% static 'facebooklogo.png' %}" id="imagenesAbajo" href="#" alt=""> Tomys_zapatillas</li>
+                </ul>
+            </div>
+
+            <div id="metodopago">
+                <h2>Horarios de atencion</h2>
+                <ul>
+                    <li>Lunes a viernes: 09:00 a 23:00</li>
+                    <li>Sabado domingo y festivos: 09:00 a 21:00</li>
+                </ul>
+            </div>
+
+            <div id="metodopago">
+                <h2> METODOS DE PAGO</h2>
+                <img src="{% static 'metodosdepago.png' %}" alt="">
+            </div>
+
+
+            <div id="metodopago">
+                <ul>
+                    <li>Pagos con todo medio de Pago</li>
+                    <li>Envios a todo el pais</li>
+                    <li>Ofertas todos los dias</li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+    
+</body>
+</html>
