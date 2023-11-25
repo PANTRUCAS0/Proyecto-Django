@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Superusuario</title>
+    <!-- Carga tus estilos CSS -->
+</head>
+<body>
+    <h1>Login Superusuario</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        <div>
+            <label for="Usuario">Usuario:</label>
+            <input type="text" id="Usuario" name="Usuario">
+        </div>
+        <div>
+            <label for="Contraseña">Contraseña:</label>
+            <input type="password" id="Contraseña" name="Contraseña">
+        </div>
+        <button type="submit">Iniciar sesión como Superusuario</button>
+    </form>
+</body>
+</html>

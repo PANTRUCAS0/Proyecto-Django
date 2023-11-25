@@ -29,6 +29,11 @@
                     <button id="botonesI"><a href="{% url 'Login' %}">Iniciar sesión</a></button>
                     <button id="botonesI"><a href="{% url 'Registro' %}">Registrarse</a></button>
                 {% endif %}
+
+                {% if user.is_authenticated and user.is_superuser %}
+                    <a href="{% url 'Admin.html' %}" class="btn btn-primary">Ver toda la información</a>
+                {% endif %}
+
             </div>
         </nav>
         <div id="cajatitulo">

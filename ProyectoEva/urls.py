@@ -27,5 +27,13 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(next_page='/Pagina'), name='logout'),
 
     path('Pagina/', views.Pagina, name='Pagina'),  
-    path('Perfil/', views.Perfil, name='Perfil'),  
+    path('Perfil/', views.Perfil, name='Perfil'),
+
+    path('Admin', views.Admin, name='Admin'),
+    path('LoginAdmin', views.login_admin, name='LoginAdmin'),  
+
+    
+    path('ActulizarCL/<int:cliente_id>/', views.actualizar_cliente, name='ActulizarCL'),
+    path('EliminarCL/<int:cliente_id>/', views.eliminar_cliente, name='EliminarCL')
+
 ]

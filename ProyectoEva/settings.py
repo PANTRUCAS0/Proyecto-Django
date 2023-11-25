@@ -142,3 +142,5 @@ AUTHENTICATION_BACKENDS = [
     'Aplicacion.custom_backend.ClienteBackend',
 
 ]
+
+LOGIN_URL = 'LoginAdmin'

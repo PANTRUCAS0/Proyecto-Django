@@ -1,0 +1,6 @@
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}  <!-- Esto renderizará los campos del formulario -->
+    <button type="submit">Actualizar</button>
+    <button><a href="{% url 'Admin' %}">Volver al Administrador</a></button>
+</form>

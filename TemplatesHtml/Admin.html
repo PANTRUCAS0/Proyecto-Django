@@ -1,0 +1,76 @@
+<html>       
+    <head>  
+        <meta charset ="utf-8">
+        <title>Template_Ventas_Con_BD</title>   
+           
+     </head>
+     <body>         
+       <center>
+          <h1> <font color="#D68910"></font></h1>
+          <br> 
+      <h2>    </h2> 
+          <br> 
+
+          <!-- Se realiza un IF con el diccionario de la vista para preguntar si la tabla tiene Trabajadores, datos-->
+          {% if DatosT %}
+             <table border="1" width="50%">
+               <caption><b><font color="#D68910">Datos Cliente</font></b></caption >
+               <tr>
+                  <th>ID</th>
+                  <th>Usuario</th>
+                  <th>Contraseña</th> 
+                  <th>Telefono</th>
+                  <th>Email</th>                                 
+               </tr>
+               
+              {% for cl in DatosT %}
+               <tr>
+                  <td>{{ cl.id }}</td>  
+                  <td>{{ cl.Usuario }}</td>
+                  <td>{{ cl.Contraseña }}</td> 
+                  <td>{{ cl.Telefono }}</td>
+                  <td>{{ cl.Email }}</td>               
+               </tr>
+               <tr>
+                
+                <td>
+                    <a href="{% url 'ActulizarCL' cliente_id=cl.id %}">Actualizar</a>
+                </td>
+                <td>
+                    <form method="POST" action="{% url 'EliminarCL' cl.id %}">
+                        {% csrf_token %}
+                        <button onclick="confirmarEliminacion({{ cl.id }})">Eliminar</button>
+                    </form>
+                </td>
+              {% endfor %}
+              
+              
+            </table
+         {% else %}               
+             <h3><b><font color="#D68910">La Tabla No Tiene Datos JN ... !!!</font></b></h3>    
+         {% endif %}         
+     </center> 
+  </Body>
+  <script>
+    function confirmarEliminacion(clienteId) {
+    if (confirm("¿Estás seguro de que deseas eliminar este cliente?")) {
+        fetch(`/eliminar/${clienteId}`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                window.location.reload(); // Recargar la página después de eliminar el cliente
+            } else {
+                console.error('Error al eliminar el cliente');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+}
+  </script>
+</html>
