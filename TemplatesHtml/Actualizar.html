@@ -1,6 +1,16 @@
-<form method="post">
+<form id="updateForm" method="post">
     {% csrf_token %}
-    {{ form.as_p }}  <!-- Esto renderizará los campos del formulario -->
+    {{ form.as_p }} <!-- Esto renderizará los campos del formulario -->
     <button type="submit">Actualizar</button>
     <button><a href="{% url 'Admin' %}">Volver al Administrador</a></button>
 </form>
+
+<script>
+    function mostrarAlerta() {
+        alert('¡Los datos se han actualizado correctamente!');
+    }
+    
+    document.getElementById('updateForm').addEventListener('submit', function() {
+        mostrarAlerta();
+    });
+</script>

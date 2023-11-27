@@ -1,0 +1,207 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #fff;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo img {
+    height: 80px;
+}
+
+#carroImg{
+    height: 35px;
+}
+
+.busqueda input {
+    padding: 5px;
+}
+
+.busqueda button {
+    padding: 5px 10px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.boton-container {
+    display: inline-block;
+    margin: 0 10px;
+}
+
+
+.botones-navegacion {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 0 10px;
+    background-color: #3498db;
+    color: #fff; 
+    text-decoration: none;
+    border: 2px solid #000; 
+    border-radius: 5px; 
+    align-content: center;
+}
+.botones-navegacion:hover {
+    background-color: #555; 
+}
+
+.botones-navegacion2 {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 0 10px;
+    background-color: #27ae60; 
+    color: #fff; 
+    text-decoration: none;
+    border: 2px solid #000; 
+    border-radius: 5px; 
+}
+
+.botones-navegacion2:hover {
+    background-color: #555; 
+}
+
+.botones-navegacion3 {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 0 10px;
+    background-color: #e74c3c; 
+    color: #fff; 
+    text-decoration: none;
+    border: 2px solid #000; 
+    border-radius: 5px; 
+}
+
+.botones-navegacion3:hover {
+    background-color: #555;
+    color: #555; 
+}
+
+
+.usuario button {
+    margin-left: 10px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+#redesFooter{
+    height: 15px;
+}
+
+.carrito {
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+}
+
+.carrito img {
+    height: 30px;
+    margin-right: 5px;
+}
+
+.productos {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    padding: 30px;
+}
+
+.tarjeta {
+    background-color: #fff;
+    padding: 40px;
+    margin: 15px;
+    width: 300px;
+    height: 300px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    border-radius: 10px;
+}
+
+.tarjeta img {
+    max-width: 100px;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+footer {
+    background-color: #3498db;
+    color: #fff;
+    padding: 20px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap; 
+}
+
+.metodos-pago {
+    text-align: center; 
+}
+
+.metodos-pago h3 {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.redes-sociales a {
+    color: #fff;
+    margin: 0 10px;
+    text-decoration: none;
+}
+
+
+
+
+.carrito-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.carrito-modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    text-align: center;
+}
+
+.cerrar-carrito {
+    background-color: #fff;
+    color: #000;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+
+#contadorCarrito {
+    position: absolute;
+    background-color: red;
+    color: #fff;
+    border-radius: 50%;
+    padding: 5px;
+    font-size: 12px;
+    display: inline-block;
+}

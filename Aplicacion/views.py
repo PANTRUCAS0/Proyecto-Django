@@ -41,7 +41,10 @@ def login_view(request):
 
 @login_required
 def Perfil(request):
-    return render (request,"Perfil.html")
+    usuario = request.user
+    perfil_usuario = Cliente.objects.get(Usuario=usuario.Usuario)
+    return render(request, 'perfil.html', {'Perfil_usuario': perfil_usuario})
+
 
 def Telefono(self):
         telefono = self.cleaned_data.get('Telefono')
@@ -83,7 +86,6 @@ def Admin(request):
     datos = Cliente.objects.all()
     Datos = {"DatosT" : datos}
     return render(request, 'Admin.html',Datos)
-
 
 def login_admin(request):
     if request.method == 'POST':
