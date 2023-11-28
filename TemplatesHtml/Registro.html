@@ -91,6 +91,10 @@
         alert("El email tiene que contener @")
     }
 
+    function AlertaContrasena() {
+            alert("La contraseña debe tener mínimo 5 caracteres, al menos 1 número y 1 carácter especial");
+        }
+
     function ValidarTelefono() {
         var telefono = document.getElementById("Telefono").value;
         if (telefono.length < 9) {
@@ -111,9 +115,20 @@
     }
     
 
-    function validarFormulario() {
-        return ValidarTelefono() && ValidarEmail();
-    }
+            function ValidarContrasena() {
+            var contrasena = document.getElementById("Contraseña").value;
+            var regex = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-zA-Z]).{5,}$/;
+
+            if (!regex.test(contrasena)) {
+                AlertaContrasena();
+                return false;
+            }
+            return true;
+        }
+
+        function validarFormulario() {
+            return ValidarTelefono() && ValidarEmail() && ValidarContrasena();
+        }
 
 </script>
 
