@@ -5,36 +5,81 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'CssHtml/Inicio.css' %}">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+
+        header {
+            background-color: #3498db;
+            padding: 20px;
+            color: #fff;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin: 0;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0;
+        }
+
+        input {
+            padding: 10px;
+            width: 200px;
+            box-sizing: border-box;
+            border: 1px solid #3498db;
+            border-radius: 5px;
+        }
+
+        button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            margin-right: 10px;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            background-color: #3498db;
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 
-<body background="{% static 'Logo.png' %}">
+<body>
 
-    <center>
-        <h1> Ingrese sus Datos </h1>
-        <h1> Para Realizar el Registro </h1>
-        <h1> En nuestra Tienda Virtual </h1>
-    </center>
+    <header>
+        <h2>Ingrese sus datos</h2>
+        <h2>para realizar el registro</h2>
+        <h2>en nuestra tienda virtual</h2>
+    </header>
 
     <form method="post" onsubmit="return validarFormulario()">
         {% csrf_token %}
-        <center>
-            <p>Usuario: <input type="text" id="Usuario" name="Usuario"></p>
-            <p>Contraseña: <input type="password" id="Contraseña" name="Contraseña"></p>
-            <p>Email:  <input type="text" id="Email" name="Email"></p>
-            <p>Telefono: <input type="text" id="Telefono" name="Telefono"></p>
+        <form>
+            <label>Usuario: <input type="text" id="Usuario" name="Usuario"></label>
+            <label>Contraseña: <input type="password" id="Contraseña" name="Contraseña"></label>
+            <label>Email:  <input type="text" id="Email" name="Email"></label>
+            <label>Telefono: <input type="text" id="Telefono" name="Telefono"></label>
 
-            <button type="submit">Registrarse</button>
-            <button><a href="{% url 'Inicio' %}">Continuar</a></button>
-        </center>
+            <label for=""><button type="submit">Registrarse</button></label>
+            <label for=""><button><a href="{% url 'Inicio' %}">Continuar</a></button></label>
+        </form>
     </form>
     
-    <center>
-        <h1> Luego de colocar los datos </h1>
-        <h1> da click al botón </h1>
-        <h1> Registrarse antes de Continuar </h1>
-    </center>
-
 <!-- Script de Validación -->
 
 <script>

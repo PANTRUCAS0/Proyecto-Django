@@ -31,6 +31,8 @@
                 {% if user.is_authenticated and user.is_superuser %}
                     <a href="{% url 'Admin.html' %}" class="btn btn-primary">Ver toda la información</a>
                 {% endif %}
+                    <button id="botonesI"><a href="{% url 'Inicio' %}">Volver al Inicio</a></button>
+
             </div>
 
                 <div id="carrito-icono" class="carrito-icono" onclick="abrirCarrito()">

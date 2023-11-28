@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Productos</title>
+</head>
+<body>
+    <h2>Lista de Productos</h2>
+    <button><a href="{% url 'Admin' %}">Volver al Admin</a></button>    
+    <ul id="listaProductos">
+        {% for producto in productos %}
+            <li class="producto">
+                <img src="{{ producto.url_imagen }}" alt="{{ producto.nombre }}">
+                <h3>{{ producto.nombre }}</h3>
+                <p>{{ producto.descripcion }}</p>
+                <p>Precio: ${{ producto.precio }}</p>
+                <button onclick="eliminarProducto({{ producto.id }})">Eliminar</button>
+            </li>
+        {% endfor %}
+    </ul>
+      
+</body>
+<script>
+    function eliminarProducto(productoId) {
+        if (confirm("¿Estás seguro de que deseas eliminar este producto?")) {
+            fetch(`/eliminar-producto/${productoId}/`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Producto eliminado exitosamente, realizar alguna acción (actualizar la lista, etc.)
+                    // Por ejemplo, podrías recargar la página o eliminar el elemento de la lista directamente
+                    // window.location.reload(); // Recargar la página
+                    const productoEliminar = document.getElementById(`producto-${productoId}`);
+                    if (productoEliminar) {
+                        productoEliminar.remove(); // Eliminar el elemento de la lista
+                    }
+                } else {
+                    console.error('Error al eliminar el producto');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    }
+</script>
+</html>

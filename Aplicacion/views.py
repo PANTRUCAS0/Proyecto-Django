@@ -11,9 +11,14 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
+from .models import Producto
+from django.views.decorators.csrf import csrf_exempt
 
 
-
+class ProductoForm(forms.ModelForm):
+    class Meta:
+        model = Producto
+        fields = ['nombre','precio','url_imagen','descripcion']
 
 class ClienteForm(forms.ModelForm):
     class Meta:
@@ -83,9 +88,39 @@ def Admin(request):
     if 'user' not in request.session or request.session['user']['username'] != 'Admin':
         return redirect('LoginAdmin')
 
-    datos = Cliente.objects.all()
+    datos = Cliente.objects.all()  # Supongamos que aquí obtienes los datos de los clientes, no los productos
     Datos = {"DatosT" : datos}
-    return render(request, 'Admin.html',Datos)
+
+    return render(request, 'Admin.html', Datos)
+
+def AgregarProducto(request):
+    if request.method == 'POST':
+        producto_form = ProductoForm(request.POST)
+        if producto_form.is_valid():
+            producto_form.save()
+            return redirect('Admin')  # Redirigir a la vista 'Admin' después de guardar el producto
+        
+
+
+    producto_form = ProductoForm()
+    context = {'producto_form': producto_form}
+    
+    return render(request, 'AgregarProducto.html', context)
+
+def mostrar_productos(request):
+    productos = Producto.objects.all()
+    return render(request, 'Producto.html', {'productos': productos})
+
+@csrf_exempt
+def eliminar_producto(request, producto_id):
+    if request.method == 'DELETE':
+        try:
+            producto = Producto.objects.get(id=producto_id)
+            producto.delete()
+            return JsonResponse({'message': 'Producto eliminado correctamente'})
+        except Producto.DoesNotExist:
+            return JsonResponse({'error': 'Producto no encontrado'}, status=404)
+
 
 def login_admin(request):
     if request.method == 'POST':
@@ -112,12 +147,10 @@ def login_admin(request):
 
     return render(request, 'LoginAdmin.html')
 
-
 def eliminar_cliente(request, cliente_id):
     cliente = get_object_or_404(Cliente, id=cliente_id)
     cliente.delete()
     return redirect('Admin') 
-
 
 def actualizar_cliente(request, cliente_id):
     cliente = get_object_or_404(Cliente, id=cliente_id)
@@ -131,3 +164,4 @@ def actualizar_cliente(request, cliente_id):
         form = ClienteForm(instance=cliente)
 
     return render(request, 'Actualizar.html', {'form': form})
+

@@ -1,28 +1,81 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="% static 'Inicio.css' %">
+    <title>Tienda Virtual Thomys</title>
+
 </head>
+<body>
 
-<body background="{% static 'Logo.png' %}">
+    <header>
+        <h1>Bienvenido a la tienda virtual de zapatería Thomys</h1>
+        <p>Elija la opción con la que desea entrar:</p>
+    </header>
 
-    <center>
-        <h1> Bienvenido a la Tienda Virtual </h1>
-        <h1> De Zapateria Thomys </h1>
-        <h1> Eliga la opcion con la que desea entrar</h1>
-    </center>
-
-    <center>
-        <Button> <a href="{% url 'Registro' %}" id="Registro">Registro</a>  </Button>
-        <Button> <a href="{% url 'Login' %}" id="Registro">Iniciar Sesion</a>  </Button>
-        <Button><a href="{% url 'Pagina' %}" id="invitado">Invitado</a></Button>
-        <button><a href="{% url 'LoginAdmin' %}" class="btn btn-primary">Acceso de Superusuario</a></button>
-    </center>
-
+    <div class="button-container">
+        <a href="{% url 'Registro' %}" id="Registro" class="button">Registro</a>  
+        <a href="{% url 'Login' %}" id="Registro" class="button">Iniciar Sesion</a>  
+        <a href="{% url 'Pagina' %}" id="invitado" class="button">Invitado</a>
+        <a href="{% url 'LoginAdmin' %}" class="button">Acceso de Superusuario</a>
+    </div>
+    <div class="contenedor">
+        <img src="{% static 'Logo.png' %}" alt="">
+    </div>
 </body>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+    }
 
+    header {
+        background-color: #3498db;
+        padding: 20px;
+        text-align: center;
+        color: #fff;
+    }
+
+    h1 {
+        margin: 0;
+        font-size: 32px;
+    }
+
+    p {
+        font-size: 18px;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+
+    .button-container {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .button {
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 5px;
+        border: 2px solid #3498db;
+        border-radius: 8px;
+        background-color: #3498db;
+        color: #fff;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    .contenedor {
+        text-align: center;
+    }
+
+    .contenedor img {
+        display: inline-block;
+    }
+
+</style>
 </html>

@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Super Usuario</title>
     <link rel="stylesheet" href="{% static 'estilos.css' %}">
-    <script src="{% static 'Admin.js' %}"></script>
 </head>
      <body>         
        <center>
@@ -56,38 +55,12 @@
          {% endif %}         
      </center> 
 
-
-    <!-- Formulario para agregar productos -->
-    <section class="formulario">
-        <h2>Agregar Producto</h2>
-        <form id="formularioProducto">
-            <label for="nombre">Nombre:</label>
-            <input type="text" id="nombre" required>
-            
-            <label for="descripcion">Descripción:</label>
-            <textarea id="descripcion" required></textarea>
-            
-            <label for="precio">Precio:</label>
-            <input type="number" id="precio" required>
-            
-            <label for="imagen">URL de la Imagen:</label>
-            <input type="url" id="imagen" required>
-
-            <button type="button" onclick="agregarProducto()">Agregar Producto</button>
-        </form>
-    </section>
-
-    <!-- Lista de productos existentes -->
-    <section class="productos">
-        <h2>Lista de Productos</h2>
-        <ul id="listaProductos">
-            <!-- Aquí se mostrarán los productos existentes -->
-        </ul>
-    </section>
-
      <button><a href="{% url 'Inicio' %}">Volver al Inicio</a></button>
+     <button><a href="{% url 'AgregarProducto' %}">Agregar Nuevo Producto</a></button>
+     <button><a href="{% url 'mostrarProductos' %}">Ver los Productos</a></button>
   </Body>
-  <script>
+
+<script>
     function confirmarEliminacion(clienteId) {
     if (confirm("¿Estás seguro de que deseas eliminar este cliente?")) {
         fetch(`/eliminar/${clienteId}`, {
@@ -109,4 +82,5 @@
     }
 }
   </script>
+
 </html>

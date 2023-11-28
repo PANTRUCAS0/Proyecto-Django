@@ -4,22 +4,79 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Superusuario</title>
-    <!-- Carga tus estilos CSS -->
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+
+        header {
+            background-color: #3498db;
+            padding: 20px;
+            color: rgb(240, 59, 59);
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0;
+        }
+
+        input {
+            padding: 10px;
+            width: 200px;
+            box-sizing: border-box;
+            border: 1px solid #3498db;
+            border-radius: 5px;
+        }
+
+        input[type="password"] {
+            margin-top: 5px;
+        }
+
+        button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            background-color: #db5b34;
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-    <h1>Login Superusuario</h1>
+    <header>
+        <h1>Inicio de Sesión de Administrador</h1>
+    </header>
 
     <form method="post">
         {% csrf_token %}
-        <div>
-            <label for="Usuario">Usuario:</label>
+        <label>
+            Usuario:
             <input type="text" id="Usuario" name="Usuario">
-        </div>
-        <div>
-            <label for="Contraseña">Contraseña:</label>
+        </label>
+        <label>
+            Contraseña:
             <input type="password" id="Contraseña" name="Contraseña">
-        </div>
-        <button type="submit">Iniciar sesión como Superusuario</button>
+        </label>
+        <button type="submit">Iniciar Sesión Admin</button>
     </form>
 </body>
 </html>

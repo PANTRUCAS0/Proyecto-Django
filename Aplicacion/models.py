@@ -1,6 +1,12 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
 
+class Productos(models.Model):
+    nombre = models.CharField(max_length=20)
+    precio = models.IntegerField()
+    descripcion = models.CharField(max_length=20)
+
+
 class ClienteManager(BaseUserManager):
     def create_user(self, Usuario, Contraseña=None, **extra_fields):
         if not Usuario:
@@ -43,4 +49,13 @@ class Cliente(AbstractBaseUser):
         return self.is_superuser
 
     def has_module_perms(self, app_label):
+
         return self.is_superuser
+
+url_por_defecto = 'https://ejemplo.com/imagen_por_defecto.jpg'
+
+class Producto(models.Model):
+    nombre = models.CharField(max_length=20)
+    precio = models.IntegerField()
+    url_imagen = models.URLField(default=url_por_defecto, max_length=300)
+    descripcion = models.CharField(max_length=20)

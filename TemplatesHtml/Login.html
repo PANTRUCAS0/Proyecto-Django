@@ -5,46 +5,103 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+
+        header {
+            background-color: #3498db;
+            padding: 20px;
+            color: #fff;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0;
+        }
+
+        input {
+            padding: 10px;
+            width: 200px;
+            box-sizing: border-box;
+            border: 1px solid #3498db;
+            border-radius: 5px;
+        }
+
+        input[type="password"] {
+            margin-top: 5px;
+        }
+
+        button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            background-color: #3498db;
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-    <h1>Login</h1>
+    <header>
+        <h1>Inicio de Sesión</h1>
+    </header>
     <form method="post" id="loginForm">
         {% csrf_token %}
-        <div class="mb-3">
-            <label for="Usuario" class="form-label">Usuario</label>
+        <label class="mb-3">
+            Usuario:
             <input type="text" class="form-control" id="Usuario" name="Usuario" placeholder="Usuario" required>
-        </div>
-        <div class="mb-3">
-            <label for="Contraseña" class="form-label">Contraseña</label>
+        </label>
+        <label class="mb-3">
+            Contraseña:
             <input type="password" class="form-control" id="Contraseña" name="Contraseña" placeholder="Contraseña" required>
-        </div>
+        </label>
         <button type="submit">Iniciar sesión</button>
     </form>
-    <script>
-        document.getElementById('loginForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            var formData = new FormData(this);
-            
-            fetch('{% url "Login" %}', {
-                method: 'POST',
-                body: formData,
-                credentials: 'same-origin' // Asegura que las credenciales se envíen junto con la solicitud
-            })
-            .then(response => {
-                if (response.redirected) {
-                    // Inicio de sesión exitoso
-                    alert('Inicio de sesión exitoso');
-                    window.location.href = response.url;
-                } else {
-                    // Credenciales inválidas o error en inicio de sesión
-                    alert('Credenciales inválidas o error al iniciar sesión');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        });
-    </script>
 </body>
+<script>
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        var formData = new FormData(this);
+        
+        fetch('{% url "Login" %}', {
+            method: 'POST',
+            body: formData,
+            credentials: 'same-origin' // Asegura que las credenciales se envíen junto con la solicitud
+        })
+        .then(response => {
+            if (response.redirected) {
+                // Inicio de sesión exitoso
+                alert('Inicio de sesión exitoso');
+                window.location.href = response.url;
+            } else {
+                // Credenciales inválidas o error en inicio de sesión
+                alert('Credenciales inválidas o error al iniciar sesión');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+</script>
 </html>
