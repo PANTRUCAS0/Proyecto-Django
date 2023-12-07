@@ -2,14 +2,56 @@
 <html>
 <head>
     <title>Perfil de Usuario</title>
+    <style>
+        header {
+            background-color: #3498db;
+            padding: 20px;
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: grid;
+            text-align: center;
+        }
+    
+        #contenedor{
+            display: grid;
+            place-items: center;
+        }
+    
+        .per{
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            background-color: #3498db;
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        
+        a{
+            color: #fff;
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
-    <h1>Perfil de Usuario</h1>
-    <p>Usuario: {{ Perfil_usuario.Usuario }}</p>
-    <p>Telefono: {{ Perfil_usuario.Telefono }}</p>
-    <p>Email: {{ Perfil_usuario.Email }}</p>
-
-    <button><a href="{% url 'Pagina' %}">Volver a la Pagina</a></button>
+    <header>
+        <h1>Perfil de Usuario</h1>
+    </header>
+    <div id="contenedor">
+        <p class="per">Usuario: {{ Perfil_usuario.Usuario }}</p>
+        <p class="per">Telefono: {{ Perfil_usuario.Telefono }}</p>
+        <p class="per">Email: {{ Perfil_usuario.Email }}</p>
+    
+        <button><a href="{% url 'Pagina' %}">Volver a la Pagina</a></button>    
+    </div>
 </body>
 
 </html>

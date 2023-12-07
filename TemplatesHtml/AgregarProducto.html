@@ -4,16 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        header {
+            background-color: #3498db;
+            padding: 20px;
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: grid;
+            text-align: center;
+        }
+
+        #contenedor{
+            display: grid;
+            place-items: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        form{
+            display: grid;
+            margin: 0px;
+        }
+        
+        #Agregar{
+            color: #fff;
+            border: 2px solid #3498db;
+            text-decoration: none;
+            background-color: #3498db;
+            border-radius: 8px;
+        }
+    </style>
 </head>
 <body>
-    <h2>Agregar Nuevo Producto</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ producto_form.as_p }}
-  <button type="submit">Agregar Producto</button>
-</form>
-
-
+        <header>
+            <h2>Agregar Nuevo Producto</h2>
+        </header>
+        <div id="contenedor">
+        <form method="post">
+          {% csrf_token %}
+          {{ producto_form.as_p }}
+          <button id="Agregar" type="submit">Agregar Producto</button>
+        </form>
+    </div>
 </body>
 </html>
 

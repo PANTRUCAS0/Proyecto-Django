@@ -1,9 +1,51 @@
-<form id="updateForm" method="post">
-    {% csrf_token %}
-    {{ form.as_p }} <!-- Esto renderizará los campos del formulario -->
-    <button type="submit">Actualizar</button>
-    <button><a href="{% url 'Admin' %}">Volver al Administrador</a></button>
-</form>
+<style>
+    header {
+            background-color: #3498db;
+            padding: 20px;
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: grid;
+            place-items: center;
+    }
+
+    #contenedor{
+            display: grid;
+            place-items: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    #Actualizar{
+        color: #fff;
+        border: 2px solid #39A500;
+        text-decoration: none;
+        background-color: #39A500;
+        border-radius: 8px;
+   
+    }
+
+    .VolverAdmin{
+        color: #fff;
+        border: 2px solid #3498db;
+        text-decoration: none;
+        background-color: #3498db;
+        border-radius: 8px;
+        text-decoration: none;
+    }
+</style>
+
+<header>
+    <h1>Actualizar</h1>
+</header>
+
+<div id="contenedor">
+
+    <form id="updateForm" method="post">
+        {% csrf_token %}
+        {{ form.as_p }} <!-- Esto renderizará los campos del formulario -->
+        <button id="Actualizar" type="submit">Actualizar</button>
+        <button class="VolverAdmin"><a class="VolverAdmin" href="{% url 'Admin' %}">Volver al Administrador</a></button>
+    </form>
+ </div>
 
 <script>
     function mostrarAlerta() {

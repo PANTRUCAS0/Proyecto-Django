@@ -4,22 +4,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Productos</title>
+    <style>
+        #contenedor{
+            display: grid;
+            place-items: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        a{
+            text-decoration: none;
+            color: #fff;
+        }
+
+        #Eliminar{
+        color: #fff;
+        border: 2px solid #a50024;
+        text-decoration: none;
+        background-color: #a50024;
+        border-radius: 8px;
+        }
+
+        ul{
+            list-style: none;
+        }
+
+        #Admin{
+            color: #fff;
+            border: 2px solid #3498db;
+            text-decoration: none;
+            background-color: #3498db;
+            border-radius: 8px;
+        }
+
+        img{
+            width: 300px;
+            height: 300px;
+        }
+    </style>
 </head>
 <body>
-    <h2>Lista de Productos</h2>
-    <button><a href="{% url 'Admin' %}">Volver al Admin</a></button>    
-    <ul id="listaProductos">
-        {% for producto in productos %}
-            <li class="producto">
-                <img src="{{ producto.url_imagen }}" alt="{{ producto.nombre }}">
-                <h3>{{ producto.nombre }}</h3>
-                <p>{{ producto.descripcion }}</p>
-                <p>Precio: ${{ producto.precio }}</p>
-                <button onclick="eliminarProducto({{ producto.id }})">Eliminar</button>
-            </li>
-        {% endfor %}
-    </ul>
-      
+    <div id="contenedor">
+        <h2>Lista de Productos</h2>
+        <button id="Admin"><a href="{% url 'Admin' %}">Volver al Admin</a></button>    
+        <ul id="listaProductos">
+            {% for producto in productos %}
+                <li class="producto">
+                    <img src="{{ producto.url_imagen }}" alt="{{ producto.nombre }}">
+                    <h3>{{ producto.nombre }}</h3>
+                    <p>{{ producto.descripcion }}</p>
+                    <p>Precio: ${{ producto.precio }}</p>
+                    <button id="Eliminar" onclick="eliminarProducto({{ producto.id }})">Eliminar</button>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 </body>
 <script>
     function eliminarProducto(productoId) {
