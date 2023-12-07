@@ -112,20 +112,31 @@ header {
 
 .productos {
     display: flex;
-    justify-content: space-around;
     flex-wrap: wrap;
+    justify-content: space-between;
     padding: 30px;
 }
 
 .tarjeta {
     background-color: #fff;
-    padding: 40px;
-    margin: 15px;
-    width: 300px;
-    height: 300px;
+    padding: 20px;
+    margin-bottom: 20px;
+    width: calc(30% - 20px); /* Ancho de cada tarjeta */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center;
     border-radius: 10px;
+}
+
+@media screen and (max-width: 768px) {
+    .tarjeta {
+        width: calc(45% - 20px); /* Cambia el ancho cuando el ancho de la pantalla sea menor */
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .tarjeta {
+        width: calc(100% - 20px); /* Cambia el ancho cuando el ancho de la pantalla sea menor */
+    }
 }
 
 .tarjeta img {

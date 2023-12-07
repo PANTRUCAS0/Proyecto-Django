@@ -30,6 +30,7 @@ function agregarProducto() {
     if (nombre === '' || descripcion === '' || isNaN(precio) || imagen === '') {
         alert('Todos los campos son obligatorios. Por favor, completa la información.');
         return;
+        
     }
 
     const nuevoProducto = {
@@ -64,5 +65,17 @@ function actualizarListaProductos() {
         `;
         listaProductosHTML.appendChild(nuevoProductoHTML);
     });
+}
+
+function agregarProducto(nombre, descripcion, precio, imagen) {
+    const nuevoProducto = {
+        nombre: nombre,
+        descripcion: descripcion,
+        precio: parseFloat(precio),
+        imagen: imagen
+    };
+
+    carrito.push(nuevoProducto); // Agregamos el nuevo producto al carrito
+    actualizarListaProductos(); // Actualizamos la lista de productos en la interfaz
 }
 </script>

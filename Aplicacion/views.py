@@ -79,7 +79,8 @@ def Registro(request):
     return render(request, 'Registro.html', {'form': form})
 
 def Pagina(request):
-    return render (request,"Pagina.html")
+    productos = Producto.objects.all()
+    return render (request,"Pagina.html",{'productos': productos})
 
 def Inicio(request):
     return render (request,"Inicio.html")

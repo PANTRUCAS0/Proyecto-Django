@@ -32,9 +32,6 @@
             })
             .then(response => {
                 if (response.ok) {
-                    // Producto eliminado exitosamente, realizar alguna acción (actualizar la lista, etc.)
-                    // Por ejemplo, podrías recargar la página o eliminar el elemento de la lista directamente
-                    // window.location.reload(); // Recargar la página
                     const productoEliminar = document.getElementById(`producto-${productoId}`);
                     if (productoEliminar) {
                         productoEliminar.remove(); // Eliminar el elemento de la lista

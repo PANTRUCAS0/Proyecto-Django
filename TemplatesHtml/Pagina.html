@@ -173,6 +173,22 @@
           
         </section>
 
+        <section>
+            <hr>
+            <div class="productos">
+                {% for producto in productos %}
+                <div class="tarjeta">
+                    <img src="{{ producto.url_imagen }}" alt="{{ producto.nombre }}">
+                    <h3>{{ producto.nombre }}</h3>
+                    <p>{{ producto.descripcion }}</p>
+                    <p>Precio: ${{ producto.precio }}</p>
+                    <button onclick="agregarProducto('{{ producto.nombre }}', '{{ producto.descripcion }}', {{ producto.precio }}, '{{ producto.imagen }}')">Agregar al Carrito</button>
+                </div>
+                {% endfor %}
+            </div>
+            </hr>
+        </section>
+
         <footer>
             <div class="horarios">
                 <h3>Horarios de Atención:</h3>
@@ -194,5 +210,6 @@
         </footer>
 
     </div>
+
 </body>
 </html>
