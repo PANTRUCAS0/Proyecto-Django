@@ -32,10 +32,10 @@ class ClienteManager(BaseUserManager):
         return self.create_user(Usuario, Contraseña, **extra_fields)
     
 class Cliente(AbstractBaseUser):
-    Usuario = models.CharField(max_length=15, unique=True)
+    Usuario = models.CharField(max_length=30, unique=True)
     Contraseña = models.CharField(max_length=10)  # Manteniendo el nombre Contraseña
     Telefono = models.CharField(max_length=9)
-    Email = models.CharField(max_length=20)
+    Email = models.CharField(max_length=30)
     last_login = models.DateTimeField(auto_now=True)
 
     objects = ClienteManager()
@@ -55,7 +55,7 @@ class Cliente(AbstractBaseUser):
 url_por_defecto = 'https://ejemplo.com/imagen_por_defecto.jpg'
 
 class Producto(models.Model):
-    nombre = models.CharField(max_length=20)
+    nombre = models.CharField(max_length=30)
     precio = models.IntegerField()
-    url_imagen = models.URLField(default=url_por_defecto, max_length=300)
-    descripcion = models.CharField(max_length=20)
+    url_imagen = models.URLField(default=url_por_defecto, max_length=400)
+    descripcion = models.CharField(max_length=30)

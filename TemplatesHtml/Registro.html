@@ -74,10 +74,14 @@
         {% csrf_token %}
         <form>
             <label>Usuario: <input type="text" id="Usuario" name="Usuario"></label>
-            <label>Contraseña: <input type="password" id="Contraseña" name="Contraseña"></label>
-            <label>Email:  <input type="text" id="Email" name="Email"></label>
-            <label>Telefono: <input type="text" id="Telefono" name="Telefono"></label>
 
+            <label>Contraseña: <input type="password" id="Contraseña" name="Contraseña" onclick="mostrarMensaje()"></label>
+            <p id="mensaje" style="display:none; color:red;">La contraseña debe tener mínimo 5 caracteres, 1 número y 1 carácter especial.</p>
+
+            <label>Email:  <input type="text" id="Email" name="Email" onclick="mostrarMensaje2()"></label>
+            <p id="mensaje2" style="display:none; color:red;">El email tiene que contener el @</p>
+
+            <label>Telefono: <input type="text" id="Telefono" name="Telefono"></label>
             <label for=""><button type="submit">Registrarse</button></label>
             <label for=""><button><a href="{% url 'Inicio' %}">Continuar</a></button></label>
         </form>
@@ -132,6 +136,16 @@
         function validarFormulario() {
             return ValidarTelefono() && ValidarEmail() && ValidarContrasena();
         }
+
+        
+    function mostrarMensaje() {
+        var mensaje = document.getElementById("mensaje");
+        mensaje.style.display = "block";
+    }
+    function mostrarMensaje2() {
+        var mensaje = document.getElementById("mensaje2");
+        mensaje.style.display = "block";
+    }
 
 </script>
 
