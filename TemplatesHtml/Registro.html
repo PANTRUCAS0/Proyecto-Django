@@ -1,145 +1,106 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro - Tienda Virtual</title>
+    <title>Document</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #74b9ff, #a29bfe);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        .card {
-            background: #fff;
-            padding: 30px 40px;
-            border-radius: 15px;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+            background-color: #f4f4f4;
             text-align: center;
-            width: 100%;
-            max-width: 400px;
         }
 
         header {
-            margin-bottom: 20px;
+            background-color: #3498db;
+            padding: 20px;
+            color: #fff;
         }
 
-        header h2 {
-            font-size: 22px;
-            margin: 5px 0;
-            color: #333;
+        h2 {
+            font-size: 24px;
+            margin: 0;
         }
 
         form {
-            text-align: left;
+            margin-top: 20px;
         }
 
         label {
             display: block;
-            margin: 12px 0 6px;
-            font-weight: 600;
-            color: #555;
+            margin: 10px 0;
         }
 
         input {
-            padding: 12px;
-            width: 100%;
+            padding: 10px;
+            width: 200px;
             box-sizing: border-box;
             border: 1px solid #3498db;
-            border-radius: 8px;
-            transition: 0.3s;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: #2980b9;
-            box-shadow: 0 0 6px rgba(41, 128, 185, 0.6);
+            border-radius: 5px;
         }
 
         button {
             display: inline-block;
-            padding: 12px 20px;
-            margin: 15px 5px 0;
-            border: none;
-            border-radius: 25px;
-            background: #3498db;
+            padding: 10px 20px;
+            margin-top: 20px;
+            margin-right: 10px;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            background-color: #3498db;
             color: #fff;
+            text-decoration: none;
             font-weight: bold;
             font-size: 16px;
             cursor: pointer;
-            transition: all 0.3s ease-in-out;
         }
-
-        button:hover {
-            background: #2980b9;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 10px rgba(0,0,0,0.3);
-        }
-
-        a {
+        a{
             color: #fff;
             text-decoration: none;
-        }
-
-        p.mensaje {
-            display: none;
-            color: red;
-            font-size: 14px;
-            margin: 4px 0 0;
         }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <header>
-            <h2>Ingrese sus datos</h2>
-            <h2>para registrarse</h2>
-            <h2>en nuestra tienda virtual</h2>
-        </header>
+    <header>
+        <h2>Ingrese sus datos</h2>
+        <h2>para realizar el registro</h2>
+        <h2>en nuestra tienda virtual</h2>
+    </header>
 
-        <form method="post" onsubmit="return validarFormulario()">
-            {% csrf_token %}
-            
-            <label for="Usuario">Usuario:</label>
-            <input type="text" id="Usuario" name="Usuario">
+    <form method="post" onsubmit="return validarFormulario()">
+        {% csrf_token %}
+        <form>
+            <label>Usuario: <input type="text" id="Usuario" name="Usuario"></label>
 
-            <label for="Contraseña">Contraseña:</label>
-            <input type="password" id="Contraseña" name="Contraseña" onclick="mostrarMensaje()">
-            <p id="mensaje" class="mensaje">La contraseña debe tener mínimo 5 caracteres, 1 número y 1 carácter especial.</p>
+            <label>Contraseña: <input type="password" id="Contraseña" name="Contraseña" onclick="mostrarMensaje()"></label>
+            <p id="mensaje" style="display:none; color:red;">La contraseña debe tener mínimo 5 caracteres, 1 número y 1 carácter especial.</p>
 
-            <label for="Email">Email:</label>
-            <input type="text" id="Email" name="Email" onclick="mostrarMensaje2()">
-            <p id="mensaje2" class="mensaje">El email tiene que contener el @</p>
+            <label>Email:  <input type="text" id="Email" name="Email" onclick="mostrarMensaje2()"></label>
+            <p id="mensaje2" style="display:none; color:red;">El email tiene que contener el @</p>
 
-            <label for="Telefono">Teléfono:</label>
-            <input type="text" id="Telefono" name="Telefono">
-
-            <button type="submit">Registrarse</button>
-            <button><a href="{% url 'Inicio' %}">Continuar</a></button>
+            <label>Telefono: <input type="text" id="Telefono" name="Telefono"></label>
+            <label for=""><button type="submit">Registrarse</button></label>
+            <label for=""><button><a href="{% url 'Inicio' %}">Continuar</a></button></label>
         </form>
-    </div>
+    </form>
     
 <!-- Script de Validación -->
+
 <script>
     function AlertaTelefono() {
         alert("El número de teléfono debe tener al menos 9 dígitos.");
     }
 
     function AlertaEmail(){
-        alert("El email tiene que contener @");
+        alert("El email tiene que contener @")
     }
 
     function AlertaContrasena() {
-        alert("La contraseña debe tener mínimo 5 caracteres, al menos 1 número y 1 carácter especial");
-    }
+            alert("La contraseña debe tener mínimo 5 caracteres, al menos 1 número y 1 carácter especial");
+        }
 
     function ValidarTelefono() {
         var telefono = document.getElementById("Telefono").value;
@@ -152,34 +113,40 @@
 
     function ValidarEmail(){
         var email = document.getElementById("Email").value;
+
         if(email.indexOf('@') === -1){
             AlertaEmail();
             return false;
         }
         return true;
     }
+    
 
-    function ValidarContrasena() {
-        var contrasena = document.getElementById("Contraseña").value;
-        var regex = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-zA-Z]).{5,}$/;
-        if (!regex.test(contrasena)) {
-            AlertaContrasena();
-            return false;
+            function ValidarContrasena() {
+            var contrasena = document.getElementById("Contraseña").value;
+            var regex = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-zA-Z]).{5,}$/;
+
+            if (!regex.test(contrasena)) {
+                AlertaContrasena();
+                return false;
+            }
+            return true;
         }
-        return true;
-    }
 
-    function validarFormulario() {
-        return ValidarTelefono() && ValidarEmail() && ValidarContrasena();
-    }
+        function validarFormulario() {
+            return ValidarTelefono() && ValidarEmail() && ValidarContrasena();
+        }
 
+        
     function mostrarMensaje() {
-        document.getElementById("mensaje").style.display = "block";
+        var mensaje = document.getElementById("mensaje");
+        mensaje.style.display = "block";
+    }
+    function mostrarMensaje2() {
+        var mensaje = document.getElementById("mensaje2");
+        mensaje.style.display = "block";
     }
 
-    function mostrarMensaje2() {
-        document.getElementById("mensaje2").style.display = "block";
-    }
 </script>
 
 </body>

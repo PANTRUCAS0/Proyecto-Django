@@ -5,95 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tienda Virtual Thomys</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(135deg, #74b9ff, #a29bfe);
-            color: #333;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
 
-        header {
-            background: rgba(52, 152, 219, 0.9);
-            padding: 25px 15px;
-            text-align: center;
-            color: #fff;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-
-        h1 {
-            margin: 0;
-            font-size: 36px;
-            font-weight: bold;
-            letter-spacing: 1px;
-        }
-
-        p {
-            font-size: 18px;
-            margin-top: 10px;
-            font-weight: 500;
-        }
-
-        .button-container {
-            text-align: center;
-            margin: 30px 0;
-        }
-
-        .button {
-            display: inline-block;
-            padding: 12px 25px;
-            margin: 8px;
-            border: none;
-            border-radius: 25px;
-            background: #3498db;
-            color: #fff;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s ease-in-out;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-        }
-
-        .button:hover {
-            background: #2980b9;
-            transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
-        }
-
-        .contenedor {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 25px;
-        }
-
-        .contenedor img {
-            max-width: 280px;
-            width: 90%;
-            border-radius: 15px;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.25);
-            transition: transform 0.3s ease-in-out;
-        }
-
-        .contenedor img:hover {
-            transform: scale(1.05);
-        }
-
-        footer {
-            text-align: center;
-            padding: 15px;
-            background: #3498db;
-            color: white;
-            font-size: 14px;
-            margin-top: auto;
-        }
-    </style>
 </head>
 <body>
 
@@ -104,18 +16,66 @@
 
     <div class="button-container">
         <a href="{% url 'Registro' %}" id="Registro" class="button">Registro</a>  
-        <a href="{% url 'Login' %}" id="Registro" class="button">Iniciar Sesión</a>  
+        <a href="{% url 'Login' %}" id="Registro" class="button">Iniciar Sesion</a>  
         <a href="{% url 'Pagina' %}" id="invitado" class="button">Invitado</a>
         <a href="{% url 'LoginAdmin' %}" class="button">Acceso de Superusuario</a>
     </div>
-
     <div class="contenedor">
-        <img src="{% static 'Logo.png' %}" alt="Logo Tienda Thomys">
+        <img src="{% static 'Logo.png' %}" alt="">
     </div>
-
-    <footer>
-        © 2025 Tienda Thomys - Todos los derechos reservados
-    </footer>
-
 </body>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+    }
+
+    header {
+        background-color: #3498db;
+        padding: 20px;
+        text-align: center;
+        color: #fff;
+    }
+
+    h1 {
+        margin: 0;
+        font-size: 32px;
+    }
+
+    p {
+        font-size: 18px;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+
+    .button-container {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .button {
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 5px;
+        border: 2px solid #3498db;
+        border-radius: 8px;
+        background-color: #3498db;
+        color: #fff;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    .contenedor {
+        text-align: center;
+    }
+
+    .contenedor img {
+        display: inline-block;
+    }
+
+</style>
 </html>

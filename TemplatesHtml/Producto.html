@@ -1,98 +1,44 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Productos</title>
     <style>
-        body {
-            margin: 0;
-            padding: 20px;
+        #contenedor{
+            display: grid;
+            place-items: center;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f4f6f9;
         }
 
-        #contenedor {
-            text-align: center;
-        }
-
-        h2 {
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        #Admin {
-            background-color: #3498db;
-            border: none;
-            border-radius: 8px;
-            padding: 10px 18px;
-            margin-bottom: 25px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        #Admin:hover {
-            background-color: #2980b9;
-        }
-
-        #Admin a {
+        a{
             text-decoration: none;
             color: #fff;
-            font-weight: bold;
         }
 
-        ul {
+        #Eliminar{
+        color: #fff;
+        border: 2px solid #a50024;
+        text-decoration: none;
+        background-color: #a50024;
+        border-radius: 8px;
+        }
+
+        ul{
             list-style: none;
-            padding: 0;
-            margin: 0;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
         }
 
-        .producto {
-            background: #fff;
-            padding: 15px;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            transition: transform 0.2s ease;
-        }
-
-        .producto:hover {
-            transform: translateY(-5px);
-        }
-
-        .producto img {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-            border-radius: 8px;
-        }
-
-        .producto h3 {
-            margin: 10px 0 5px;
-            font-size: 20px;
-            color: #2c3e50;
-        }
-
-        .producto p {
-            margin: 5px 0;
-            color: #555;
-        }
-
-        #Eliminar {
-            background-color: #e74c3c;
-            border: none;
-            border-radius: 8px;
-            padding: 10px 18px;
+        #Admin{
             color: #fff;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
+            border: 2px solid #3498db;
+            text-decoration: none;
+            background-color: #3498db;
+            border-radius: 8px;
         }
 
-        #Eliminar:hover {
-            background-color: #c0392b;
+        img{
+            width: 300px;
+            height: 300px;
         }
     </style>
 </head>
@@ -100,14 +46,13 @@
     <div id="contenedor">
         <h2>Lista de Productos</h2>
         <button id="Admin"><a href="{% url 'Admin' %}">Volver al Admin</a></button>    
-
         <ul id="listaProductos">
             {% for producto in productos %}
-                <li class="producto" id="producto-{{ producto.id }}">
+                <li class="producto">
                     <img src="{{ producto.url_imagen }}" alt="{{ producto.nombre }}">
                     <h3>{{ producto.nombre }}</h3>
                     <p>{{ producto.descripcion }}</p>
-                    <p><strong>Precio:</strong> ${{ producto.precio }}</p>
+                    <p>Precio: ${{ producto.precio }}</p>
                     <button id="Eliminar" onclick="eliminarProducto({{ producto.id }})">Eliminar</button>
                 </li>
             {% endfor %}
@@ -127,7 +72,7 @@
                 if (response.ok) {
                     const productoEliminar = document.getElementById(`producto-${productoId}`);
                     if (productoEliminar) {
-                        productoEliminar.remove(); // Eliminar visualmente el producto
+                        productoEliminar.remove(); // Eliminar el elemento de la lista
                     }
                 } else {
                     console.error('Error al eliminar el producto');

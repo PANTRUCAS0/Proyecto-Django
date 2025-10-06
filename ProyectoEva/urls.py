@@ -20,7 +20,7 @@ from Aplicacion import views
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
-    path('', views.Inicio, name='Inicio'),  
+    path('Inicio/', views.Inicio, name='Inicio'),  
     path('Registro/', views.Registro, name='Registro'),  
     
     path('Login/', views.login_view, name='Login'),  
@@ -39,5 +39,7 @@ urlpatterns = [
     path('AgregarProducto', views.AgregarProducto, name='AgregarProducto'),
     path('Producto',views.mostrar_productos, name='mostrarProductos'),
     path('eliminar-producto/<int:producto_id>/', views.eliminar_producto, name='eliminar_producto'),
+
+    path("chatbot/", views.chatbot, name="chatbot"),
 
 ]

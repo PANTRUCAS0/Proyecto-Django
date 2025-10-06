@@ -12,9 +12,10 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
-import pymysql
+import pymysql 
 pymysql.install_as_MySQLdb()
 pymysql.version_info = (1,4,3,"final",0)
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 
@@ -145,3 +146,12 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 LOGIN_URL = 'LoginAdmin'
+
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / ".env")
+
+OPENAI_API_KEY      = os.getenv("OPENAI_API_KEY")
+GEMINI_API_KEY      = os.getenv("GEMINI_API_KEY")
+AI_PROVIDER         = (os.getenv("AI_PROVIDER") or "gemini").lower()
+OPENROUTER_API_KEY  = os.getenv("OPENROUTER_API_KEY") or ""

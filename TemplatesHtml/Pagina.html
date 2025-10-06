@@ -188,7 +188,8 @@
                     <h3>{{ producto.nombre }}</h3>
                     <p>{{ producto.descripcion }}</p>
                     <p>Precio: ${{ producto.precio }}</p>
-                    <button onclick="agregarProducto('{{ producto.nombre }}', '{{ producto.descripcion }}', {{ producto.precio }}, '{{ producto.imagen }}')">Agregar al Carrito</button>
+                    <button onclick="agregarProducto('{{ producto.nombre }}', '{{ producto.descripcion }}', '{{ producto.imagen }}')">Agregar al Carrito</button>
+                     <!-- , {{ producto.precio }}  este producto tenia error, no se la causa  -->
                 </div>
                 {% endfor %}
             </div>
@@ -216,6 +217,73 @@
         </footer>
 
     </div>
+
+<!-- Chatbot Flotante Thomys -->
+<div id="chatbot-box">
+    <div id="chatbot-header">🤖 Chat Thomys</div>
+    <div id="chatbot-messages"></div>
+    <div id="chatbot-input-row">
+      <input type="text" id="chatbot-input" placeholder="Escribe tu duda...">
+      <button id="chatbot-send">Enviar</button>
+    </div>
+  </div>
+  
+  <style>
+  #chatbot-box {
+    position: fixed;
+    bottom: 20px; right: 20px;
+    width: 300px; max-height: 380px;
+    display: flex; flex-direction: column;
+    background: #fff; border: 2px solid #3498db; border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2); font-family: Arial, sans-serif; z-index: 9999;
+  }
+  #chatbot-header { background: #3498db; color: #fff; padding: 10px; font-weight: bold; border-radius: 8px 8px 0 0; }
+  #chatbot-messages { padding: 10px; overflow-y: auto; flex: 1; font-size: 14px; }
+  #chatbot-input-row { display: flex; gap: 6px; padding: 10px; }
+  #chatbot-input { flex: 1; padding: 6px; border: 1px solid #3498db; border-radius: 6px; }
+  #chatbot-send { padding: 6px 10px; background: #3498db; color:#fff; border: none; border-radius: 6px; cursor: pointer; }
+  #chatbot-send:hover { filter: brightness(0.95); }
+  </style>
+  
+  <script>
+  (function(){
+    const box = document.getElementById("chatbot-box");
+    const msgs = document.getElementById("chatbot-messages");
+    const input = document.getElementById("chatbot-input");
+    const sendBtn = document.getElementById("chatbot-send");
+  
+    function append(role, text) {
+      const p = document.createElement("p");
+      p.innerHTML = role === "user" ? "<b>Tú:</b> " + text : "<b>Bot:</b> " + text;
+      msgs.appendChild(p);
+      msgs.scrollTop = msgs.scrollHeight;
+    }
+  
+    function enviar() {
+      const pregunta = input.value.trim();
+      if (!pregunta) return;
+      append("user", pregunta);
+      input.value = "";
+  
+      fetch("/chatbot/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pregunta })
+      })
+      .then(r => r.json())
+      .then(data => append("bot", data.respuesta || "Respuesta vacía."))
+      .catch(() => append("bot", "Error de red. Intenta más tarde."));
+    }
+  
+    sendBtn.addEventListener("click", enviar);
+    input.addEventListener("keydown", (e) => { if (e.key === "Enter") enviar(); });
+  
+    // Mensaje de bienvenida
+    append("bot", "Hola 👋 Soy el asistente de Thomys. ¿Cómo puedo ayudarte?.");
+  })();
+  </script>
+  
+  
 
 </body>
 </html>
