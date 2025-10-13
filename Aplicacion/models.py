@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
+from django.utils import timezone
 
 class Productos(models.Model):
     nombre = models.CharField(max_length=20)
@@ -59,3 +60,28 @@ class Producto(models.Model):
     precio = models.IntegerField()
     url_imagen = models.URLField(default=url_por_defecto, max_length=400)
     descripcion = models.CharField(max_length=30)
+
+
+url_por_defecto = 'https://ejemplo.com/imagen_por_defecto.jpg'
+
+
+class Boleta(models.Model):
+    id_boleta = models.AutoField(primary_key=True)
+    fecha_creacion = models.DateTimeField(default=timezone.now)
+    total = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f"Boleta #{self.id_boleta} - {self.fecha_creacion.strftime('%d/%m/%Y %H:%M')}"
+
+
+class DetalleBoleta(models.Model):
+    boleta = models.ForeignKey(Boleta, related_name="detalles", on_delete=models.CASCADE)
+    nombre = models.CharField(max_length=30)
+    descripcion = models.CharField(max_length=100)
+    precio = models.IntegerField()
+    cantidad = models.IntegerField(default=1)
+    subtotal = models.IntegerField()
+    url_imagen = models.URLField(default=url_por_defecto, max_length=400)
+
+    def __str__(self):
+        return f"{self.nombre} x{self.cantidad}"

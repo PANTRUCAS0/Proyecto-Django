@@ -1,0 +1,117 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Boleta de Compra</title>
+    <link rel="stylesheet" href="{% static 'estilos.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f9f9f9;
+            padding: 40px;
+        }
+        .boleta {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            margin: auto;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        th, td {
+            border-bottom: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background: #3498db;
+            color: white;
+        }
+        img {
+            width: 80px;
+            height: auto;
+            border-radius: 5px;
+        }
+        .total {
+            text-align: right;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
+        .volver {
+            display: block;
+            margin-top: 30px;
+            text-align: center;
+        }
+        .volver a {
+            text-decoration: none;
+            color: white;
+            background: #27ae60;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="boleta">
+    <h1>Boleta de Compra</h1>
+
+    <table id="tabla-boleta">
+        <tr>
+            <th>Imagen</th>
+            <th>Producto</th>
+            <th>Descripción</th>
+            <th>Precio Unitario</th>
+            <th>Cantidad</th>
+            <th>Subtotal</th>
+        </tr>
+        <!-- Aquí se insertarán los productos con JS -->
+    </table>
+
+    <p id="total" class="total">Total: $0</p>
+
+    <div class="volver">
+        <a href="{% url 'Inicio' %}">Volver al Inicio</a>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const data = JSON.parse(localStorage.getItem("boleta"));
+        if (!data) return;
+
+        const tbody = document.querySelector("table");
+        const totalEl = document.querySelector(".total");
+
+        data.productos.forEach(p => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td><img src="${p.url_imagen}" alt="${p.nombre}" width="80"></td>
+                <td>${p.nombre}</td>
+                <td>${p.descripcion}</td>
+                <td>$${p.precio.toLocaleString()}</td>
+                <td>${p.cantidad}</td>
+                <td>$${p.subtotal.toLocaleString()}</td>
+            `;
+            tbody.appendChild(row);
+        });
+
+        totalEl.textContent = "Total: $" + data.total.toLocaleString();
+    });
+</script>
+
+</body>
+</html>
+</body>
+</html>

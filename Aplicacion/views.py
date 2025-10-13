@@ -392,3 +392,51 @@ def clean_response(text: str) -> str:
     text = re.sub(r'~~(.*?)~~', r'\1', text)
     return text.strip()
 
+def boleta(request):
+    productos = Producto.objects.all()
+
+    # Asignar una cantidad ficticia por ahora
+    lista_productos = []
+    total = 0
+    for p in productos:
+        cantidad = 1  # Puedes cambiar esto por una variable real del carrito
+        subtotal = p.precio * cantidad
+        total += subtotal
+        lista_productos.append({
+            'nombre': p.nombre,
+            'descripcion': p.descripcion,
+            'precio': p.precio,
+            'cantidad': cantidad,
+            'subtotal': subtotal,
+            'url_imagen': p.url_imagen,
+        })
+
+    return render(request, 'boleta.html', {'productos': lista_productos, 'total': total})
+
+
+from .models import Boleta, DetalleBoleta
+
+def guardar_boleta(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        productos = data.get('productos', [])
+        total = data.get('total', 0)
+
+        # Crear la boleta principal
+        boleta = Boleta.objects.create(total=total)
+
+        # Crear cada detalle de producto
+        for p in productos:
+            DetalleBoleta.objects.create(
+                boleta=boleta,
+                nombre=p['nombre'],
+                descripcion=p['descripcion'],
+                precio=p['precio'],
+                cantidad=p['cantidad'],
+                subtotal=p['subtotal'],
+                url_imagen=p['url_imagen']
+            )
+
+        return JsonResponse({'status': 'ok', 'boleta_id': boleta.id_boleta})
+
+    return JsonResponse({'status': 'error', 'message': 'Método no permitido'}, status=405)
