@@ -1,32 +1,37 @@
-let carrito = [];
 let contadorCarrito = 0;
 
 function agregarProducto(nombre, descripcion, precio, imagen) {
-    const nuevoProducto = {
-        nombre: nombre,
-        descripcion: descripcion,
-        precio: parseFloat(precio),
-        imagen: imagen
-    };
+    let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
-    carrito.push(nuevoProducto);
-    contadorCarrito += 1;
+    let productoExistente = carrito.find(item => item.nombre === nombre);
 
+    if (productoExistente) {
+        productoExistente.cantidad += 1;
+        productoExistente.subtotal = productoExistente.precio * productoExistente.cantidad;
+    } else {
+        carrito.push({
+            nombre: nombre,
+            descripcion: descripcion,
+            precio: parseFloat(precio),
+            cantidad: 1,
+            subtotal: parseFloat(precio),
+            url_imagen: imagen // 👈 usamos SIEMPRE el mismo nombre
+        });
+    }
+
+    localStorage.setItem("carrito", JSON.stringify(carrito));
     actualizarCarrito();
 }
 
+
 function abrirCarrito() {
-    const carritoOverlay = document.getElementById('carrito');
-    carritoOverlay.style.display = 'block';
+    document.getElementById('carrito').style.display = 'block';
 }
 
 
 function cerrarCarrito() {
-    const carritoOverlay = document.getElementById('carrito');
-    carritoOverlay.style.display = 'none';
+    document.getElementById('carrito').style.display = 'none';
 }
-
-
 
 
 function actualizarCarrito() {
@@ -34,51 +39,52 @@ function actualizarCarrito() {
     const totalCarrito = document.getElementById('totalCarrito');
     const contadorCarritoElemento = document.getElementById('contadorCarrito');
 
-    // Limpiar la lista de carrito antes de volver a llenar
+    const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
     listaCarrito.innerHTML = '';
 
     let total = 0;
-
     carrito.forEach(producto => {
         const itemCarrito = document.createElement('li');
-        itemCarrito.textContent = `${producto.nombre} - $${producto.precio.toFixed(2)}`;
+        itemCarrito.textContent = `${producto.nombre} - $${producto.precio.toLocaleString()}`;
         listaCarrito.appendChild(itemCarrito);
-
-        total += producto.precio;
+        total += producto.subtotal;
     });
 
-    totalCarrito.textContent = `Total: $${total.toFixed(2)}`;
-    contadorCarritoElemento.textContent = contadorCarrito;
+    totalCarrito.textContent = `Total: $${total.toLocaleString()}`;
+    contadorCarritoElemento.textContent = carrito.length;
 }
 
+
 function pagar() {
+    let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+
     if (carrito.length === 0) {
         alert("Tu carrito está vacío.");
         return;
     }
 
-    // Agrupar productos iguales
+    
     const productosAgrupados = [];
     carrito.forEach(p => {
         const existente = productosAgrupados.find(x => x.nombre === p.nombre);
         if (existente) {
-            existente.cantidad += 1;
-            existente.subtotal += p.precio;
+            existente.cantidad += p.cantidad;
+            existente.subtotal += p.subtotal;
         } else {
             productosAgrupados.push({
                 nombre: p.nombre,
                 descripcion: p.descripcion,
                 precio: p.precio,
-                cantidad: 1,
-                subtotal: p.precio,
-                url_imagen: p.imagen
+                cantidad: p.cantidad,
+                subtotal: p.subtotal,
+                url_imagen: p.url_imagen // 👈 importante
             });
         }
     });
 
     const total = productosAgrupados.reduce((acc, p) => acc + p.subtotal, 0);
 
-    // Enviar datos a Django con fetch
+   
     fetch('/guardar_boleta/', {
         method: 'POST',
         headers: {
@@ -93,20 +99,20 @@ function pagar() {
     .then(res => res.json())
     .then(data => {
         if (data.status === 'ok') {
-            // Guardamos datos para mostrar en la boleta
             localStorage.setItem("boleta", JSON.stringify({
                 productos: productosAgrupados,
                 total: total
             }));
-            carrito = []; // limpiar carrito
+            localStorage.removeItem("carrito");
             window.location.href = "/boleta/";
         } else {
-            alert("Hubo un error al guardar la boleta");
+            alert("Hubo un error al guardar la boleta.");
         }
-    });
+    })
+    .catch(err => console.error("Error al pagar:", err));
 }
 
-// Función para obtener el token CSRF
+
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -121,3 +127,6 @@ function getCookie(name) {
     }
     return cookieValue;
 }
+
+
+document.addEventListener("DOMContentLoaded", actualizarCarrito);

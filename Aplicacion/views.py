@@ -427,16 +427,17 @@ def guardar_boleta(request):
 
         # Crear cada detalle de producto
         for p in productos:
-            DetalleBoleta.objects.create(
-                boleta=boleta,
-                nombre=p['nombre'],
-                descripcion=p['descripcion'],
-                precio=p['precio'],
-                cantidad=p['cantidad'],
-                subtotal=p['subtotal'],
-                url_imagen=p['url_imagen']
-            )
+           DetalleBoleta.objects.create(
+    boleta=boleta,
+    nombre=p['nombre'],
+    descripcion=p['descripcion'],
+    precio=p['precio'],
+    cantidad=p['cantidad'],
+    subtotal=p['subtotal'],
+    url_imagen=p['url_imagen']
+)
 
         return JsonResponse({'status': 'ok', 'boleta_id': boleta.id_boleta})
 
     return JsonResponse({'status': 'error', 'message': 'Método no permitido'}, status=405)
+

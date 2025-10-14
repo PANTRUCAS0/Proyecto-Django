@@ -97,7 +97,7 @@
         data.productos.forEach(p => {
             const row = document.createElement("tr");
             row.innerHTML = `
-                <td><img src="${p.url_imagen}" alt="${p.nombre}" width="80"></td>
+                <td><img src="${p.url_imagen}" alt="${p.nombre}" width="200"></td>
                 <td>${p.nombre}</td>
                 <td>${p.descripcion}</td>
                 <td>$${p.precio.toLocaleString()}</td>

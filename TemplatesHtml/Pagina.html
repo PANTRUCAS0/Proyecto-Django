@@ -188,7 +188,14 @@
                     <h3>{{ producto.nombre }}</h3>
                     <p>{{ producto.descripcion }}</p>
                     <p>Precio: ${{ producto.precio }}</p>
-                    <button onclick="agregarProducto('{{ producto.nombre }}', '{{ producto.descripcion }}', {{ producto.precio }}, '{{ producto.imagen }}')">Agregar al Carrito</button>
+                    <button onclick="agregarProducto(
+    '{{ producto.nombre }}',
+    '{{ producto.descripcion }}',
+    {{ producto.precio }},
+    '{{ producto.url_imagen }}'
+)">
+    Agregar al carrito
+</button>
                 </div>
                 {% endfor %}
             </div>
