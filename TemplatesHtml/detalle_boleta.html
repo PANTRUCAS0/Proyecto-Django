@@ -1,0 +1,97 @@
+<h2 style="text-align: center; margin-top: 30px; font-family: 'Poppins', sans-serif; color: #333;">
+    Detalle de Boletas
+</h2>
+
+<style>
+    table {
+        width: 90%;
+        margin: 25px auto;
+        border-collapse: collapse;
+        font-family: 'Poppins', sans-serif;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    thead {
+        background: linear-gradient(135deg, #4b79a1, #283e51);
+        color: white;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    th, td {
+        padding: 12px 15px;
+        text-align: center;
+    }
+
+    tbody tr {
+        background-color: #fff;
+        transition: background-color 0.2s ease, transform 0.1s ease;
+    }
+
+    tbody tr:nth-child(even) {
+        background-color: #f8f9fa;
+    }
+
+    tbody tr:hover {
+        background-color: #eaf4ff;
+        transform: scale(1.01);
+    }
+
+    th:first-child, td:first-child {
+        border-left: none;
+    }
+
+    th:last-child, td:last-child {
+        border-right: none;
+    }
+
+    td {
+        border-bottom: 1px solid #ddd;
+    }
+
+    tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .no-data {
+        text-align: center;
+        font-style: italic;
+        color: #666;
+        padding: 15px;
+    }
+</style>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Precio</th>
+            <th>Cantidad</th>
+            <th>Subtotal</th>
+            <th>ID Boleta</th>
+            <th>Fecha Boleta</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for d in detalles %}
+        <tr>
+            <td>{{ d.id }}</td>
+            <td>{{ d.nombre }}</td>
+            <td>{{ d.descripcion }}</td>
+            <td>${{ d.precio }}</td>
+            <td>{{ d.cantidad }}</td>
+            <td>${{ d.subtotal }}</td>
+            <td>{{ d.boleta.id_boleta }}</td>
+            <td>{{ d.boleta.fecha_creacion|date:"d/m/Y H:i" }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="8" class="no-data">No hay detalles de boleta registrados.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

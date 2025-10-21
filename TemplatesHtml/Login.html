@@ -1,64 +1,130 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Login | Zapatería Thomys</title>
     <style>
+        /* === ESTILOS GENERALES === */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
-            text-align: center;
+            background: linear-gradient(135deg, #e3f2fd, #ffffff);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: #333;
+            animation: fadeIn 1s ease forwards;
         }
 
         header {
             background-color: #3498db;
-            padding: 20px;
+            padding: 25px 20px;
+            width: 100%;
+            text-align: center;
             color: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            animation: fadeDown 1s ease forwards;
         }
 
         h1 {
-            font-size: 32px;
-            font-weight: bold;
+            font-size: 2rem;
             margin: 0;
+            letter-spacing: 1px;
         }
 
+        /* === CONTENEDOR DEL FORM === */
         form {
-            margin-top: 20px;
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 40px 30px;
+            margin-top: 40px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            max-width: 380px;
+            width: 90%;
+            text-align: left;
+            animation: slideUp 1.2s ease forwards;
         }
 
         label {
             display: block;
-            margin: 10px 0;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #444;
         }
 
         input {
+            width: 100%;
             padding: 10px;
-            width: 200px;
+            margin-bottom: 20px;
+            border: 1.5px solid #3498db;
+            border-radius: 6px;
             box-sizing: border-box;
-            border: 1px solid #3498db;
-            border-radius: 5px;
+            font-size: 15px;
+            transition: border-color 0.3s, box-shadow 0.3s;
         }
 
-        input[type="password"] {
-            margin-top: 5px;
+        input:focus {
+            outline: none;
+            border-color: #2d89c7;
+            box-shadow: 0 0 6px rgba(52, 152, 219, 0.4);
         }
 
+        /* === BOTÓN === */
         button {
-            display: inline-block;
-            padding: 10px 20px;
-            margin-top: 20px;
-            border: 2px solid #3498db;
-            border-radius: 8px;
+            width: 100%;
+            padding: 12px;
             background-color: #3498db;
             color: #fff;
-            text-decoration: none;
+            border: none;
+            border-radius: 8px;
             font-weight: bold;
             font-size: 16px;
             cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        button:hover {
+            background-color: #2d89c7;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+        }
+
+        /* === ANIMACIONES === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === RESPONSIVIDAD === */
+        @media (max-width: 480px) {
+            form {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 1.6rem;
+            }
+
+            button {
+                font-size: 15px;
+            }
         }
     </style>
 </head>
@@ -66,42 +132,42 @@
     <header>
         <h1>Inicio de Sesión</h1>
     </header>
+
     <form method="post" id="loginForm">
         {% csrf_token %}
-        <label class="mb-3">
-            Usuario:
-            <input type="text" class="form-control" id="Usuario" name="Usuario" placeholder="Usuario" required>
-        </label>
-        <label class="mb-3">
-            Contraseña:
-            <input type="password" class="form-control" id="Contraseña" name="Contraseña" placeholder="Contraseña" required>
-        </label>
-        <button type="submit">Iniciar sesión</button>
+        <label for="Usuario">Usuario:</label>
+        <input type="text" id="Usuario" name="Usuario" placeholder="Ingrese su usuario" required>
+
+        <label for="Contraseña">Contraseña:</label>
+        <input type="password" id="Contraseña" name="Contraseña" placeholder="Ingrese su contraseña" required>
+
+        <button type="submit">Iniciar Sesión</button>
     </form>
-</body>
-<script>
-    document.getElementById('loginForm').addEventListener('submit', function(event) {
-        event.preventDefault();
-        var formData = new FormData(this);
-        
-        fetch('{% url "Login" %}', {
-            method: 'POST',
-            body: formData,
-            credentials: 'same-origin' // Asegura que las credenciales se envíen junto con la solicitud
-        })
-        .then(response => {
-            if (response.redirected) {
-                // Inicio de sesión exitoso
-                alert('Inicio de sesión exitoso');
-                window.location.href = response.url;
-            } else {
-                // Credenciales inválidas o error en inicio de sesión
-                alert('Credenciales inválidas o error al iniciar sesión');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var formData = new FormData(this);
+
+            fetch('{% url "Login" %}', {
+                method: 'POST',
+                body: formData,
+                credentials: 'same-origin'
+            })
+            .then(response => {
+                if (response.redirected) {
+                    alert('✅ Inicio de sesión exitoso');
+                    window.location.href = response.url;
+                } else {
+                    alert('❌ Credenciales inválidas o error al iniciar sesión');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('⚠️ Error al procesar la solicitud');
+            });
         });
-    });
-</script>
+    </script>
+</body>
 </html>
+

@@ -19,6 +19,7 @@ from django.urls import path
 from Aplicacion import views
 from django.contrib.auth import views as auth_views
 
+
 urlpatterns = [
     path('', views.Inicio, name='Inicio'),  
     path('Registro/', views.Registro, name='Registro'),  
@@ -29,15 +30,14 @@ urlpatterns = [
     path('Pagina/', views.Pagina, name='Pagina'),  
     path('Perfil/', views.Perfil, name='Perfil'),
 
-    path('Admin', views.Admin, name='Admin'),
-    path('LoginAdmin', views.login_admin, name='LoginAdmin'),  
+    path('Admin/', views.Admin, name='Admin'),
+    path('LoginAdmin/', views.login_admin, name='LoginAdmin'),  
 
-    
     path('ActulizarCL/<int:cliente_id>/', views.actualizar_cliente, name='ActulizarCL'),
     path('EliminarCL/<int:cliente_id>/', views.eliminar_cliente, name='EliminarCL'),
     
-    path('AgregarProducto', views.AgregarProducto, name='AgregarProducto'),
-    path('Producto',views.mostrar_productos, name='mostrarProductos'),
+    path('AgregarProducto/', views.AgregarProducto, name='AgregarProducto'),
+    path('Producto/', views.mostrar_productos, name='mostrarProductos'),
     path('eliminar-producto/<int:producto_id>/', views.eliminar_producto, name='eliminar_producto'),
 
     path("chatbot/", views.chatbot, name="chatbot"),
@@ -45,5 +45,7 @@ urlpatterns = [
     path('boleta/', views.boleta, name='boleta'),
     path('guardar_boleta/', views.guardar_boleta, name='guardar_boleta'),
 
-
+    path('detalle_boleta/', views.detalle_boleta, name='detalle_boleta'),
 ]
+
+

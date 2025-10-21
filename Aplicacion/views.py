@@ -13,10 +13,8 @@ from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from .models import Producto
 from django.views.decorators.csrf import csrf_exempt
-
-import openai 
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
+import openai
+from .models import DetalleBoleta
 
 from django.conf import settings
 import json
@@ -96,7 +94,7 @@ def Admin(request):
     if 'user' not in request.session or request.session['user']['username'] != 'Admin':
         return redirect('LoginAdmin')
 
-    datos = Cliente.objects.all()  # Supongamos que aquí obtienes los datos de los clientes, no los productos
+    datos = Cliente.objects.all()  # Datos del cliente
     Datos = {"DatosT" : datos}
 
     return render(request, 'Admin.html', Datos)
@@ -106,7 +104,7 @@ def AgregarProducto(request):
         producto_form = ProductoForm(request.POST)
         if producto_form.is_valid():
             producto_form.save()
-            return redirect('Admin')  # Redirigir a la vista 'Admin' después de guardar el producto
+            return redirect('Admin')  # Redirige a la vista admin despues de guardar un producto
         
 
 
@@ -145,7 +143,7 @@ def login_admin(request):
                 'username': username,
                 'password': password
             }
-            request.session['user'] = user  # Guardar el usuario en la sesión
+            request.session['user'] = user  # Guarda el usuario de la sesion activa
 
             print("Superusuario autenticado")
             return redirect('Admin')
@@ -167,7 +165,7 @@ def actualizar_cliente(request, cliente_id):
         form = ClienteForm(request.POST, instance=cliente)
         if form.is_valid():
             form.save()
-            return redirect('Admin')  # Redirecciona al administrador después de guardar los cambios
+            return redirect('Admin')  # Redireccion a la pagina del Administrador
     else:
         form = ClienteForm(instance=cliente)
 
@@ -395,11 +393,11 @@ def clean_response(text: str) -> str:
 def boleta(request):
     productos = Producto.objects.all()
 
-    # Asignar una cantidad ficticia por ahora
+    # Cantidad de los productos
     lista_productos = []
     total = 0
     for p in productos:
-        cantidad = 1  # Puedes cambiar esto por una variable real del carrito
+        cantidad = 1  # Variables del carrito
         subtotal = p.precio * cantidad
         total += subtotal
         lista_productos.append({
@@ -422,10 +420,10 @@ def guardar_boleta(request):
         productos = data.get('productos', [])
         total = data.get('total', 0)
 
-        # Crear la boleta principal
+        # Creacion de la boleta principal
         boleta = Boleta.objects.create(total=total)
 
-        # Crear cada detalle de producto
+        # Detalles de los productos
         for p in productos:
            DetalleBoleta.objects.create(
     boleta=boleta,
@@ -441,3 +439,6 @@ def guardar_boleta(request):
 
     return JsonResponse({'status': 'error', 'message': 'Método no permitido'}, status=405)
 
+def detalle_boleta(request):
+    detalles = DetalleBoleta.objects.select_related('boleta').order_by('id')
+    return render(request, 'detalle_boleta.html', {'detalles': detalles})

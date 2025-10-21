@@ -4,13 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-Commerce Thomys</title>
+    <title>E-Commerce Tomys</title>
+
+    <!-- Estilos y scripts -->
     <link rel="stylesheet" type="text/css" href="{% static 'estilos.css' %}">
     <script src="{% static 'Pagina.js' %}"></script>
+
     <style>
-        a{
+        a {
             text-decoration: none;
-            color: #fff;;
+            color: #fff;
         }
     </style>
 </head>
@@ -20,276 +23,274 @@
             <div class="logo">
                 <img src="{% static 'Logo.png' %}" alt="Logo de la tienda">
             </div>
+
             <div class="busqueda">
-                <input type="text" placeholder="Buscar productos">
+                <input type="text" placeholder="Buscar productos" aria-label="Buscar productos">
                 <button>Buscar</button>
             </div>
+
             <div class="usuario">
-            <div inicioS>
-                {% if user.is_authenticated %}
-                    <button id="botonesI"><a href="{% url 'logout' %}">Cerrar sesión</a></button>
-                    <button id="botonesI"><a href="{% url 'Perfil' %}">Ver perfil</a></button>
-                {% else %}
-                    <button id="botonesI"><a href="{% url 'Login' %}">Iniciar sesión</a></button>
-                    <button id="botonesI"><a href="{% url 'Registro' %}">Registrarse</a></button>
-                {% endif %}
+                <div id="inicioS">
+                    {% if user.is_authenticated %}
+                        <button id="botonesI"><a href="{% url 'logout' %}">Cerrar sesión</a></button>
+                        <button id="botonesI"><a href="{% url 'Perfil' %}">Ver perfil</a></button>
+                    {% else %}
+                        <button id="botonesI"><a href="{% url 'Login' %}">Iniciar sesión</a></button>
+                        <button id="botonesI"><a href="{% url 'Registro' %}">Registrarse</a></button>
+                    {% endif %}
 
-                {% if user.is_authenticated and user.is_superuser %}
-                    <a href="{% url 'Admin.html' %}" class="btn btn-primary">Ver toda la información</a>
-                {% endif %}
+                    {% if user.is_authenticated and user.is_superuser %}
+                        <a href="{% url 'Admin.html' %}" class="btn btn-primary">Ver toda la información</a>
+                    {% endif %}
+
                     <button id="botonesI"><a href="{% url 'Inicio' %}">Volver al Inicio</a></button>
+                </div>
 
-            </div>
-
-                <div id="carrito-icono" class="carrito-icono" onclick="abrirCarrito()">
+                <!-- Ícono del carrito -->
+                <div id="carrito-icono" class="carrito-icono" onclick="abrirCarrito()" title="Ver carrito de compras">
                     <img id="carroImg" src="{% static 'Carrito.webp' %}" alt="Icono de carrito">
                     <span id="contadorCarrito">0</span>
                 </div>
-
-
             </div>
-            <!-- Carrito de Compras -->
+
+            <!-- Carrito de compras -->
             <div id="carrito" class="carrito-overlay">
                 <div class="carrito-modal">
-                    <button onclick="cerrarCarrito()" class="cerrar-carrito">&times;</button>
+                    <button onclick="cerrarCarrito()" class="cerrar-carrito" aria-label="Cerrar carrito">&times;</button>
                     <h3>Carrito de Compras</h3>
-                    <ul id="listaCarrito">
-                        <!-- Aquí se mostrarán los productos en el carrito -->
-                    </ul>
+                    <ul id="listaCarrito"><!-- Productos del carrito --></ul>
                     <p id="totalCarrito">Total: $0.00</p>
                     <button onclick="pagar()">Pagar</button>
                 </div>
             </div>
-
         </header>
 
-        <div class="botones-navegacion">
-            <a href="#seccion1" class="boton-navegacion" style="background-color: #3498db;">De Vestir</a>
-        </div>
-        <div class="botones-navegacion2">
-            <a href="#seccion2" class="boton-navegacion" style="background-color: #27ae60;">Trekking</a>
-        </div>
-        <div class="botones-navegacion3">
-            <a href="#seccion3" class="boton-navegacion" style="background-color: #e74c3c;">Deportivas</a>
-        </div>
-        
-    
+        <!-- Botones de navegación -->
+        <nav>
+            <div class="botones-navegacion">
+                <a href="#seccion1" class="boton-navegacion" style="background-color: #3498db;">De Vestir</a>
+            </div>
+            <div class="botones-navegacion2">
+                <a href="#seccion2" class="boton-navegacion" style="background-color: #27ae60;">Trekking</a>
+            </div>
+            <div class="botones-navegacion3">
+                <a href="#seccion3" class="boton-navegacion" style="background-color: #e74c3c;">Deportivas</a>
+            </div>
+        </nav>
+
+        <!-- Sección 1 -->
         <section id="seccion1" class="productos">
             <div class="tarjeta">
-                <img src="{% static 'Zapatilla1.jpg' %}" alt="Producto 1">
-                <h3>Yeezy Foam Runner.</h3>
+                <img src="{% static 'Zapatilla1.jpg' %}" alt="Yeezy Foam Runner">
+                <h3>Yeezy Foam Runner</h3>
                 <p>Yeezy Foam Runner.</p>
                 <p>Precio: $100.000</p>
                 <button onclick="agregarProducto('Yeezy Foam Runner', 'Descripción corta del producto 1.', 100000, 'Imagenes/Zapatilla1.jpg')">Agregar al Carrito</button>
             </div>
-    
+
             <div class="tarjeta">
-                <img src="{% static 'Zapatilla2.jpg' %}" alt="Producto 2">
-                <h3>Nike panda black.</h3>
+                <img src="{% static 'Zapatilla2.jpg' %}" alt="Nike panda black">
+                <h3>Nike Panda Black</h3>
                 <p>Nike panda black.</p>
                 <p>Precio: $123.990</p>
-                <button onclick="agregarProducto('Nike panda black', 'Descripción corta del producto 1.', 123990, 'Imagenes/Zapatilla2.jpg')">Agregar al Carrito</button> 
+                <button onclick="agregarProducto('Nike panda black', 'Descripción corta del producto 1.', 123990, 'Imagenes/Zapatilla2.jpg')">Agregar al Carrito</button>
             </div>
 
             <div class="tarjeta">
-                <img src="{% static 'Zapatilla3.jpg' %}" alt="Producto 1">
-                <h3>Jordan 4 negras</h3>
+                <img src="{% static 'Zapatilla3.jpg' %}" alt="Jordan 4 negras">
+                <h3>Jordan 4 Negras</h3>
                 <p>Descripción corta del producto 1.</p>
                 <p>Precio: $329.690</p>
                 <button onclick="agregarProducto('Jordan 4 negras', 'Descripción corta del producto 1.', 329690, 'Imagenes/Zapatilla3.jpg')">Agregar al Carrito</button>
-            </div>   
+            </div>
+
             <div class="tarjeta">
-                <img src="{% static 'Zapatilla4.jpg' %}" alt="Producto 1">
-                <h3>Puma rojo</h3>
+                <img src="{% static 'Zapatilla4.jpg' %}" alt="Puma rojo">
+                <h3>Puma Rojo</h3>
                 <p>Descripción corta del producto 1.</p>
                 <p>Precio: $578.990</p>
                 <button onclick="agregarProducto('Puma rojo', 'Descripción corta del producto 1.', 578990, 'Imagenes/Zapatilla4.jpg')">Agregar al Carrito</button>
-            </div>           
+            </div>
         </section>
+
         <hr>
-    
+
+        <!-- Sección 2 -->
         <section id="seccion2" class="productos">
             <div class="tarjeta">
-                <img src="{% static 'Trekking1.png' %}" alt="Producto 1">
+                <img src="{% static 'Trekking1.png' %}" alt="Trekking Reforzadas">
                 <h3>Trekking Reforzadas</h3>
                 <p>Descripción corta del producto 1.</p>
                 <p>Precio: $75.000</p>
                 <button onclick="agregarProducto('Trekking Reforzadas', 'Descripción corta del producto 1.', 75000, 'Imagenes/Trekking1.png')">Agregar al Carrito</button>
             </div>
-    
+
             <div class="tarjeta">
-                <img src="{% static 'Trekking2.png' %}" alt="Producto 2">
-                <h3>Trekking naranjas</h3>
+                <img src="{% static 'Trekking2.png' %}" alt="Trekking naranjas">
+                <h3>Trekking Naranjas</h3>
                 <p>Descripción corta del producto 2.</p>
                 <p>Precio: $123.990</p>
                 <button onclick="agregarProducto('Trekking naranjas', 'Descripción corta del producto 1.', 123990, 'Imagenes/Trekking2.png')">Agregar al Carrito</button>
             </div>
 
             <div class="tarjeta">
-                <img src="{% static 'Trekking3.png' %}" alt="Producto 1">
-                <h3>Trekking negras</h3>
+                <img src="{% static 'Trekking3.png' %}" alt="Trekking negras">
+                <h3>Trekking Negras</h3>
                 <p>Descripción corta del producto 1.</p>
                 <p>Precio: $329.690</p>
                 <button onclick="agregarProducto('Trekking negras', 'Descripción corta del producto 1.', 329690, 'Imagenes/Trekking3.png')">Agregar al Carrito</button>
-            </div>   
+            </div>
+
             <div class="tarjeta">
-                <img src="{% static 'Trekking4.png' %}" alt="Producto 1">
-                <h3>Trekking turquesa</h3>
+                <img src="{% static 'Trekking4.png' %}" alt="Trekking turquesa">
+                <h3>Trekking Turquesa</h3>
                 <p>Descripción corta del producto 1.</p>
                 <p>Precio: $578.990</p>
                 <button onclick="agregarProducto('Trekking turquesa', 'Descripción corta del producto 1.', 578990, 'Imagenes/Trekking4.png')">Agregar al Carrito</button>
             </div>
-            
         </section>
+
         <hr>
-    
+
         <!-- Sección 3 -->
         <section id="seccion3" class="productos">
             <div class="tarjeta">
-                <img src="{% static 'deportivas1.png' %}" alt="Producto 1">
-                <h3>Nike mercurrial</h3>
+                <img src="{% static 'deportivas1.png' %}" alt="Nike Mercurial">
+                <h3>Nike Mercurial</h3>
                 <p>Descripción corta del producto 1.</p>
                 <p>Precio: $329.000</p>
                 <button onclick="agregarProducto('Nike mercurrial', 'Descripción corta del producto 1.', 329000, 'Imagenes/deportivas1.png')">Agregar al Carrito</button>
             </div>
-    
+
             <div class="tarjeta">
-                <img src="{% static 'deportivas2.png' %}" alt="Producto 2">
-                <h3>Nike negras y verde</h3>
+                <img src="{% static 'deportivas2.png' %}" alt="Nike negras y verde">
+                <h3>Nike Negras y Verde</h3>
                 <p>Descripción corta del producto 2.</p>
                 <p>Precio: $75.500</p>
                 <button onclick="agregarProducto('Nike negras y verde', 'Descripción corta del producto 1.', 75500, 'Imagenes/deportivas2.png')">Agregar al Carrito</button>
             </div>
 
             <div class="tarjeta">
-                <img src="{% static 'deportivas3.png' %}" alt="Producto 1">
-                <h3>Pumas blancas y rojas</h3>
+                <img src="{% static 'deportivas3.png' %}" alt="Pumas blancas y rojas">
+                <h3>Pumas Blancas y Rojas</h3>
                 <p>Descripción corta del producto 1.</p>
                 <p>Precio: $187.000</p>
                 <button onclick="agregarProducto('Pumas blancas y rojas', 'Descripción corta del producto 1.', 187000, 'Imagenes/deportivas3.png')">Agregar al Carrito</button>
             </div>
-            
+
             <div class="tarjeta">
-                <img src="{% static 'deportivas4.png' %}" alt="Producto 1">
-                <h3>Pumas rojas</h3>
+                <img src="{% static 'deportivas4.png' %}" alt="Pumas rojas">
+                <h3>Pumas Rojas</h3>
                 <p>Descripción corta del producto 1.</p>
                 <p>Precio: $769.840</p>
                 <button onclick="agregarProducto('Pumas rojas', 'Descripción corta del producto 1.', 769840, 'Imagenes/deportivas4.png')">Agregar al Carrito</button>
             </div>
-          
         </section>
 
+        <!-- Sección de productos dinámicos -->
         <section>
             <hr>
             <div class="productos">
                 {% for producto in productos %}
-                <div class="tarjeta">
-                    <img src="{{ producto.url_imagen }}" alt="{{ producto.nombre }}">
-                    <h3>{{ producto.nombre }}</h3>
-                    <p>{{ producto.descripcion }}</p>
-                    <p>Precio: ${{ producto.precio }}</p>
-                    <button onclick="agregarProducto(
-    '{{ producto.nombre }}',
-    '{{ producto.descripcion }}',
-    {{ producto.precio }},
-    '{{ producto.url_imagen }}'
-)">
-    Agregar al carrito
-</button>
-                </div>
+                    <div class="tarjeta">
+                        <img src="{{ producto.url_imagen }}" alt="{{ producto.nombre }}">
+                        <h3>{{ producto.nombre }}</h3>
+                        <p>{{ producto.descripcion }}</p>
+                        <p>Precio: ${{ producto.precio }}</p>
+                        <button onclick="agregarProducto('{{ producto.nombre }}', '{{ producto.descripcion }}', {{ producto.precio }}, '{{ producto.url_imagen }}')">
+                            Agregar al carrito
+                        </button>
+                    </div>
                 {% endfor %}
             </div>
-            </hr>
         </section>
-        
+
         <footer>
             <div class="horarios">
                 <h3>Horarios de Atención:</h3>
                 <p>Lunes a Viernes: 9am - 6pm</p>
                 <p>Sábado: 10am - 2pm</p>
             </div>
+
             <div class="redes-sociales">
                 <h3>Síguenos en:</h3>
-                <a href="#" target="_blank"><img id="redesFooter" src="{% static 'facebooklogo.png' %}" alt="FB_">Facebook</a>
-                <a href="#" target="_blank"><img id="redesFooter" src="{% static 'Logowhatsapp.jpg' %}" alt="FB_">Whatsapp</a>
-                <a href="#" target="_blank"><img id="redesFooter" src="{% static 'IGlogo.png' %}" alt="FB_">Instagram</a>
+                <a href="#" target="_blank"><img id="redesFooter" src="{% static 'facebooklogo.png' %}" alt="Facebook">Facebook</a>
+                <a href="#" target="_blank"><img id="redesFooter" src="{% static 'Logowhatsapp.jpg' %}" alt="Whatsapp">Whatsapp</a>
+                <a href="#" target="_blank"><img id="redesFooter" src="{% static 'IGlogo.png' %}" alt="Instagram">Instagram</a>
             </div>
+
             <div class="metodos-pago">
-                <h3>MÉTODOS DE PAGO</h3>
-                <p>Pagos con todo medio de Pago</p>
+                <h3>Métodos de Pago</h3>
+                <p>Pagos con todo medio de pago</p>
                 <p>Envíos a todo el país</p>
                 <p>Ofertas todos los días</p>
             </div>
         </footer>
-
     </div>
 
-<!-- Chatbot Flotante Thomys -->
-<div id="chatbot-box">
-    <div id="chatbot-header">🤖 Chat Thomys</div>
-    <div id="chatbot-messages"></div>
-    <div id="chatbot-input-row">
-      <input type="text" id="chatbot-input" placeholder="Escribe tu duda...">
-      <button id="chatbot-send">Enviar</button>
+    <!-- Chatbot Flotante Thomys -->
+    <div id="chatbot-box">
+        <div id="chatbot-header">🤖 Chat Thomys</div>
+        <div id="chatbot-messages"></div>
+        <div id="chatbot-input-row">
+            <input type="text" id="chatbot-input" placeholder="Escribe tu duda...">
+            <button id="chatbot-send">Enviar</button>
+        </div>
     </div>
-  </div>
-  
-  <style>
-  #chatbot-box {
-    position: fixed;
-    bottom: 20px; right: 20px;
-    width: 300px; max-height: 380px;
-    display: flex; flex-direction: column;
-    background: #fff; border: 2px solid #3498db; border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2); font-family: Arial, sans-serif; z-index: 9999;
-  }
-  #chatbot-header { background: #3498db; color: #fff; padding: 10px; font-weight: bold; border-radius: 8px 8px 0 0; }
-  #chatbot-messages { padding: 10px; overflow-y: auto; flex: 1; font-size: 14px; }
-  #chatbot-input-row { display: flex; gap: 6px; padding: 10px; }
-  #chatbot-input { flex: 1; padding: 6px; border: 1px solid #3498db; border-radius: 6px; }
-  #chatbot-send { padding: 6px 10px; background: #3498db; color:#fff; border: none; border-radius: 6px; cursor: pointer; }
-  #chatbot-send:hover { filter: brightness(0.95); }
-  </style>
-  
-  <script>
-  (function(){
-    const box = document.getElementById("chatbot-box");
-    const msgs = document.getElementById("chatbot-messages");
-    const input = document.getElementById("chatbot-input");
-    const sendBtn = document.getElementById("chatbot-send");
-  
-    function append(role, text) {
-      const p = document.createElement("p");
-      p.innerHTML = role === "user" ? "<b>Tú:</b> " + text : "<b>Bot:</b> " + text;
-      msgs.appendChild(p);
-      msgs.scrollTop = msgs.scrollHeight;
-    }
-  
-    function enviar() {
-      const pregunta = input.value.trim();
-      if (!pregunta) return;
-      append("user", pregunta);
-      input.value = "";
-  
-      fetch("/chatbot/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ pregunta })
-      })
-      .then(r => r.json())
-      .then(data => append("bot", data.respuesta || "Respuesta vacía."))
-      .catch(() => append("bot", "Error de red. Intenta más tarde."));
-    }
-  
-    sendBtn.addEventListener("click", enviar);
-    input.addEventListener("keydown", (e) => { if (e.key === "Enter") enviar(); });
-  
-    // Mensaje de bienvenida
-    append("bot", "Hola 👋 Soy el asistente de Thomys. ¿Cómo puedo ayudarte?.");
-  })();
-  </script>
-  
-  
 
+    <style>
+        #chatbot-box {
+            position: fixed;
+            bottom: 20px; right: 20px;
+            width: 300px; max-height: 380px;
+            display: flex; flex-direction: column;
+            background: #fff; border: 2px solid #3498db; border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2); font-family: Arial, sans-serif; z-index: 9999;
+        }
+        #chatbot-header { background: #3498db; color: #fff; padding: 10px; font-weight: bold; border-radius: 8px 8px 0 0; }
+        #chatbot-messages { padding: 10px; overflow-y: auto; flex: 1; font-size: 14px; }
+        #chatbot-input-row { display: flex; gap: 6px; padding: 10px; }
+        #chatbot-input { flex: 1; padding: 6px; border: 1px solid #3498db; border-radius: 6px; }
+        #chatbot-send { padding: 6px 10px; background: #3498db; color:#fff; border: none; border-radius: 6px; cursor: pointer; }
+        #chatbot-send:hover { filter: brightness(0.95); }
+    </style>
+
+    <script>
+        (function(){
+            const box = document.getElementById("chatbot-box");
+            const msgs = document.getElementById("chatbot-messages");
+            const input = document.getElementById("chatbot-input");
+            const sendBtn = document.getElementById("chatbot-send");
+
+            function append(role, text) {
+                const p = document.createElement("p");
+                p.innerHTML = role === "user" ? "<b>Tú:</b> " + text : "<b>Bot:</b> " + text;
+                msgs.appendChild(p);
+                msgs.scrollTop = msgs.scrollHeight;
+            }
+
+            function enviar() {
+                const pregunta = input.value.trim();
+                if (!pregunta) return;
+                append("user", pregunta);
+                input.value = "";
+
+                fetch("/chatbot/", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ pregunta })
+                })
+                .then(r => r.json())
+                .then(data => append("bot", data.respuesta || "Respuesta vacía."))
+                .catch(() => append("bot", "Error de red. Intenta más tarde."));
+            }
+
+            sendBtn.addEventListener("click", enviar);
+            input.addEventListener("keydown", e => { if (e.key === "Enter") enviar(); });
+
+            // Mensaje de bienvenida
+            append("bot", "Hola 👋 Soy el asistente de Thomys. ¿Cómo puedo ayudarte?");
+        })();
+    </script>
 </body>
 </html>

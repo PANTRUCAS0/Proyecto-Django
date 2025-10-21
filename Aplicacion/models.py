@@ -2,10 +2,6 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
 from django.utils import timezone
 
-class Productos(models.Model):
-    nombre = models.CharField(max_length=20)
-    precio = models.IntegerField()
-    descripcion = models.CharField(max_length=20)
 
 
 class ClienteManager(BaseUserManager):

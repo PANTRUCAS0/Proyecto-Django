@@ -1,87 +1,150 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Productos</title>
     <style>
-        #contenedor{
-            display: grid;
-            place-items: center;
+        body {
+            margin: 0;
+            background-color: #f8f9fa;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        a{
-            text-decoration: none;
-            color: #fff;
+        #contenedor {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
         }
 
-        #Eliminar{
-        color: #fff;
-        border: 2px solid #a50024;
-        text-decoration: none;
-        background-color: #a50024;
-        border-radius: 8px;
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
         }
 
-        ul{
-            list-style: none;
-        }
-
-        #Admin{
-            color: #fff;
-            border: 2px solid #3498db;
-            text-decoration: none;
-            background-color: #3498db;
+        .btn {
+            display: inline-block;
+            padding: 10px 16px;
             border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
         }
 
-        img{
-            width: 300px;
-            height: 300px;
+        .btn a {
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .btn-admin {
+            background-color: #3498db;
+        }
+
+        .btn-admin:hover {
+            background-color: #2980b9;
+        }
+
+        .btn-eliminar {
+            background-color: #a50024;
+        }
+
+        .btn-eliminar:hover {
+            background-color: #8b001e;
+        }
+
+        ul#listaProductos {
+            list-style: none;
+            padding: 0;
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        li.producto {
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        li.producto:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+        }
+
+        img {
+            width: 100%;
+            max-width: 220px;
+            height: 220px;
+            object-fit: contain; /* evita que se corte */
+            border-radius: 10px;
+            margin: 0 auto 10px;
+            display: block;
+        }
+
+        h3 {
+            margin: 12px 0 6px;
+            color: #222;
+        }
+
+        p {
+            margin: 5px 0;
+            color: #555;
+        }
+
+        .precio {
+            font-weight: bold;
+            color: #222;
         }
     </style>
 </head>
 <body>
     <div id="contenedor">
         <h2>Lista de Productos</h2>
-        <button id="Admin"><a href="{% url 'Admin' %}">Volver al Admin</a></button>    
+        <button class="btn btn-admin"><a href="{% url 'Admin' %}">Volver al Admin</a></button>
+
         <ul id="listaProductos">
             {% for producto in productos %}
-                <li class="producto">
+                <li class="producto" id="producto-{{ producto.id }}">
                     <img src="{{ producto.url_imagen }}" alt="{{ producto.nombre }}">
                     <h3>{{ producto.nombre }}</h3>
                     <p>{{ producto.descripcion }}</p>
-                    <p>Precio: ${{ producto.precio }}</p>
-                    <button id="Eliminar" onclick="eliminarProducto({{ producto.id }})">Eliminar</button>
+                    <p class="precio">Precio: ${{ producto.precio }}</p>
+                    <button class="btn btn-eliminar" onclick="eliminarProducto({{ producto.id }})">Eliminar</button>
                 </li>
             {% endfor %}
         </ul>
     </div>
-</body>
-<script>
-    function eliminarProducto(productoId) {
-        if (confirm("¿Estás seguro de que deseas eliminar este producto?")) {
-            fetch(`/eliminar-producto/${productoId}/`, {
-                method: 'DELETE',
-                headers: {
-                    'X-CSRFToken': '{{ csrf_token }}'
-                }
-            })
-            .then(response => {
-                if (response.ok) {
-                    const productoEliminar = document.getElementById(`producto-${productoId}`);
-                    if (productoEliminar) {
-                        productoEliminar.remove(); // Eliminar el elemento de la lista
+
+    <script>
+        function eliminarProducto(productoId) {
+            if (confirm("¿Estás seguro de que deseas eliminar este producto?")) {
+                fetch(`/eliminar-producto/${productoId}/`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
                     }
-                } else {
-                    console.error('Error al eliminar el producto');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+                })
+                .then(response => {
+                    if (response.ok) {
+                        const productoEliminar = document.getElementById(`producto-${productoId}`);
+                        if (productoEliminar) {
+                            productoEliminar.remove();
+                        }
+                    } else {
+                        console.error('Error al eliminar el producto');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            }
         }
-    }
-</script>
+    </script>
+</body>
 </html>

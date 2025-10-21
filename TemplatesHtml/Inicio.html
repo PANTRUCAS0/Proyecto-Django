@@ -5,7 +5,145 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tienda Virtual Thomys</title>
+    <style>
+        /* === Estilos generales === */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #e3f2fd, #ffffff);
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
 
+        header {
+            background-color: #3498db;
+            padding: 30px 20px;
+            text-align: center;
+            color: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            animation: fadeInDown 1s ease forwards;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2rem;
+            letter-spacing: 1px;
+        }
+
+        p {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-top: 10px;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            text-align: center;
+            animation: fadeIn 1.2s ease forwards;
+        }
+
+        /* === Botones === */
+        .button-container {
+            margin-top: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            animation: slideUp 1.5s ease forwards;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            background-color: #3498db;
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .button:hover {
+            background-color: #2d89c7;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+        }
+
+        /* === Logo === */
+        .contenedor {
+            margin-top: 50px;
+            text-align: center;
+            animation: fadeIn 2s ease forwards;
+        }
+
+        .contenedor img {
+            width: 300px; /* Aumenté el tamaño del logo */
+            max-width: 90%;
+            border-radius: 10px;
+            transition: transform 0.4s ease;
+        }
+
+        .contenedor img:hover {
+            transform: scale(1.08);
+        }
+
+        footer {
+            background-color: #3498db;
+            color: #fff;
+            text-align: center;
+            padding: 15px;
+            font-size: 0.9rem;
+            animation: fadeInUp 1.8s ease forwards;
+        }
+
+        /* === Animaciones === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === Responsividad === */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .button {
+                width: 80%;
+            }
+
+            .contenedor img {
+                width: 220px;
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -14,68 +152,23 @@
         <p>Elija la opción con la que desea entrar:</p>
     </header>
 
-    <div class="button-container">
-        <a href="{% url 'Registro' %}" id="Registro" class="button">Registro</a>  
-        <a href="{% url 'Login' %}" id="Registro" class="button">Iniciar Sesion</a>  
-        <a href="{% url 'Pagina' %}" id="invitado" class="button">Invitado</a>
-        <a href="{% url 'LoginAdmin' %}" class="button">Acceso de Superusuario</a>
-    </div>
-    <div class="contenedor">
-        <img src="{% static 'Logo.png' %}" alt="">
-    </div>
+    <main>
+        <div class="button-container">
+            <a href="{% url 'Registro' %}" class="button">Registro</a>  
+            <a href="{% url 'Login' %}" class="button">Iniciar Sesión</a>  
+            <a href="{% url 'Pagina' %}" class="button">Entrar como Invitado</a>
+            <a href="{% url 'LoginAdmin' %}" class="button">Acceso de Superusuario</a>
+        </div>
+
+        <div class="contenedor">
+            <img src="{% static 'Logo.png' %}" alt="Logo de Zapatería Thomys">
+        </div>
+    </main>
+
+    <footer>
+        &copy; 2025 Zapatería Thomys — Todos los derechos reservados.
+    </footer>
+
 </body>
-<style>
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #f4f4f4;
-    }
-
-    header {
-        background-color: #3498db;
-        padding: 20px;
-        text-align: center;
-        color: #fff;
-    }
-
-    h1 {
-        margin: 0;
-        font-size: 32px;
-    }
-
-    p {
-        font-size: 18px;
-        font-weight: bold;
-        margin-top: 10px;
-    }
-
-    .button-container {
-        text-align: center;
-        margin-top: 20px;
-    }
-
-    .button {
-        display: inline-block;
-        padding: 10px 20px;
-        margin: 5px;
-        border: 2px solid #3498db;
-        border-radius: 8px;
-        background-color: #3498db;
-        color: #fff;
-        text-decoration: none;
-        font-weight: bold;
-        font-size: 16px;
-        cursor: pointer;
-    }
-
-    .contenedor {
-        text-align: center;
-    }
-
-    .contenedor img {
-        display: inline-block;
-    }
-
-</style>
 </html>
+
