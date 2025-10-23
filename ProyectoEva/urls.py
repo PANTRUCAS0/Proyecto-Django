@@ -34,11 +34,13 @@ urlpatterns = [
     path('LoginAdmin/', views.login_admin, name='LoginAdmin'),  
 
     path('ActulizarCL/<int:cliente_id>/', views.actualizar_cliente, name='ActulizarCL'),
-    path('EliminarCL/<int:cliente_id>/', views.eliminar_cliente, name='EliminarCL'),
+    path('eliminar/<int:id>/', views.eliminar_cliente, name='EliminarCL'),
     
     path('AgregarProducto/', views.AgregarProducto, name='AgregarProducto'),
     path('Producto/', views.mostrar_productos, name='mostrarProductos'),
+
     path('eliminar-producto/<int:producto_id>/', views.eliminar_producto, name='eliminar_producto'),
+    path('actualizar-producto/<int:producto_id>/', views.actualizar_producto, name='actualizar_producto'),
 
     path("chatbot/", views.chatbot, name="chatbot"),
 
@@ -46,6 +48,11 @@ urlpatterns = [
     path('guardar_boleta/', views.guardar_boleta, name='guardar_boleta'),
 
     path('detalle_boleta/', views.detalle_boleta, name='detalle_boleta'),
+
+    path('exportar_excel/', views.exportar_excel, name='exportar_excel'),
+
+    path('graficos_boletas/', views.graficos_boletas, name='graficos_boletas'),
+
 ]
 
 

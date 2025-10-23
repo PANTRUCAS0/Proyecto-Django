@@ -2,274 +2,227 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro | Zapatería Thomys</title>
-    <style>
-        /* === ESTILOS GENERALES === */
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(135deg, #e3f2fd, #ffffff);
-            color: #333;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            overflow-x: hidden;
-            animation: fadeIn 1s ease forwards;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registro | Zapatería Thomys</title>
+<style>
+    /* === ESTILOS GENERALES === */
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(135deg, #e3f2fd, #ffffff);
+        color: #333;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+        overflow-x: hidden;
+        animation: fadeIn 1s ease forwards;
+    }
+    header {
+        background-color: #3498db;
+        padding: 30px 20px;
+        color: #fff;
+        text-align: center;
+        width: 100%;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        animation: slideDown 1s ease forwards;
+    }
+    header h2 { margin: 5px 0; font-size: 1.6rem; font-weight: 600; }
 
-        header {
-            background-color: #3498db;
-            padding: 30px 20px;
-            color: #fff;
-            text-align: center;
-            width: 100%;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            animation: slideDown 1s ease forwards;
-        }
+    form {
+        background-color: #ffffff;
+        margin-top: 40px;
+        padding: 40px 30px;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        width: 90%;
+        max-width: 400px;
+        text-align: left;
+        animation: slideUp 1.2s ease forwards;
+        position: relative;
+    }
 
-        header h2 {
-            margin: 5px 0;
-            font-size: 1.6rem;
-            font-weight: 600;
-        }
+    label { font-weight: 600; display: block; margin-bottom: 8px; color: #444; }
+    input {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 5px;
+        border: 1.5px solid #3498db;
+        border-radius: 6px;
+        box-sizing: border-box;
+        font-size: 15px;
+        transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    input:focus { outline: none; border-color: #2d89c7; box-shadow: 0 0 6px rgba(52, 152, 219, 0.4); }
 
-        form {
-            background-color: #ffffff;
-            margin-top: 40px;
-            padding: 40px 30px;
-            border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-            width: 90%;
-            max-width: 400px;
-            text-align: left;
-            animation: slideUp 1.2s ease forwards;
-            position: relative;
-        }
+    button {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 8px;
+        background-color: #3498db;
+        color: #fff;
+        font-weight: bold;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        margin-top: 10px;
+    }
+    button:hover { background-color: #2d89c7; transform: translateY(-2px); box-shadow: 0 6px 14px rgba(0,0,0,0.15); }
+    .btn-secundario { background-color: #555; }
+    .btn-secundario:hover { background-color: #444; }
+    a { text-decoration: none; color: #fff; }
 
-        label {
-            font-weight: 600;
-            display: block;
-            margin-bottom: 8px;
-            color: #444;
-        }
+    /* === MENSAJES DE VALIDACIÓN CON CHECK/X === */
+    .guia {
+        font-size: 0.9rem;
+        margin-bottom: 12px;
+        padding: 8px 12px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+    .guia .icono { font-weight: bold; font-size: 1.1rem; }
+    .guia.valido { color: #2ecc71; }
+    .guia.valido .icono::before { content: "✅"; }
+    .guia.invalido { color: #e74c3c; }
+    .guia.invalido .icono::before { content: "❌"; }
 
-        input {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1.5px solid #3498db;
-            border-radius: 6px;
-            box-sizing: border-box;
-            font-size: 15px;
-            transition: border-color 0.3s, box-shadow 0.3s;
-        }
+    /* === ALERTAS DE DJANGO === */
+    .alerta-exito { background-color: #2ecc71; color: #fff; padding: 12px; border-radius: 8px; text-align: center; font-weight: bold; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    .alerta-error { background-color: #e74c3c; }
 
-        input:focus {
-            outline: none;
-            border-color: #2d89c7;
-            box-shadow: 0 0 6px rgba(52, 152, 219, 0.4);
-        }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes slideDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
 
-        button {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            background-color: #3498db;
-            color: #fff;
-            font-weight: bold;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            margin-top: 10px;
-        }
-
-        button:hover {
-            background-color: #2d89c7;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 14px rgba(0,0,0,0.15);
-        }
-
-        .btn-secundario {
-            background-color: #555;
-        }
-
-        .btn-secundario:hover {
-            background-color: #444;
-        }
-
-        a {
-            text-decoration: none;
-            color: #fff;
-        }
-
-        /* === MENSAJES DE AYUDA === */
-        .mensaje {
-            display: none;
-            color: #e74c3c;
-            font-size: 0.9rem;
-            margin-bottom: 10px;
-            transition: opacity 0.3s ease;
-        }
-
-        /* === ALERTA DE ÉXITO === */
-        .alerta-exito {
-            display: none;
-            background-color: #2ecc71;
-            color: #fff;
-            padding: 12px;
-            border-radius: 8px;
-            text-align: center;
-            font-weight: bold;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            animation: aparecer 0.5s ease forwards;
-        }
-
-        @keyframes aparecer {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* === ANIMACIONES === */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* === RESPONSIVIDAD === */
-        @media (max-width: 480px) {
-            header h2 {
-                font-size: 1.3rem;
-            }
-            form {
-                padding: 30px 20px;
-            }
-            button {
-                font-size: 15px;
-            }
-        }
-    </style>
+    @media (max-width: 480px) {
+        header h2 { font-size: 1.3rem; }
+        form { padding: 30px 20px; }
+        button { font-size: 15px; }
+    }
+</style>
 </head>
 <body>
 
-    <header>
-        <h2>Ingrese sus datos</h2>
-        <h2>para registrarse</h2>
-        <h2>en nuestra tienda virtual</h2>
-    </header>
+<header>
+    <h2>Ingrese sus datos</h2>
+    <h2>para registrarse</h2>
+    <h2>en nuestra tienda virtual</h2>
+</header>
 
-    <form method="post" onsubmit="return validarFormulario()">
-        {% csrf_token %}
+<form method="post" onsubmit="return validarFormulario()">
+    {% csrf_token %}
 
-        <!-- ALERTA DE ÉXITO -->
-        <div id="alertaExito" class="alerta-exito">
-            ✅ Registro exitoso. ¡Bienvenido a la tienda virtual!
-        </div>
+    <!-- ALERTAS DE DJANGO -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alerta-exito {% if message.tags == 'error' %}alerta-error{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
 
-        <label for="Usuario">Usuario:</label>
-        <input type="text" id="Usuario" name="Usuario" placeholder="Ingrese su nombre de usuario" required>
+    <!-- Usuario -->
+    <label for="Usuario">Usuario:</label>
+    <input type="text" id="Usuario" name="Usuario" placeholder="Ingrese su nombre de usuario" required>
+    <p id="mensajeUsuario" class="guia invalido"><span class="icono"></span> El usuario debe tener mínimo 3 caracteres.</p>
 
-        <label for="Contraseña">Contraseña:</label>
-        <input type="password" id="Contraseña" name="Contraseña" placeholder="Cree una contraseña segura" onfocus="mostrarMensaje('mensajeContrasena')" required>
-        <p id="mensajeContrasena" class="mensaje">La contraseña debe tener mínimo 5 caracteres, 1 número y 1 carácter especial.</p>
+    <!-- Contraseña -->
+    <label for="Contraseña">Contraseña:</label>
+    <input type="password" id="Contraseña" name="Contraseña" placeholder="Cree una contraseña segura" required>
+    <p id="mensajeContrasena" class="guia invalido"><span class="icono"></span> Debe tener mínimo 5 caracteres, 1 número y 1 carácter especial.</p>
 
-        <label for="Email">Correo electrónico:</label>
-        <input type="email" id="Email" name="Email" placeholder="Ingrese su correo electrónico" onfocus="mostrarMensaje('mensajeEmail')" required>
-        <p id="mensajeEmail" class="mensaje">El email debe contener el símbolo @</p>
+    <!-- Email -->
+    <label for="Email">Correo electrónico:</label>
+    <input type="email" id="Email" name="Email" placeholder="Ingrese su correo electrónico" required>
+    <p id="mensajeEmail" class="guia invalido"><span class="icono"></span> El email debe ser válido.</p>
 
-        <label for="Telefono">Teléfono:</label>
-        <input type="text" id="Telefono" name="Telefono" placeholder="Ingrese su número de teléfono" required>
-        <p id="mensajeTelefono" class="mensaje">Debe contener al menos 9 dígitos.</p>
+    <!-- Teléfono -->
+    <label for="Telefono">Teléfono:</label>
+    <input type="text" id="Telefono" name="Telefono" placeholder="Ingrese su número de teléfono" required>
+    <p id="mensajeTelefono" class="guia invalido"><span class="icono"></span> EL numero de telefono debe ser válido.</p>
 
-        <button type="submit">Registrarse</button>
-        <button type="button" class="btn-secundario">
-            <a href="{% url 'Inicio' %}">Volver al inicio</a>
-        </button>
-    </form>
+    <button type="submit">Registrarse</button>
+    <button type="button" class="btn-secundario">
+        <a href="{% url 'Inicio' %}">Volver al inicio</a>
+    </button>
+</form>
 
-    <script>
-        // === VALIDACIONES ===
-        function validarFormulario() {
-            if (validarTelefono() && validarEmail() && validarContrasena()) {
-                mostrarAlertaExito();
+<script>
+    // === CAMPOS ===
+    const usuarioInput = document.getElementById("Usuario");
+    const contrasenaInput = document.getElementById("Contraseña");
+    const emailInput = document.getElementById("Email");
+    const telefonoInput = document.getElementById("Telefono");
 
-                // Espera 1 segundo para mostrar la alerta y luego envía el formulario
-                setTimeout(() => {
-                    document.querySelector("form").submit();
-                }, 1000);
+    // === EVENTOS INPUT ===
+    usuarioInput.addEventListener("input", validarUsuario);
+    contrasenaInput.addEventListener("input", validarContrasena);
+    emailInput.addEventListener("input", validarEmail);
+    telefonoInput.addEventListener("input", validarTelefono);
 
-                return false; // evita envío inmediato
-            }
-            return false; // bloquea envío si alguna validación falla
+    // === FUNCIONES DE VALIDACIÓN ===
+    function validarUsuario() {
+        const mensaje = document.getElementById("mensajeUsuario");
+        if (usuarioInput.value.trim().length >= 3) {
+            mensaje.classList.remove("invalido"); mensaje.classList.add("valido");
+        } else {
+            mensaje.classList.remove("valido"); mensaje.classList.add("invalido");
         }
+    }
 
-        function validarTelefono() {
-            const telefono = document.getElementById("Telefono").value.trim();
-            const mensaje = document.getElementById("mensajeTelefono");
-            if (telefono.length < 9) {
-                mostrarTemporal(mensaje);
-                return false;
-            }
-            return true;
+    function validarContrasena() {
+        const regex = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-zA-Z]).{5,}$/;
+        const mensaje = document.getElementById("mensajeContrasena");
+        if (regex.test(contrasenaInput.value)) {
+            mensaje.classList.remove("invalido"); mensaje.classList.add("valido");
+        } else {
+            mensaje.classList.remove("valido"); mensaje.classList.add("invalido");
         }
+    }
 
-        function validarEmail() {
-            const email = document.getElementById("Email").value.trim();
-            const mensaje = document.getElementById("mensajeEmail");
-            if (!email.includes('@')) {
-                mostrarTemporal(mensaje);
-                return false;
-            }
-            return true;
+    function validarEmail() {
+        const mensaje = document.getElementById("mensajeEmail");
+        if (emailInput.value.includes("@") && emailInput.value.includes(".")) {
+            mensaje.classList.remove("invalido"); mensaje.classList.add("valido");
+        } else {
+            mensaje.classList.remove("valido"); mensaje.classList.add("invalido");
         }
+    }
+function validarTelefono() {
+    const mensaje = document.getElementById("mensajeTelefono");
+    const telefono = telefonoInput.value.trim();
+    const regex = /^\d{9}$/; // EXACTAMENTE 9 dígitos
+    if (regex.test(telefono)) {
+        mensaje.classList.remove("invalido");
+        mensaje.classList.add("valido");
+    } else {
+        mensaje.classList.remove("valido");
+        mensaje.classList.add("invalido");
+    }
+}
 
-        function validarContrasena() {
-            const contrasena = document.getElementById("Contraseña").value;
-            const regex = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-zA-Z]).{5,}$/;
-            const mensaje = document.getElementById("mensajeContrasena");
-            if (!regex.test(contrasena)) {
-                mostrarTemporal(mensaje);
-                return false;
-            }
-            return true;
-        }
 
-        // === ALERTA DE ÉXITO ===
-        function mostrarAlertaExito() {
-            const alerta = document.getElementById("alertaExito");
-            alerta.style.display = "block";
-        }
+    // === VALIDAR TODO AL ENVIAR ===
+    function validarFormulario() {
+        validarUsuario();
+        validarContrasena();
+        validarEmail();
+        validarTelefono();
 
-        // === FUNCIONES DE MENSAJE ===
-        function mostrarMensaje(id) {
-            document.getElementById(id).style.display = "block";
+        const mensajes = document.querySelectorAll(".guia");
+        for (let m of mensajes) {
+            if (m.classList.contains("invalido")) return false; // bloquea envío si hay error
         }
-
-        function mostrarTemporal(elemento) {
-            elemento.style.display = "block";
-            elemento.style.opacity = "1";
-            setTimeout(() => {
-                elemento.style.opacity = "0";
-                setTimeout(() => elemento.style.display = "none", 300);
-            }, 2500);
-        }
-    </script>
+        return true; // permite enviar
+    }
+</script>
 </body>
 </html>
-

@@ -1,35 +1,139 @@
 <style>
+    /* === ENCABEZADO === */
     header {
-            background-color: #3498db;
-            padding: 20px;
-            color: #fff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: grid;
-            place-items: center;
-    }
-
-    #contenedor{
-            display: grid;
-            place-items: center;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    #Actualizar{
-        color: #fff;
-        border: 2px solid #39A500;
-        text-decoration: none;
-        background-color: #39A500;
-        border-radius: 8px;
-   
-    }
-
-    .VolverAdmin{
-        color: #fff;
-        border: 2px solid #3498db;
-        text-decoration: none;
         background-color: #3498db;
+        width: 100%;
+        padding: 25px 0;
+        color: #fff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        text-align: center;
+        position: relative;
+        top: 0;
+        left: 0;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+        animation: slideDown 0.8s ease forwards;
+    }
+
+    header h1 {
+        margin: 0;
+        font-size: 1.9rem;
+        letter-spacing: 1px;
+    }
+
+    /* === CUERPO GENERAL === */
+    body {
+        background: #f5f7fb;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        min-height: 100vh;
+        margin: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* === CONTENEDOR === */
+    #contenedor {
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        width: 90%;
+        max-width: 450px;
+        padding: 35px 30px;
+        margin-top: 50px;
+        animation: fadeIn 1s ease forwards;
+    }
+
+    form {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    form p {
+        width: 100%;
+        margin: 10px 0;
+        font-size: 1rem;
+        color: #333;
+    }
+
+    input, select, textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1.5px solid #3498db;
         border-radius: 8px;
+        font-size: 15px;
+        transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    input:focus, select:focus, textarea:focus {
+        border-color: #2d89c7;
+        box-shadow: 0 0 6px rgba(52, 152, 219, 0.4);
+        outline: none;
+    }
+
+    /* === BOTONES === */
+    #Actualizar,
+    .VolverAdmin {
+        display: inline-block;
+        padding: 12px 25px;
+        margin-top: 20px;
+        border: none;
+        border-radius: 10px;
+        color: #fff;
+        font-weight: 600;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
         text-decoration: none;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    #Actualizar {
+        background-color: #39A500;
+    }
+
+    #Actualizar:hover {
+        background-color: #2f8400;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+    }
+
+    .VolverAdmin {
+        background-color: #3498db;
+        margin-left: 10px;
+    }
+
+    .VolverAdmin:hover {
+        background-color: #2d89c7;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+    }
+
+    /* === ANIMACIONES === */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* === RESPONSIVE === */
+    @media (max-width: 480px) {
+        header h1 {
+            font-size: 1.5rem;
+        }
+        #contenedor {
+            padding: 25px 20px;
+        }
+        #Actualizar, .VolverAdmin {
+            font-size: 15px;
+            padding: 10px 18px;
+        }
     }
 </style>
 
@@ -38,14 +142,15 @@
 </header>
 
 <div id="contenedor">
-
     <form id="updateForm" method="post">
         {% csrf_token %}
-        {{ form.as_p }} <!-- Esto renderizará los campos del formulario -->
-        <button id="Actualizar" type="submit">Actualizar</button>
-        <button class="VolverAdmin"><a class="VolverAdmin" href="{% url 'Admin' %}">Volver al Administrador</a></button>
+        {{ form.as_p }} 
+        <div style="display: flex; justify-content: center; flex-wrap: wrap;">
+            <button id="Actualizar" type="submit">Actualizar</button>
+            <a href="{% url 'Admin' %}" class="VolverAdmin">Volver al Administrador</a>
+        </div>
     </form>
- </div>
+</div>
 
 <script>
     function mostrarAlerta() {
@@ -56,3 +161,4 @@
         mostrarAlerta();
     });
 </script>
+

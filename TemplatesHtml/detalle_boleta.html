@@ -1,3 +1,53 @@
+<div style="display: flex; justify-content: center; gap: 15px; margin-top: 20px; flex-wrap: wrap;">
+    <a href="{% url 'Admin' %}" 
+       style="background: linear-gradient(135deg, #4b79a1, #283e51);
+              color: white; 
+              padding: 10px 20px; 
+              border-radius: 8px; 
+              text-decoration: none; 
+              font-family: 'Poppins', sans-serif;
+              font-weight: 500;
+              transition: 0.3s;">
+        Volver
+    </a>
+
+    <a href="{% url 'exportar_excel' %}" 
+       style="background: linear-gradient(135deg, #4b79a1, #283e51);
+              color: white; 
+              padding: 10px 20px; 
+              border-radius: 8px; 
+              text-decoration: none; 
+              font-family: 'Poppins', sans-serif;
+              font-weight: 500;
+              transition: 0.3s;">
+        Exportar a Excel
+    </a>
+
+    <a href="{% url 'graficos_boletas' %}" 
+       style="background: linear-gradient(135deg, #4b79a1, #283e51);
+              color: white; 
+              padding: 10px 20px; 
+              border-radius: 8px; 
+              text-decoration: none; 
+              font-family: 'Poppins', sans-serif;
+              font-weight: 500;
+              transition: 0.3s;">
+        Ver gráficos
+    </a>
+</div>
+
+
+<div style="text-align: center; margin-top: 20px;">
+    <input type="text" id="searchInput" 
+           placeholder="Buscar por ID Boleta o Nombre..."
+           style="width: 60%; 
+                  padding: 10px 15px; 
+                  border-radius: 8px; 
+                  border: 1px solid #ccc; 
+                  font-family: 'Poppins', sans-serif; 
+                  font-size: 14px;">
+</div>
+
 <h2 style="text-align: center; margin-top: 30px; font-family: 'Poppins', sans-serif; color: #333;">
     Detalle de Boletas
 </h2>
@@ -86,7 +136,7 @@
             <td>{{ d.cantidad }}</td>
             <td>${{ d.subtotal }}</td>
             <td>{{ d.boleta.id_boleta }}</td>
-            <td>{{ d.boleta.fecha_creacion|date:"d/m/Y H:i" }}</td>
+            <td>{{ d.boleta.fecha_creacion|date:"d/m/Y" }}</td>
         </tr>
         {% empty %}
         <tr>
@@ -95,3 +145,21 @@
         {% endfor %}
     </tbody>
 </table>
+
+<script>
+document.getElementById('searchInput').addEventListener('keyup', function() {
+    const filter = this.value.toLowerCase().trim();
+    const rows = document.querySelectorAll('tbody tr');
+
+    rows.forEach(row => {
+        const idBoleta = row.children[6]?.textContent.toLowerCase() || '';    // ID Boleta (columna 7)
+        const nombre = row.children[1]?.textContent.toLowerCase() || '';      // Nombre
+
+        if (idBoleta.includes(filter) || nombre.includes(filter) ) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+});
+</script>

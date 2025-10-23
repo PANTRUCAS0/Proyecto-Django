@@ -3,46 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Agregar Producto</title>
     <style>
-        header {
-            background-color: #3498db;
-            padding: 20px;
-            color: #fff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: grid;
-            text-align: center;
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
-        #contenedor{
-            display: grid;
-            place-items: center;
+        body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f9;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
-        form{
-            display: grid;
-            margin: 0px;
-        }
-        
-        #Agregar{
+
+        header {
+            background: linear-gradient(135deg, #4b79a1, #283e51);
             color: #fff;
-            border: 2px solid #3498db;
-            text-decoration: none;
-            background-color: #3498db;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h2 {
+            font-size: 2rem;
+            letter-spacing: 1px;
+        }
+
+        #contenedor {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        form input, form textarea {
+            padding: 10px 15px;
             border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+            transition: border 0.3s, box-shadow 0.3s;
+        }
+
+        form input:focus, form textarea:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 5px rgba(52,152,219,0.5);
+            outline: none;
+        }
+
+        #Agregar {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 12px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        #Agregar:hover {
+            background: linear-gradient(135deg, #2980b9, #1c5980);
+            transform: translateY(-2px);
+        }
+
+        #Agregar:active {
+            transform: translateY(0);
+        }
+
+        /* Estilo del botón Volver */
+        .volver-container {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .volver-btn {
+            display: inline-block;
+            text-decoration: none;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .volver-btn:hover {
+            background: linear-gradient(135deg, #2575fc, #1b4db3);
+            transform: translateY(-2px);
         }
     </style>
 </head>
 <body>
-        <header>
-            <h2>Agregar Nuevo Producto</h2>
-        </header>
-        <div id="contenedor">
+    <header>
+        <h2>Agregar Nuevo Producto</h2>
+    </header>
+
+    <div id="contenedor">
         <form method="post">
-          {% csrf_token %}
-          {{ producto_form.as_p }}
-          <button id="Agregar" type="submit">Agregar Producto</button>
+            {% csrf_token %}
+            {{ producto_form.as_p }}
+            <button id="Agregar" type="submit">Agregar Producto</button>
         </form>
+    </div>
+
+    <div class="volver-container">
+        <a href="{% url 'Admin' %}" class="volver-btn">Volver al Panel</a>
     </div>
 </body>
 </html>

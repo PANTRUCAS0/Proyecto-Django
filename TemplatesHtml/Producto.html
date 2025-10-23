@@ -31,6 +31,7 @@
             cursor: pointer;
             border: none;
             transition: all 0.3s ease;
+            margin: 5px;
         }
 
         .btn a {
@@ -52,6 +53,14 @@
 
         .btn-eliminar:hover {
             background-color: #8b001e;
+        }
+
+        .btn-actualizar {
+            background-color: #27ae60;
+        }
+
+        .btn-actualizar:hover {
+            background-color: #1e8449;
         }
 
         ul#listaProductos {
@@ -83,7 +92,7 @@
             width: 100%;
             max-width: 220px;
             height: 220px;
-            object-fit: contain; /* evita que se corte */
+            object-fit: contain;
             border-radius: 10px;
             margin: 0 auto 10px;
             display: block;
@@ -103,12 +112,78 @@
             font-weight: bold;
             color: #222;
         }
+
+        .botones-producto {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.6);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 100px auto;
+            padding: 20px;
+            border-radius: 12px;
+            max-width: 400px;
+            position: relative;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .modal-content h3 {
+            margin-bottom: 15px;
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 12px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        .modal-content .btn-guardar {
+            background-color: #27ae60;
+            color: #fff;
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .modal-content .btn-guardar:hover {
+            background-color: #1e8449;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 20px;
+            cursor: pointer;
+            color: #333;
+        }
     </style>
 </head>
 <body>
     <div id="contenedor">
         <h2>Lista de Productos</h2>
-        <button class="btn btn-admin"><a href="{% url 'Admin' %}">Volver al Admin</a></button>
+        <button class="btn btn-admin"><a href="{% url 'Admin' %}">Volver al Panel</a></button>
 
         <ul id="listaProductos">
             {% for producto in productos %}
@@ -117,13 +192,89 @@
                     <h3>{{ producto.nombre }}</h3>
                     <p>{{ producto.descripcion }}</p>
                     <p class="precio">Precio: ${{ producto.precio }}</p>
-                    <button class="btn btn-eliminar" onclick="eliminarProducto({{ producto.id }})">Eliminar</button>
+                    <div class="botones-producto">
+                        <button class="btn btn-actualizar" onclick="abrirModal({{ producto.id }}, '{{ producto.nombre }}', '{{ producto.descripcion }}', {{ producto.precio }}, '{{ producto.url_imagen }}')">Actualizar</button>
+                        <button class="btn btn-eliminar" onclick="eliminarProducto({{ producto.id }})">Eliminar</button>
+                    </div>
                 </li>
             {% endfor %}
         </ul>
     </div>
 
+    <!-- Modal -->
+<div id="modalActualizar" class="modal">
+    <div class="modal-content">
+        <span class="modal-close" onclick="cerrarModal()">&times;</span>
+        <h3>Actualizar Producto</h3>
+        <input type="text" id="modalNombre" placeholder="Nombre">
+        <input type="text" id="modalDescripcion" placeholder="Descripción">
+        <input type="number" id="modalPrecio" placeholder="Precio">
+        <input type="text" id="modalImagen" placeholder="URL Imagen">
+        <button class="btn-guardar" onclick="guardarCambios()">Guardar Cambios</button>
+    </div>
+</div>
+
     <script>
+let productoActualId = null;
+
+function abrirModal(id, nombre, descripcion, precio, imagen) {
+    productoActualId = id;
+    document.getElementById('modalNombre').value = nombre;
+    document.getElementById('modalDescripcion').value = descripcion;
+    document.getElementById('modalPrecio').value = precio;
+    document.getElementById('modalImagen').value = imagen;
+    document.getElementById('modalActualizar').style.display = 'block';
+}
+
+function cerrarModal() {
+    document.getElementById('modalActualizar').style.display = 'none';
+}
+
+function guardarCambios() {
+    const nombre = document.getElementById('modalNombre').value;
+    const descripcion = document.getElementById('modalDescripcion').value;
+    const precio = parseFloat(document.getElementById('modalPrecio').value);
+    const imagen = document.getElementById('modalImagen').value;
+
+    // Enviar datos a Django
+    fetch(`/actualizar-producto/${productoActualId}/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: JSON.stringify({
+            nombre: nombre,
+            descripcion: descripcion,
+            precio: precio,
+            url_imagen: imagen
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Actualizar la lista visualmente
+            const li = document.getElementById(`producto-${productoActualId}`);
+            li.querySelector('h3').textContent = nombre;
+            li.querySelector('p').textContent = descripcion;
+            li.querySelector('.precio').textContent = `Precio: $${precio}`;
+            li.querySelector('img').src = imagen;
+            cerrarModal();
+        } else {
+            alert('Error al actualizar el producto');
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+// Cerrar modal si se hace click afuera
+window.onclick = function(event) {
+    const modal = document.getElementById('modalActualizar');
+    if (event.target == modal) {
+        cerrarModal();
+    }
+};
+
         function eliminarProducto(productoId) {
             if (confirm("¿Estás seguro de que deseas eliminar este producto?")) {
                 fetch(`/eliminar-producto/${productoId}/`, {
@@ -143,6 +294,14 @@
                     }
                 })
                 .catch(error => console.error('Error:', error));
+            }
+        }
+
+        // Cerrar modal si se hace click afuera
+        window.onclick = function(event) {
+            const modal = document.getElementById('modalActualizar');
+            if (event.target == modal) {
+                cerrarModal();
             }
         }
     </script>

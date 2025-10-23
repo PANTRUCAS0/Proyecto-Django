@@ -4,231 +4,319 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-Commerce Tomys</title>
+    <title>E-Commerce Thomys</title>
 
-    <!-- Estilos y scripts -->
-    <link rel="stylesheet" type="text/css" href="{% static 'estilos.css' %}">
+    <!-- Estilos -->
+    <link rel="icon" href="{% static 'Logo.png' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <script src="{% static 'Pagina.js' %}"></script>
 
     <style>
-        a {
-            text-decoration: none;
-            color: #fff;
+        /* -------- ESTILOS GENERALES -------- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Poppins', sans-serif; background-color: #f8f9fb; color: #333; }
+        a { text-decoration: none; color: inherit; }
+
+        /* -------- HEADER -------- */
+        header {
+            position: sticky; top: 0; z-index: 1000;
+            background: white; display: flex; align-items: center; justify-content: space-between;
+            padding: 15px 30px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);
         }
+
+        .logo img { height: 60px; }
+        .busqueda { display: flex; align-items: center; gap: 10px; }
+        .busqueda input { padding: 8px 12px; border: 1px solid #ccc; border-radius: 6px; min-width: 200px; }
+        .busqueda button { background: #3498db; color: white; border: none; border-radius: 6px; padding: 8px 14px; cursor: pointer; font-weight: 600; }
+        .busqueda button:hover { background: #2980b9; }
+
+        .usuario { display: flex; align-items: center; gap: 10px; }
+        
+        #botonesI a {
+            display: inline-block;             /* Para que tengan tamaño uniforme */
+            background: #3498db;               /* Color de fondo */
+            color: white;                      /* Texto blanco */
+            padding: 8px 16px;                 /* Espaciado interno */
+            margin: 0 4px;                     /* Separación entre botones */
+            border: none;                      /* Quitar bordes */
+            border-radius: 8px;                /* Bordes redondeados */
+            font-weight: 600;
+            text-align: center;
+            transition: background 0.2s, transform 0.2s;
+            text-decoration: none;             /* Quitar subrayado */
+        }
+
+        #botonesI a:hover { 
+            background: #2980b9;
+            transform: translateY(-2px); 
+        }
+
+        .carrito-icono { position: relative; cursor: pointer; }
+        #carroImg { width: 40px; height: 40px; }
+        #contadorCarrito { position: absolute; top: -6px; right: -8px; background: #e74c3c; color: white; font-size: 12px; padding: 2px 6px; border-radius: 50%; }
+
+        .carrito-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); justify-content: center; align-items: center; z-index: 2000; }
+        .carrito-modal { background: white; padding: 20px; border-radius: 10px; width: 350px; max-height: 80vh; overflow-y: auto; box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+        .cerrar-carrito { float: right; border: none; background: none; font-size: 20px; cursor: pointer; }
+
+        /* -------- NAVEGACIÓN -------- */
+        nav { display: flex; justify-content: center; flex-wrap: wrap; background: #ffffff; padding: 15px 0; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+        .boton-navegacion { margin: 5px 15px; padding: 10px 20px; color: white; font-weight: 600; border-radius: 25px; transition: transform 0.2s, opacity 0.2s; }
+        .boton-navegacion:hover { transform: scale(1.05); opacity: 0.9; }
+
+        /* -------- PRODUCTOS -------- */
+        .productos { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; padding: 40px; }
+        .tarjeta { background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); padding: 15px; text-align: center; transition: transform 0.2s, box-shadow 0.2s; }
+        .tarjeta:hover { transform: translateY(-4px); box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
+        .tarjeta img { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; }
+        .tarjeta h3 { margin: 12px 0 8px; color: #222; }
+        .tarjeta p { margin-bottom: 6px; color: #555; }
+        .tarjeta button { background: #27ae60; color: white; border: none; border-radius: 6px; padding: 8px 12px; cursor: pointer; transition: 0.2s; }
+        .tarjeta button:hover { background: #219150; }
+
+        /* -------- FOOTER -------- */
+        footer { background: #333; color: #fff; padding: 40px 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; text-align: center; }
+        footer h3 { margin-bottom: 10px; color: #f1c40f; }
+        #redesFooter { width: 24px; vertical-align: middle; margin-right: 6px; }
+        footer a { display: block; margin: 4px 0; color: #fff; transition: 0.2s; }
+        footer a:hover { color: #f1c40f; }
+
+        /* -------- CHATBOT -------- */
+        #chatbot-box { position: fixed; bottom: 20px; right: 20px; width: 320px; max-height: 420px; display: flex; flex-direction: column; background: #fff; border: 2px solid #3498db; border-radius: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); font-family: 'Poppins', sans-serif; z-index: 9999; overflow: hidden; }
+        #chatbot-header { background: #3498db; color: #fff; padding: 12px; font-weight: 600; text-align: center; }
+        #chatbot-messages { flex: 1; padding: 10px; overflow-y: auto; font-size: 14px; }
+        #chatbot-input-row { display: flex; gap: 8px; padding: 10px; background: #f4f7fb; }
+        #chatbot-input { flex: 1; padding: 6px; border: 1px solid #ccc; border-radius: 6px; }
+        #chatbot-send { background: #3498db; color:#fff; border: none; border-radius: 6px; padding: 6px 12px; cursor: pointer; transition: 0.2s; }
+        #chatbot-send:hover { background: #2980b9; }
+
+        /* -------- RESPONSIVE -------- */
+        @media (max-width: 768px) {
+            header { flex-direction: column; gap: 15px; }
+            .busqueda input { min-width: 140px; }
+            #chatbot-box { width: 90%; right: 5%; }
+        }
+
+        .separador {
+            border: 0;
+            height: 2px;
+            background: linear-gradient(to right, #3498db, #27ae60, #e74c3c);
+            margin: 40px 0;
+            border-radius: 5px;
+        }
+        
+        .boton-login {
+    display: inline-block;
+    background: #3498db;
+    color: white;
+    padding: 8px 16px;
+    margin: 0 4px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    text-align: center;
+    transition: background 0.2s, transform 0.2s;
+    text-decoration: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.boton-login:hover {
+    background: #2980b9;
+    transform: translateY(-2px);
+}
+
+
     </style>
 </head>
+
 <body>
-    <div>
-        <header>
-            <div class="logo">
-                <img src="{% static 'Logo.png' %}" alt="Logo de la tienda">
+    <!-- Header -->
+    <header>
+        <div class="logo"><img src="{% static 'Logo.png' %}" alt="Logo de la tienda"></div>
+        <div class="busqueda">
+            <input type="text" placeholder="Buscar productos">
+            <button>Buscar</button>
+        </div>
+<div id="inicioS">
+    {% if user.is_authenticated %}
+        <a href="{% url 'logout' %}" class="boton-login">Cerrar sesión</a>
+        <a href="{% url 'Perfil' %}" class="boton-login">Ver perfil</a>
+    {% else %}
+        <a href="{% url 'Login' %}" class="boton-login">Iniciar sesión</a>
+        <a href="{% url 'Registro' %}" class="boton-login">Registrarse</a>
+    {% endif %}
+    {% if user.is_authenticated and user.is_superuser %}
+        <a href="{% url 'Admin.html' %}" class="boton-login">Ver toda la información</a>
+    {% endif %}
+    <a href="{% url 'Inicio' %}" class="boton-login">Inicio</a>
+</div>
+
+
+            <div id="carrito-icono" class="carrito-icono" onclick="abrirCarrito()" title="Ver carrito">
+                <img id="carroImg" src="{% static 'Carrito.webp' %}" alt="Icono carrito">
+                <span id="contadorCarrito">0</span>
             </div>
-
-            <div class="busqueda">
-                <input type="text" placeholder="Buscar productos" aria-label="Buscar productos">
-                <button>Buscar</button>
+        </div>
+        <div id="carrito" class="carrito-overlay">
+            <div class="carrito-modal">
+                <button onclick="cerrarCarrito()" class="cerrar-carrito">&times;</button>
+                <h3>Carrito de Compras</h3>
+                <ul id="listaCarrito"></ul>
+                <p id="totalCarrito">Total: $0.00</p>
+                <button onclick="pagar()">Pagar</button>
             </div>
+        </div>
+    </header>
 
-            <div class="usuario">
-                <div id="inicioS">
-                    {% if user.is_authenticated %}
-                        <button id="botonesI"><a href="{% url 'logout' %}">Cerrar sesión</a></button>
-                        <button id="botonesI"><a href="{% url 'Perfil' %}">Ver perfil</a></button>
-                    {% else %}
-                        <button id="botonesI"><a href="{% url 'Login' %}">Iniciar sesión</a></button>
-                        <button id="botonesI"><a href="{% url 'Registro' %}">Registrarse</a></button>
-                    {% endif %}
+    <!-- Navegación -->
+    <nav>
+        <a href="#seccion1" class="boton-navegacion" style="background-color: #3498db;">De Vestir</a>
+        <a href="#seccion2" class="boton-navegacion" style="background-color: #27ae60;">Trekking</a>
+        <a href="#seccion3" class="boton-navegacion" style="background-color: #e74c3c;">Deportivas</a>
+    </nav>
 
-                    {% if user.is_authenticated and user.is_superuser %}
-                        <a href="{% url 'Admin.html' %}" class="btn btn-primary">Ver toda la información</a>
-                    {% endif %}
+    <!-- Sección 1: De Vestir -->
+    <section id="seccion1" class="productos">
+        <div class="tarjeta">
+            <img src="{% static 'Zapatilla1.jpg' %}" alt="Yeezy Foam Runner">
+            <h3>Yeezy Foam Runner</h3>
+            <p>Yeezy Foam Runner.</p>
+            <p>Precio: $100.000</p>
+            <button onclick="agregarProducto('Yeezy Foam Runner','Yeezy Foam Runner',100000,'Imagenes/Zapatilla1.jpg')">Agregar</button>
+        </div>
+        <div class="tarjeta">
+            <img src="{% static 'Zapatilla2.jpg' %}" alt="Nike Panda Black">
+            <h3>Nike Panda Black</h3>
+            <p>Nike panda black.</p>
+            <p>Precio: $123.990</p>
+            <button onclick="agregarProducto('Nike Panda Black','Nike panda black',123990,'Imagenes/Zapatilla2.jpg')">Agregar</button>
+        </div>
+        <div class="tarjeta">
+            <img src="{% static 'Zapatilla3.jpg' %}" alt="Jordan 4 Negras">
+            <h3>Jordan 4 Negras</h3>
+            <p>Descripción corta del producto.</p>
+            <p>Precio: $329.690</p>
+            <button onclick="agregarProducto('Jordan 4 Negras','Descripción corta del producto',329690,'Imagenes/Zapatilla3.jpg')">Agregar</button>
+        </div>
+        <div class="tarjeta">
+            <img src="{% static 'Zapatilla4.jpg' %}" alt="Puma Rojo">
+            <h3>Puma Rojo</h3>
+            <p>Descripción corta del producto.</p>
+            <p>Precio: $578.990</p>
+            <button onclick="agregarProducto('Puma Rojo','Descripción corta del producto',578990,'Imagenes/Zapatilla4.jpg')">Agregar</button>
+        </div>
+    </section>
 
-                    <button id="botonesI"><a href="{% url 'Inicio' %}">Volver al Inicio</a></button>
-                </div>
+    <hr class="separador">
 
-                <!-- Ícono del carrito -->
-                <div id="carrito-icono" class="carrito-icono" onclick="abrirCarrito()" title="Ver carrito de compras">
-                    <img id="carroImg" src="{% static 'Carrito.webp' %}" alt="Icono de carrito">
-                    <span id="contadorCarrito">0</span>
-                </div>
-            </div>
+    <!-- Sección 2: Trekking -->
+    <section id="seccion2" class="productos">
+        <div class="tarjeta">
+            <img src="{% static 'Trekking1.png' %}" alt="Trekking Reforzadas">
+            <h3>Trekking Reforzadas</h3>
+            <p>Descripción corta del producto.</p>
+            <p>Precio: $75.000</p>
+            <button onclick="agregarProducto('Trekking Reforzadas','Descripción corta',75000,'Imagenes/Trekking1.png')">Agregar</button>
+        </div>
+        <div class="tarjeta">
+            <img src="{% static 'Trekking2.png' %}" alt="Trekking Naranjas">
+            <h3>Trekking Naranjas</h3>
+            <p>Descripción corta del producto.</p>
+            <p>Precio: $123.990</p>
+            <button onclick="agregarProducto('Trekking Naranjas','Descripción corta',123990,'Imagenes/Trekking2.png')">Agregar</button>
+        </div>
+        <div class="tarjeta">
+            <img src="{% static 'Trekking3.png' %}" alt="Trekking Negras">
+            <h3>Trekking Negras</h3>
+            <p>Descripción corta del producto.</p>
+            <p>Precio: $329.690</p>
+            <button onclick="agregarProducto('Trekking Negras','Descripción corta',329690,'Imagenes/Trekking3.png')">Agregar</button>
+        </div>
+        <div class="tarjeta">
+            <img src="{% static 'Trekking4.png' %}" alt="Trekking Turquesa">
+            <h3>Trekking Turquesa</h3>
+            <p>Descripción corta del producto.</p>
+            <p>Precio: $578.990</p>
+            <button onclick="agregarProducto('Trekking Turquesa','Descripción corta',578990,'Imagenes/Trekking4.png')">Agregar</button>
+        </div>
+    </section>
 
-            <!-- Carrito de compras -->
-            <div id="carrito" class="carrito-overlay">
-                <div class="carrito-modal">
-                    <button onclick="cerrarCarrito()" class="cerrar-carrito" aria-label="Cerrar carrito">&times;</button>
-                    <h3>Carrito de Compras</h3>
-                    <ul id="listaCarrito"><!-- Productos del carrito --></ul>
-                    <p id="totalCarrito">Total: $0.00</p>
-                    <button onclick="pagar()">Pagar</button>
-                </div>
-            </div>
-        </header>
+    <hr class="separador">
 
-        <!-- Botones de navegación -->
-        <nav>
-            <div class="botones-navegacion">
-                <a href="#seccion1" class="boton-navegacion" style="background-color: #3498db;">De Vestir</a>
-            </div>
-            <div class="botones-navegacion2">
-                <a href="#seccion2" class="boton-navegacion" style="background-color: #27ae60;">Trekking</a>
-            </div>
-            <div class="botones-navegacion3">
-                <a href="#seccion3" class="boton-navegacion" style="background-color: #e74c3c;">Deportivas</a>
-            </div>
-        </nav>
+    <!-- Sección 3: Deportivas -->
+    <section id="seccion3" class="productos">
+        <div class="tarjeta">
+            <img src="{% static 'deportivas1.png' %}" alt="Nike Mercurial">
+            <h3>Nike Mercurial</h3>
+            <p>Descripción corta del producto.</p>
+            <p>Precio: $329.000</p>
+            <button onclick="agregarProducto('Nike Mercurial','Descripción corta',329000,'Imagenes/deportivas1.png')">Agregar</button>
+        </div>
+        <div class="tarjeta">
+            <img src="{% static 'deportivas2.png' %}" alt="Nike Negras y Verde">
+            <h3>Nike Negras y Verde</h3>
+            <p>Descripción corta del producto.</p>
+            <p>Precio: $75.500</p>
+            <button onclick="agregarProducto('Nike Negras y Verde','Descripción corta',75500,'Imagenes/deportivas2.png')">Agregar</button>
+        </div>
+        <div class="tarjeta">
+            <img src="{% static 'deportivas3.png' %}" alt="Pumas Blancas y Rojas">
+            <h3>Pumas Blancas y Rojas</h3>
+            <p>Descripción corta del producto.</p>
+            <p>Precio: $187.000</p>
+            <button onclick="agregarProducto('Pumas Blancas y Rojas','Descripción corta',187000,'Imagenes/deportivas3.png')">Agregar</button>
+        </div>
+        <div class="tarjeta">
+            <img src="{% static 'deportivas4.png' %}" alt="Pumas Rojas">
+            <h3>Pumas Rojas</h3>
+            <p>Descripción corta del producto.</p>
+            <p>Precio: $769.840</p>
+            <button onclick="agregarProducto('Pumas Rojas','Descripción corta',769840,'Imagenes/deportivas4.png')">Agregar</button>
+        </div>
+    </section>
 
-        <!-- Sección 1 -->
-        <section id="seccion1" class="productos">
-            <div class="tarjeta">
-                <img src="{% static 'Zapatilla1.jpg' %}" alt="Yeezy Foam Runner">
-                <h3>Yeezy Foam Runner</h3>
-                <p>Yeezy Foam Runner.</p>
-                <p>Precio: $100.000</p>
-                <button onclick="agregarProducto('Yeezy Foam Runner', 'Descripción corta del producto 1.', 100000, 'Imagenes/Zapatilla1.jpg')">Agregar al Carrito</button>
-            </div>
+    <hr class="separador">
 
-            <div class="tarjeta">
-                <img src="{% static 'Zapatilla2.jpg' %}" alt="Nike panda black">
-                <h3>Nike Panda Black</h3>
-                <p>Nike panda black.</p>
-                <p>Precio: $123.990</p>
-                <button onclick="agregarProducto('Nike panda black', 'Descripción corta del producto 1.', 123990, 'Imagenes/Zapatilla2.jpg')">Agregar al Carrito</button>
-            </div>
-
-            <div class="tarjeta">
-                <img src="{% static 'Zapatilla3.jpg' %}" alt="Jordan 4 negras">
-                <h3>Jordan 4 Negras</h3>
-                <p>Descripción corta del producto 1.</p>
-                <p>Precio: $329.690</p>
-                <button onclick="agregarProducto('Jordan 4 negras', 'Descripción corta del producto 1.', 329690, 'Imagenes/Zapatilla3.jpg')">Agregar al Carrito</button>
-            </div>
-
-            <div class="tarjeta">
-                <img src="{% static 'Zapatilla4.jpg' %}" alt="Puma rojo">
-                <h3>Puma Rojo</h3>
-                <p>Descripción corta del producto 1.</p>
-                <p>Precio: $578.990</p>
-                <button onclick="agregarProducto('Puma rojo', 'Descripción corta del producto 1.', 578990, 'Imagenes/Zapatilla4.jpg')">Agregar al Carrito</button>
-            </div>
-        </section>
-
+    <!-- Productos dinámicos -->
+    <section>
         <hr>
+        <div class="productos">
+            {% for producto in productos %}
+                <div class="tarjeta">
+                    <img src="{{ producto.url_imagen }}" alt="{{ producto.nombre }}">
+                    <h3>{{ producto.nombre }}</h3>
+                    <p>{{ producto.descripcion }}</p>
+                    <p>Precio: ${{ producto.precio }}</p>
+                    <button onclick="agregarProducto('{{ producto.nombre }}', '{{ producto.descripcion }}', {{ producto.precio }}, '{{ producto.url_imagen }}')">Agregar al carrito</button>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
 
-        <!-- Sección 2 -->
-        <section id="seccion2" class="productos">
-            <div class="tarjeta">
-                <img src="{% static 'Trekking1.png' %}" alt="Trekking Reforzadas">
-                <h3>Trekking Reforzadas</h3>
-                <p>Descripción corta del producto 1.</p>
-                <p>Precio: $75.000</p>
-                <button onclick="agregarProducto('Trekking Reforzadas', 'Descripción corta del producto 1.', 75000, 'Imagenes/Trekking1.png')">Agregar al Carrito</button>
-            </div>
+    <hr class="separador">
 
-            <div class="tarjeta">
-                <img src="{% static 'Trekking2.png' %}" alt="Trekking naranjas">
-                <h3>Trekking Naranjas</h3>
-                <p>Descripción corta del producto 2.</p>
-                <p>Precio: $123.990</p>
-                <button onclick="agregarProducto('Trekking naranjas', 'Descripción corta del producto 1.', 123990, 'Imagenes/Trekking2.png')">Agregar al Carrito</button>
-            </div>
+    <!-- Footer -->
+    <footer>
+        <div>
+            <h3>Horarios de Atención</h3>
+            <p>Lunes a Viernes: 9am - 6pm</p>
+            <p>Sábado: 10am - 2pm</p>
+        </div>
+        <div>
+            <h3>Síguenos</h3>
+            <a href="#"><img id="redesFooter" src="{% static 'facebooklogo.png' %}" alt="">Facebook</a>
+            <a href="#"><img id="redesFooter" src="{% static 'Logowhatsapp.jpg' %}" alt="">Whatsapp</a>
+            <a href="#"><img id="redesFooter" src="{% static 'IGlogo.png' %}" alt="">Instagram</a>
+        </div>
+        <div>
+            <h3>Métodos de Pago</h3>
+            <p>Pagos con todo medio de pago</p>
+            <p>Envíos a todo el país</p>
+            <p>Ofertas todos los días</p>
+        </div>
+    </footer>
 
-            <div class="tarjeta">
-                <img src="{% static 'Trekking3.png' %}" alt="Trekking negras">
-                <h3>Trekking Negras</h3>
-                <p>Descripción corta del producto 1.</p>
-                <p>Precio: $329.690</p>
-                <button onclick="agregarProducto('Trekking negras', 'Descripción corta del producto 1.', 329690, 'Imagenes/Trekking3.png')">Agregar al Carrito</button>
-            </div>
-
-            <div class="tarjeta">
-                <img src="{% static 'Trekking4.png' %}" alt="Trekking turquesa">
-                <h3>Trekking Turquesa</h3>
-                <p>Descripción corta del producto 1.</p>
-                <p>Precio: $578.990</p>
-                <button onclick="agregarProducto('Trekking turquesa', 'Descripción corta del producto 1.', 578990, 'Imagenes/Trekking4.png')">Agregar al Carrito</button>
-            </div>
-        </section>
-
-        <hr>
-
-        <!-- Sección 3 -->
-        <section id="seccion3" class="productos">
-            <div class="tarjeta">
-                <img src="{% static 'deportivas1.png' %}" alt="Nike Mercurial">
-                <h3>Nike Mercurial</h3>
-                <p>Descripción corta del producto 1.</p>
-                <p>Precio: $329.000</p>
-                <button onclick="agregarProducto('Nike mercurrial', 'Descripción corta del producto 1.', 329000, 'Imagenes/deportivas1.png')">Agregar al Carrito</button>
-            </div>
-
-            <div class="tarjeta">
-                <img src="{% static 'deportivas2.png' %}" alt="Nike negras y verde">
-                <h3>Nike Negras y Verde</h3>
-                <p>Descripción corta del producto 2.</p>
-                <p>Precio: $75.500</p>
-                <button onclick="agregarProducto('Nike negras y verde', 'Descripción corta del producto 1.', 75500, 'Imagenes/deportivas2.png')">Agregar al Carrito</button>
-            </div>
-
-            <div class="tarjeta">
-                <img src="{% static 'deportivas3.png' %}" alt="Pumas blancas y rojas">
-                <h3>Pumas Blancas y Rojas</h3>
-                <p>Descripción corta del producto 1.</p>
-                <p>Precio: $187.000</p>
-                <button onclick="agregarProducto('Pumas blancas y rojas', 'Descripción corta del producto 1.', 187000, 'Imagenes/deportivas3.png')">Agregar al Carrito</button>
-            </div>
-
-            <div class="tarjeta">
-                <img src="{% static 'deportivas4.png' %}" alt="Pumas rojas">
-                <h3>Pumas Rojas</h3>
-                <p>Descripción corta del producto 1.</p>
-                <p>Precio: $769.840</p>
-                <button onclick="agregarProducto('Pumas rojas', 'Descripción corta del producto 1.', 769840, 'Imagenes/deportivas4.png')">Agregar al Carrito</button>
-            </div>
-        </section>
-
-        <!-- Sección de productos dinámicos -->
-        <section>
-            <hr>
-            <div class="productos">
-                {% for producto in productos %}
-                    <div class="tarjeta">
-                        <img src="{{ producto.url_imagen }}" alt="{{ producto.nombre }}">
-                        <h3>{{ producto.nombre }}</h3>
-                        <p>{{ producto.descripcion }}</p>
-                        <p>Precio: ${{ producto.precio }}</p>
-                        <button onclick="agregarProducto('{{ producto.nombre }}', '{{ producto.descripcion }}', {{ producto.precio }}, '{{ producto.url_imagen }}')">
-                            Agregar al carrito
-                        </button>
-                    </div>
-                {% endfor %}
-            </div>
-        </section>
-
-        <footer>
-            <div class="horarios">
-                <h3>Horarios de Atención:</h3>
-                <p>Lunes a Viernes: 9am - 6pm</p>
-                <p>Sábado: 10am - 2pm</p>
-            </div>
-
-            <div class="redes-sociales">
-                <h3>Síguenos en:</h3>
-                <a href="#" target="_blank"><img id="redesFooter" src="{% static 'facebooklogo.png' %}" alt="Facebook">Facebook</a>
-                <a href="#" target="_blank"><img id="redesFooter" src="{% static 'Logowhatsapp.jpg' %}" alt="Whatsapp">Whatsapp</a>
-                <a href="#" target="_blank"><img id="redesFooter" src="{% static 'IGlogo.png' %}" alt="Instagram">Instagram</a>
-            </div>
-
-            <div class="metodos-pago">
-                <h3>Métodos de Pago</h3>
-                <p>Pagos con todo medio de pago</p>
-                <p>Envíos a todo el país</p>
-                <p>Ofertas todos los días</p>
-            </div>
-        </footer>
-    </div>
-
-    <!-- Chatbot Flotante Thomys -->
+    <!-- Chatbot -->
     <div id="chatbot-box">
         <div id="chatbot-header">🤖 Chat Thomys</div>
         <div id="chatbot-messages"></div>
@@ -237,23 +325,6 @@
             <button id="chatbot-send">Enviar</button>
         </div>
     </div>
-
-    <style>
-        #chatbot-box {
-            position: fixed;
-            bottom: 20px; right: 20px;
-            width: 300px; max-height: 380px;
-            display: flex; flex-direction: column;
-            background: #fff; border: 2px solid #3498db; border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2); font-family: Arial, sans-serif; z-index: 9999;
-        }
-        #chatbot-header { background: #3498db; color: #fff; padding: 10px; font-weight: bold; border-radius: 8px 8px 0 0; }
-        #chatbot-messages { padding: 10px; overflow-y: auto; flex: 1; font-size: 14px; }
-        #chatbot-input-row { display: flex; gap: 6px; padding: 10px; }
-        #chatbot-input { flex: 1; padding: 6px; border: 1px solid #3498db; border-radius: 6px; }
-        #chatbot-send { padding: 6px 10px; background: #3498db; color:#fff; border: none; border-radius: 6px; cursor: pointer; }
-        #chatbot-send:hover { filter: brightness(0.95); }
-    </style>
 
     <script>
         (function(){
@@ -274,7 +345,6 @@
                 if (!pregunta) return;
                 append("user", pregunta);
                 input.value = "";
-
                 fetch("/chatbot/", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -287,8 +357,6 @@
 
             sendBtn.addEventListener("click", enviar);
             input.addEventListener("keydown", e => { if (e.key === "Enter") enviar(); });
-
-            // Mensaje de bienvenida
             append("bot", "Hola 👋 Soy el asistente de Thomys. ¿Cómo puedo ayudarte?");
         })();
     </script>
