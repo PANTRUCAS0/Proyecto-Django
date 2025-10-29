@@ -62,7 +62,7 @@ ROOT_URLCONF = 'ProyectoEva.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [Template],
+        'DIRS': [BASE_DIR / 'TemplatesHtml'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -128,10 +128,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'Fotos'),    # Ruta a la carpeta 'Fotos' con tus imágenes
-    os.path.join(BASE_DIR, 'CssHtml'),  # Ruta a la carpeta 'CssHtml' con tus archivos CSS
-    os.path.join(BASE_DIR, 'JavaScript')
+    os.path.join(BASE_DIR, 'Aplicacion/static'),
 ]
+
+STATIC_ROOT = BASE_DIR / 'staticfiles'   #  para AWS 
 
 
 # Default primary key field type

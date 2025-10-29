@@ -1,364 +1,212 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-Commerce Thomys</title>
 
-    <!-- Estilos -->
-    <link rel="icon" href="{% static 'Logo.png' %}">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <script src="{% static 'Pagina.js' %}"></script>
+{% block title %}Inicio - Zapatería Tomy’s{% endblock %}
 
-    <style>
-        /* -------- ESTILOS GENERALES -------- */
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Poppins', sans-serif; background-color: #f8f9fb; color: #333; }
-        a { text-decoration: none; color: inherit; }
+{% block carousel %}
+<!-- 🔹 Carrusel de portada -->
+<div id="carruselDestacado" class="carousel slide mb-4" data-bs-ride="carousel">
+  <div class="carousel-inner">
 
-        /* -------- HEADER -------- */
-        header {
-            position: sticky; top: 0; z-index: 1000;
-            background: white; display: flex; align-items: center; justify-content: space-between;
-            padding: 15px 30px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        }
-
-        .logo img { height: 60px; }
-        .busqueda { display: flex; align-items: center; gap: 10px; }
-        .busqueda input { padding: 8px 12px; border: 1px solid #ccc; border-radius: 6px; min-width: 200px; }
-        .busqueda button { background: #3498db; color: white; border: none; border-radius: 6px; padding: 8px 14px; cursor: pointer; font-weight: 600; }
-        .busqueda button:hover { background: #2980b9; }
-
-        .usuario { display: flex; align-items: center; gap: 10px; }
-        
-        #botonesI a {
-            display: inline-block;             /* Para que tengan tamaño uniforme */
-            background: #3498db;               /* Color de fondo */
-            color: white;                      /* Texto blanco */
-            padding: 8px 16px;                 /* Espaciado interno */
-            margin: 0 4px;                     /* Separación entre botones */
-            border: none;                      /* Quitar bordes */
-            border-radius: 8px;                /* Bordes redondeados */
-            font-weight: 600;
-            text-align: center;
-            transition: background 0.2s, transform 0.2s;
-            text-decoration: none;             /* Quitar subrayado */
-        }
-
-        #botonesI a:hover { 
-            background: #2980b9;
-            transform: translateY(-2px); 
-        }
-
-        .carrito-icono { position: relative; cursor: pointer; }
-        #carroImg { width: 40px; height: 40px; }
-        #contadorCarrito { position: absolute; top: -6px; right: -8px; background: #e74c3c; color: white; font-size: 12px; padding: 2px 6px; border-radius: 50%; }
-
-        .carrito-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); justify-content: center; align-items: center; z-index: 2000; }
-        .carrito-modal { background: white; padding: 20px; border-radius: 10px; width: 350px; max-height: 80vh; overflow-y: auto; box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
-        .cerrar-carrito { float: right; border: none; background: none; font-size: 20px; cursor: pointer; }
-
-        /* -------- NAVEGACIÓN -------- */
-        nav { display: flex; justify-content: center; flex-wrap: wrap; background: #ffffff; padding: 15px 0; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
-        .boton-navegacion { margin: 5px 15px; padding: 10px 20px; color: white; font-weight: 600; border-radius: 25px; transition: transform 0.2s, opacity 0.2s; }
-        .boton-navegacion:hover { transform: scale(1.05); opacity: 0.9; }
-
-        /* -------- PRODUCTOS -------- */
-        .productos { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; padding: 40px; }
-        .tarjeta { background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); padding: 15px; text-align: center; transition: transform 0.2s, box-shadow 0.2s; }
-        .tarjeta:hover { transform: translateY(-4px); box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
-        .tarjeta img { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; }
-        .tarjeta h3 { margin: 12px 0 8px; color: #222; }
-        .tarjeta p { margin-bottom: 6px; color: #555; }
-        .tarjeta button { background: #27ae60; color: white; border: none; border-radius: 6px; padding: 8px 12px; cursor: pointer; transition: 0.2s; }
-        .tarjeta button:hover { background: #219150; }
-
-        /* -------- FOOTER -------- */
-        footer { background: #333; color: #fff; padding: 40px 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; text-align: center; }
-        footer h3 { margin-bottom: 10px; color: #f1c40f; }
-        #redesFooter { width: 24px; vertical-align: middle; margin-right: 6px; }
-        footer a { display: block; margin: 4px 0; color: #fff; transition: 0.2s; }
-        footer a:hover { color: #f1c40f; }
-
-        /* -------- CHATBOT -------- */
-        #chatbot-box { position: fixed; bottom: 20px; right: 20px; width: 320px; max-height: 420px; display: flex; flex-direction: column; background: #fff; border: 2px solid #3498db; border-radius: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); font-family: 'Poppins', sans-serif; z-index: 9999; overflow: hidden; }
-        #chatbot-header { background: #3498db; color: #fff; padding: 12px; font-weight: 600; text-align: center; }
-        #chatbot-messages { flex: 1; padding: 10px; overflow-y: auto; font-size: 14px; }
-        #chatbot-input-row { display: flex; gap: 8px; padding: 10px; background: #f4f7fb; }
-        #chatbot-input { flex: 1; padding: 6px; border: 1px solid #ccc; border-radius: 6px; }
-        #chatbot-send { background: #3498db; color:#fff; border: none; border-radius: 6px; padding: 6px 12px; cursor: pointer; transition: 0.2s; }
-        #chatbot-send:hover { background: #2980b9; }
-
-        /* -------- RESPONSIVE -------- */
-        @media (max-width: 768px) {
-            header { flex-direction: column; gap: 15px; }
-            .busqueda input { min-width: 140px; }
-            #chatbot-box { width: 90%; right: 5%; }
-        }
-
-        .separador {
-            border: 0;
-            height: 2px;
-            background: linear-gradient(to right, #3498db, #27ae60, #e74c3c);
-            margin: 40px 0;
-            border-radius: 5px;
-        }
-        
-        .boton-login {
-    display: inline-block;
-    background: #3498db;
-    color: white;
-    padding: 8px 16px;
-    margin: 0 4px;
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    text-align: center;
-    transition: background 0.2s, transform 0.2s;
-    text-decoration: none;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.boton-login:hover {
-    background: #2980b9;
-    transform: translateY(-2px);
-}
-
-
-    </style>
-</head>
-
-<body>
-    <!-- Header -->
-    <header>
-        <div class="logo"><img src="{% static 'Logo.png' %}" alt="Logo de la tienda"></div>
-        <div class="busqueda">
-            <input type="text" placeholder="Buscar productos">
-            <button>Buscar</button>
-        </div>
-<div id="inicioS">
-    {% if user.is_authenticated %}
-        <a href="{% url 'logout' %}" class="boton-login">Cerrar sesión</a>
-        <a href="{% url 'Perfil' %}" class="boton-login">Ver perfil</a>
-    {% else %}
-        <a href="{% url 'Login' %}" class="boton-login">Iniciar sesión</a>
-        <a href="{% url 'Registro' %}" class="boton-login">Registrarse</a>
-    {% endif %}
-    {% if user.is_authenticated and user.is_superuser %}
-        <a href="{% url 'Admin.html' %}" class="boton-login">Ver toda la información</a>
-    {% endif %}
-    <a href="{% url 'Inicio' %}" class="boton-login">Inicio</a>
-</div>
-
-
-            <div id="carrito-icono" class="carrito-icono" onclick="abrirCarrito()" title="Ver carrito">
-                <img id="carroImg" src="{% static 'Carrito.webp' %}" alt="Icono carrito">
-                <span id="contadorCarrito">0</span>
-            </div>
-        </div>
-        <div id="carrito" class="carrito-overlay">
-            <div class="carrito-modal">
-                <button onclick="cerrarCarrito()" class="cerrar-carrito">&times;</button>
-                <h3>Carrito de Compras</h3>
-                <ul id="listaCarrito"></ul>
-                <p id="totalCarrito">Total: $0.00</p>
-                <button onclick="pagar()">Pagar</button>
-            </div>
-        </div>
-    </header>
-
-    <!-- Navegación -->
-    <nav>
-        <a href="#seccion1" class="boton-navegacion" style="background-color: #3498db;">De Vestir</a>
-        <a href="#seccion2" class="boton-navegacion" style="background-color: #27ae60;">Trekking</a>
-        <a href="#seccion3" class="boton-navegacion" style="background-color: #e74c3c;">Deportivas</a>
-    </nav>
-
-    <!-- Sección 1: De Vestir -->
-    <section id="seccion1" class="productos">
-        <div class="tarjeta">
-            <img src="{% static 'Zapatilla1.jpg' %}" alt="Yeezy Foam Runner">
-            <h3>Yeezy Foam Runner</h3>
-            <p>Yeezy Foam Runner.</p>
-            <p>Precio: $100.000</p>
-            <button onclick="agregarProducto('Yeezy Foam Runner','Yeezy Foam Runner',100000,'Imagenes/Zapatilla1.jpg')">Agregar</button>
-        </div>
-        <div class="tarjeta">
-            <img src="{% static 'Zapatilla2.jpg' %}" alt="Nike Panda Black">
-            <h3>Nike Panda Black</h3>
-            <p>Nike panda black.</p>
-            <p>Precio: $123.990</p>
-            <button onclick="agregarProducto('Nike Panda Black','Nike panda black',123990,'Imagenes/Zapatilla2.jpg')">Agregar</button>
-        </div>
-        <div class="tarjeta">
-            <img src="{% static 'Zapatilla3.jpg' %}" alt="Jordan 4 Negras">
-            <h3>Jordan 4 Negras</h3>
-            <p>Descripción corta del producto.</p>
-            <p>Precio: $329.690</p>
-            <button onclick="agregarProducto('Jordan 4 Negras','Descripción corta del producto',329690,'Imagenes/Zapatilla3.jpg')">Agregar</button>
-        </div>
-        <div class="tarjeta">
-            <img src="{% static 'Zapatilla4.jpg' %}" alt="Puma Rojo">
-            <h3>Puma Rojo</h3>
-            <p>Descripción corta del producto.</p>
-            <p>Precio: $578.990</p>
-            <button onclick="agregarProducto('Puma Rojo','Descripción corta del producto',578990,'Imagenes/Zapatilla4.jpg')">Agregar</button>
-        </div>
-    </section>
-
-    <hr class="separador">
-
-    <!-- Sección 2: Trekking -->
-    <section id="seccion2" class="productos">
-        <div class="tarjeta">
-            <img src="{% static 'Trekking1.png' %}" alt="Trekking Reforzadas">
-            <h3>Trekking Reforzadas</h3>
-            <p>Descripción corta del producto.</p>
-            <p>Precio: $75.000</p>
-            <button onclick="agregarProducto('Trekking Reforzadas','Descripción corta',75000,'Imagenes/Trekking1.png')">Agregar</button>
-        </div>
-        <div class="tarjeta">
-            <img src="{% static 'Trekking2.png' %}" alt="Trekking Naranjas">
-            <h3>Trekking Naranjas</h3>
-            <p>Descripción corta del producto.</p>
-            <p>Precio: $123.990</p>
-            <button onclick="agregarProducto('Trekking Naranjas','Descripción corta',123990,'Imagenes/Trekking2.png')">Agregar</button>
-        </div>
-        <div class="tarjeta">
-            <img src="{% static 'Trekking3.png' %}" alt="Trekking Negras">
-            <h3>Trekking Negras</h3>
-            <p>Descripción corta del producto.</p>
-            <p>Precio: $329.690</p>
-            <button onclick="agregarProducto('Trekking Negras','Descripción corta',329690,'Imagenes/Trekking3.png')">Agregar</button>
-        </div>
-        <div class="tarjeta">
-            <img src="{% static 'Trekking4.png' %}" alt="Trekking Turquesa">
-            <h3>Trekking Turquesa</h3>
-            <p>Descripción corta del producto.</p>
-            <p>Precio: $578.990</p>
-            <button onclick="agregarProducto('Trekking Turquesa','Descripción corta',578990,'Imagenes/Trekking4.png')">Agregar</button>
-        </div>
-    </section>
-
-    <hr class="separador">
-
-    <!-- Sección 3: Deportivas -->
-    <section id="seccion3" class="productos">
-        <div class="tarjeta">
-            <img src="{% static 'deportivas1.png' %}" alt="Nike Mercurial">
-            <h3>Nike Mercurial</h3>
-            <p>Descripción corta del producto.</p>
-            <p>Precio: $329.000</p>
-            <button onclick="agregarProducto('Nike Mercurial','Descripción corta',329000,'Imagenes/deportivas1.png')">Agregar</button>
-        </div>
-        <div class="tarjeta">
-            <img src="{% static 'deportivas2.png' %}" alt="Nike Negras y Verde">
-            <h3>Nike Negras y Verde</h3>
-            <p>Descripción corta del producto.</p>
-            <p>Precio: $75.500</p>
-            <button onclick="agregarProducto('Nike Negras y Verde','Descripción corta',75500,'Imagenes/deportivas2.png')">Agregar</button>
-        </div>
-        <div class="tarjeta">
-            <img src="{% static 'deportivas3.png' %}" alt="Pumas Blancas y Rojas">
-            <h3>Pumas Blancas y Rojas</h3>
-            <p>Descripción corta del producto.</p>
-            <p>Precio: $187.000</p>
-            <button onclick="agregarProducto('Pumas Blancas y Rojas','Descripción corta',187000,'Imagenes/deportivas3.png')">Agregar</button>
-        </div>
-        <div class="tarjeta">
-            <img src="{% static 'deportivas4.png' %}" alt="Pumas Rojas">
-            <h3>Pumas Rojas</h3>
-            <p>Descripción corta del producto.</p>
-            <p>Precio: $769.840</p>
-            <button onclick="agregarProducto('Pumas Rojas','Descripción corta',769840,'Imagenes/deportivas4.png')">Agregar</button>
-        </div>
-    </section>
-
-    <hr class="separador">
-
-    <!-- Productos dinámicos -->
-    <section>
-        <hr>
-        <div class="productos">
-            {% for producto in productos %}
-                <div class="tarjeta">
-                    <img src="{{ producto.url_imagen }}" alt="{{ producto.nombre }}">
-                    <h3>{{ producto.nombre }}</h3>
-                    <p>{{ producto.descripcion }}</p>
-                    <p>Precio: ${{ producto.precio }}</p>
-                    <button onclick="agregarProducto('{{ producto.nombre }}', '{{ producto.descripcion }}', {{ producto.precio }}, '{{ producto.url_imagen }}')">Agregar al carrito</button>
-                </div>
-            {% endfor %}
-        </div>
-    </section>
-
-    <hr class="separador">
-
-    <!-- Footer -->
-    <footer>
-        <div>
-            <h3>Horarios de Atención</h3>
-            <p>Lunes a Viernes: 9am - 6pm</p>
-            <p>Sábado: 10am - 2pm</p>
-        </div>
-        <div>
-            <h3>Síguenos</h3>
-            <a href="#"><img id="redesFooter" src="{% static 'facebooklogo.png' %}" alt="">Facebook</a>
-            <a href="#"><img id="redesFooter" src="{% static 'Logowhatsapp.jpg' %}" alt="">Whatsapp</a>
-            <a href="#"><img id="redesFooter" src="{% static 'IGlogo.png' %}" alt="">Instagram</a>
-        </div>
-        <div>
-            <h3>Métodos de Pago</h3>
-            <p>Pagos con todo medio de pago</p>
-            <p>Envíos a todo el país</p>
-            <p>Ofertas todos los días</p>
-        </div>
-    </footer>
-
-    <!-- Chatbot -->
-    <div id="chatbot-box">
-        <div id="chatbot-header">🤖 Chat Thomys</div>
-        <div id="chatbot-messages"></div>
-        <div id="chatbot-input-row">
-            <input type="text" id="chatbot-input" placeholder="Escribe tu duda...">
-            <button id="chatbot-send">Enviar</button>
-        </div>
+    <div class="carousel-item active">
+      <img src="{% static 'Fotos/Zapatilla1.jpg' %}" class="d-block w-100" alt="Zapatilla 1" style="height: 480px; object-fit: cover;">
+      <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded">
+        <h5>Colección Deportiva</h5>
+        <p>Comodidad y estilo en cada paso 🏃‍♂️</p>
+      </div>
     </div>
 
-    <script>
-        (function(){
-            const box = document.getElementById("chatbot-box");
-            const msgs = document.getElementById("chatbot-messages");
-            const input = document.getElementById("chatbot-input");
-            const sendBtn = document.getElementById("chatbot-send");
+    <div class="carousel-item">
+      <img src="{% static 'Fotos/Zapatilla2.jpg' %}" class="d-block w-100" alt="Zapatilla 2" style="height: 480px; object-fit: cover;">
+      <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded">
+        <h5>Estilo Urbano</h5>
+        <p>Descubre la nueva línea street 👟</p>
+      </div>
+    </div>
 
-            function append(role, text) {
-                const p = document.createElement("p");
-                p.innerHTML = role === "user" ? "<b>Tú:</b> " + text : "<b>Bot:</b> " + text;
-                msgs.appendChild(p);
-                msgs.scrollTop = msgs.scrollHeight;
-            }
+    <div class="carousel-item">
+      <img src="{% static 'Fotos/Zapatilla3.jpg' %}" class="d-block w-100" alt="Zapatilla 3" style="height: 480px; object-fit: cover;">
+      <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded">
+        <h5>Edición Limitada</h5>
+        <p>Diseños únicos para verdaderos coleccionistas 🔥</p>
+      </div>
+    </div>
+  </div>
 
-            function enviar() {
-                const pregunta = input.value.trim();
-                if (!pregunta) return;
-                append("user", pregunta);
-                input.value = "";
-                fetch("/chatbot/", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ pregunta })
-                })
-                .then(r => r.json())
-                .then(data => append("bot", data.respuesta || "Respuesta vacía."))
-                .catch(() => append("bot", "Error de red. Intenta más tarde."));
-            }
+  <button class="carousel-control-prev" type="button" data-bs-target="#carruselDestacado" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon"></span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carruselDestacado" data-bs-slide="next">
+    <span class="carousel-control-next-icon"></span>
+  </button>
+</div>
 
-            sendBtn.addEventListener("click", enviar);
-            input.addEventListener("keydown", e => { if (e.key === "Enter") enviar(); });
-            append("bot", "Hola 👋 Soy el asistente de Thomys. ¿Cómo puedo ayudarte?");
-        })();
-    </script>
-</body>
-</html>
+{% endblock %}
+
+
+{% block content %}
+<!-- 🔹 Barra de Filtros -->
+<div class="card shadow-sm border-0 mb-4">
+  <div class="card-body">
+    <form class="row gy-2 gx-3 align-items-end" method="GET" action="">
+
+      <!-- Precio -->
+      <div class="col-12 col-md-4">
+        <label class="form-label fw-semibold">Rango de precio</label>
+        <div class="input-group">
+          <span class="input-group-text">$</span>
+          <input type="number" class="form-control" name="min_precio" placeholder="Mínimo" value="{{ request.GET.min_precio }}">
+          <span class="input-group-text">-</span>
+          <input type="number" class="form-control" name="max_precio" placeholder="Máximo" value="{{ request.GET.max_precio }}">
+        </div>
+      </div>
+
+      <!-- Talla -->
+      <div class="col-6 col-md-3">
+        <label class="form-label fw-semibold">Talla</label>
+        <select name="talla" class="form-select">
+          <option value="">Todas</option>
+          {% for n in tallas %}
+            <option value="{{ n }}" {% if request.GET.talla == n %}selected{% endif %}>{{ n }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- Marca -->
+      <div class="col-6 col-md-3">
+        <label class="form-label fw-semibold">Marca</label>
+        <select name="marca" class="form-select">
+          <option value="">Todas</option>
+          {% for m in marcas %}
+            <option value="{{ m }}" {% if request.GET.marca == m %}selected{% endif %}>{{ m }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- Botón Filtrar -->
+      <div class="col-12 col-md-2">
+        <button type="submit" class="btn btn-primary w-100">
+          <i class="bi bi-funnel"></i> Filtrar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- 🔹 Sección de Productos -->
+<section class="row g-4">
+  {% for producto in productos %}
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+      <div class="card h-100 shadow-sm">
+        <img src="{{ producto.url_imagen }}" class="card-img-top" alt="{{ producto.nombre }}">
+        <div class="card-body text-center">
+          <h5 class="card-title">{{ producto.nombre }}</h5>
+          <p class="text-muted small mb-2">{{ producto.descripcion }}</p>
+          <p class="fw-bold text-success mb-3">${{ producto.precio }}</p>
+
+          <button class="btn btn-outline-success btn-sm"
+                  data-nombre="{{ producto.nombre }}"
+                  data-descripcion="{{ producto.descripcion|escapejs }}"
+                  data-precio="{{ producto.precio }}"
+                  data-imagen="{{ producto.url_imagen }}"
+                  onclick="agregarProductoDataset(this)">
+            Agregar al carrito
+          </button>
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <div class="col-12">
+      <div class="alert alert-warning text-center">
+        No se encontraron productos con los filtros seleccionados.
+      </div>
+    </div>
+  {% endfor %}
+</section>
+
+<!-- 🔹 Chatbot Desplegable con Animación -->
+<div id="chatbot-container" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999;">
+  <!-- Botón flotante -->
+  <button id="chatbot-toggle" class="btn btn-primary rounded-circle shadow-lg"
+          style="width: 60px; height: 60px; font-size: 24px;">
+    💬
+  </button>
+
+  <!-- Caja del chatbot -->
+  <div id="chatbot-box" class="border border-primary rounded shadow bg-white mt-2 p-3"
+       style="width: 320px; display: none; opacity: 0; transform: translateY(20px); transition: all 0.3s ease;">
+    <div class="d-flex justify-content-between align-items-center bg-primary text-white rounded-top p-2">
+      <strong>🤖 Chat Thomy’s</strong>
+      <button id="chatbot-close" class="btn btn-sm btn-light text-dark fw-bold" style="border-radius: 50%;">✖</button>
+    </div>
+
+    <div id="chatbot-messages" style="height: 220px; overflow-y: auto; padding: 10px; font-size: 14px;"></div>
+
+    <div class="input-group mt-2">
+      <input type="text" id="chatbot-input" class="form-control" placeholder="Escribe tu duda...">
+      <button id="chatbot-send" class="btn btn-primary">Enviar</button>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// ✅ Mostrar / ocultar chatbot con animación
+(function(){
+  const toggleBtn = document.getElementById("chatbot-toggle");
+  const closeBtn = document.getElementById("chatbot-close");
+  const box = document.getElementById("chatbot-box");
+
+  function toggleChat() {
+    if (box.style.display === "none" || box.style.display === "") {
+      box.style.display = "block";
+      setTimeout(() => {
+        box.style.opacity = "1";
+        box.style.transform = "translateY(0)";
+      }, 10);
+    } else {
+      box.style.opacity = "0";
+      box.style.transform = "translateY(20px)";
+      setTimeout(() => { box.style.display = "none"; }, 300);
+    }
+  }
+
+  toggleBtn.addEventListener("click", toggleChat);
+  closeBtn.addEventListener("click", toggleChat);
+})();
+
+// ✅ Lógica del chatbot
+(function(){
+  const msgs = document.getElementById("chatbot-messages");
+  const input = document.getElementById("chatbot-input");
+  const sendBtn = document.getElementById("chatbot-send");
+
+  function append(role, text) {
+    const p = document.createElement("p");
+    p.innerHTML = (role === "user" ? "<b>Tú:</b> " : "<b>Bot:</b> ") + text;
+    msgs.appendChild(p);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function enviar() {
+    const pregunta = input.value.trim();
+    if (!pregunta) return;
+    append("user", pregunta);
+    input.value = "";
+    fetch("/chatbot/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ pregunta })
+    })
+    .then(r => r.json())
+    .then(d => append("bot", d.respuesta || "Sin respuesta."))
+    .catch(() => append("bot", "Error de red."));
+  }
+
+  sendBtn.addEventListener("click", enviar);
+  input.addEventListener("keydown", e => { if (e.key === "Enter") enviar(); });
+})();
+</script>
+{% endblock %}

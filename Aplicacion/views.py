@@ -28,7 +28,15 @@ logger = logging.getLogger(__name__)
 class ProductoForm(forms.ModelForm):
     class Meta:
         model = Producto
-        fields = ['nombre', 'precio', 'url_imagen', 'descripcion']
+        fields = ['nombre', 'precio', 'url_imagen', 'descripcion', 'talla', 'marca']
+        widgets = {
+            'nombre': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nombre del producto'}),
+            'precio': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Precio'}),
+            'url_imagen': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'URL de la imagen'}),
+            'descripcion': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Descripción'}),
+            'talla': forms.Select(choices=[('', 'Seleccione talla'), ('38','38'),('39','39'),('40','40'),('41','41'),('42','42'),('43','43')], attrs={'class': 'form-select'}),
+            'marca': forms.Select(choices=[('', 'Seleccione marca'), ('Nike','Nike'), ('Adidas','Adidas'), ('Puma','Puma'), ('Yeezy','Yeezy')], attrs={'class': 'form-select'}),
+        }
 
 
 class ClienteForm(forms.ModelForm):
@@ -94,9 +102,37 @@ def Registro(request):
         form = ClienteForm()
     return render(request, 'Registro.html', {'form': form})
 
-def Pagina(request):
+def Pagina(request):  #LO MODIFIQUE POR SI NECESITAS CAMBIAR ALGO
     productos = Producto.objects.all()
-    return render(request, "Pagina.html", {'productos': productos})
+
+    # Filtros del formulario
+    q = request.GET.get('q')
+    if q:
+        productos = productos.filter(nombre__icontains=q)
+
+    min_p = request.GET.get('min_precio')
+    max_p = request.GET.get('max_precio')
+    talla = request.GET.get('talla')
+    marca = request.GET.get('marca')
+
+    if min_p:
+        productos = productos.filter(precio__gte=min_p)
+    if max_p:
+        productos = productos.filter(precio__lte=max_p)
+    if talla:
+        productos = productos.filter(talla=talla)  
+    if marca:
+        productos = productos.filter(marca__iexact=marca) 
+
+    # 🔹 Listas que se usan en el filtro del template
+    tallas = ["38", "39", "40", "41", "42", "43"]
+    marcas = ["Nike", "Adidas", "Puma", "Yeezy"]
+
+    return render(request, 'Pagina.html', {
+        'productos': productos,
+        'tallas': tallas,
+        'marcas': marcas
+    })
 
 
 def Inicio(request):

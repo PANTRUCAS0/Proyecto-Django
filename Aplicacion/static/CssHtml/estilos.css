@@ -1,0 +1,55 @@
+/* === Carrusel Principal === */
+#carruselDestacado .carousel-item img {
+  width: 100%;
+  height: 420px;           /* 🔹 ajusta según prefieras (350–500px queda bien) */
+  object-fit: cover;       /* recorta manteniendo proporciones */
+}
+
+#carruselDestacado .carousel-caption {
+  bottom: 40px;            /* posición del texto dentro del carrusel */
+}
+
+@media (max-width: 768px) {
+  #carruselDestacado .carousel-item img {
+    height: 260px;         /* 🔹 más pequeño en celulares */
+  }
+  #carruselDestacado .carousel-caption {
+    bottom: 20px;
+    font-size: 0.9rem;
+  }
+}
+
+#carruselDestacado .carousel-item img {
+  width: 100%;
+  height: 420px;
+  object-fit: cover;
+}
+
+
+
+/* 🔹 Botones del carrusel: siempre visibles y con estilo */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-color: rgba(0, 0, 0, 0.7); /* Fondo negro semitransparente */
+  border-radius: 50%;
+  padding: 14px;
+  background-size: 60% 60%;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
+  transition: all 0.3s ease;
+  filter: invert(1); /* Asegura que el ícono sea blanco */
+}
+
+/* 🔹 Hover: efecto colorido moderno */
+.carousel-control-prev-icon:hover,
+.carousel-control-next-icon:hover {
+  background-color: #0d6efd; /* Azul bootstrap */
+  box-shadow: 0 0 18px rgba(13, 110, 253, 0.7);
+  transform: scale(1.15);
+  filter: invert(0); /* Cambia a ícono oscuro */
+}
+
+/* 🔹 Botones accesibles en pantallas grandes */
+.carousel-control-prev,
+.carousel-control-next {
+  width: 8%;
+}

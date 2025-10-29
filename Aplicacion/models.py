@@ -55,7 +55,14 @@ class Producto(models.Model):
     nombre = models.CharField(max_length=30)
     precio = models.IntegerField()
     url_imagen = models.URLField(default=url_por_defecto, max_length=400)
-    descripcion = models.CharField(max_length=30)
+    descripcion = models.CharField(max_length=100)
+    # Nuevos campos 
+    talla = models.CharField(max_length=10, blank=True, null=True)
+    marca = models.CharField(max_length=50, blank=True, null=True)
+    
+
+    def __str__(self):
+        return f"{self.nombre} ({self.marca or 'Sin marca'})"
 
 
 url_por_defecto = 'https://ejemplo.com/imagen_por_defecto.jpg'
