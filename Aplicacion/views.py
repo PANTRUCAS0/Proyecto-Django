@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django import forms
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
+from django.contrib.auth import logout  
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponse
@@ -82,6 +83,14 @@ def login_view(request):
     else:
         form = LoginForm()
     return render(request, 'login.html', {'form': form})
+
+
+
+@csrf_exempt
+def logout_view(request):
+    logout(request)
+    messages.success(request, "🟢 Sesión cerrada correctamente.")
+    return redirect('Pagina')
 
 
 @login_required

@@ -24,7 +24,8 @@ urlpatterns = [
     path('Registro/', views.Registro, name='Registro'),  
     
     path('Login/', views.login_view, name='Login'),  
-    path('logout/', auth_views.LogoutView.as_view(next_page='/Pagina'), name='logout'),
+    path('logout/', views.logout_view, name='logout'),
+
 
     path('', views.Pagina, name='Pagina'),  
     path('Perfil/', views.Perfil, name='Perfil'),
@@ -39,7 +40,7 @@ urlpatterns = [
     path('Producto/', views.mostrar_productos, name='mostrarProductos'),
 
     path('eliminar-producto/<int:producto_id>/', views.eliminar_producto, name='eliminar_producto'),
-    path('actualizar-producto/<int:producto_id>/', views.actualizar_producto, name='actualizar_producto'),
+    path('actualizar_producto/<int:producto_id>/', views.actualizar_producto, name='actualizar_producto'),
 
     path("chatbot/", views.chatbot, name="chatbot"),
 
