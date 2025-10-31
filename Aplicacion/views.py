@@ -19,6 +19,9 @@ import requests
 from openpyxl import Workbook
 import openai
 
+def carrito(request):
+    return render(request, 'carrito.html')
+
 # Configuración API
 openai.api_key = settings.OPENAI_API_KEY
 logger = logging.getLogger(__name__)
@@ -479,3 +482,168 @@ def graficos_boletas(request):
     return render(request, 'graficos_boletas.html', {
         'detalles_json': detalles_json
     })
+
+# ===============================
+# Carrito BD
+# ===============================
+
+# views.py - AGREGAR ESTAS NUEVAS VISTAS
+
+from .models import Orden, ItemOrden
+
+def checkout(request):
+    """Vista del formulario de checkout"""
+    carrito = json.loads(request.POST.get('carrito', '[]')) if request.method == 'POST' else []
+    
+    # Calcular totales
+    subtotal = sum(item.get('subtotal', 0) for item in carrito)
+    costo_envio = 0 if subtotal > 50000 else 5000  # Envío gratis sobre $50.000
+    total = subtotal + costo_envio
+    
+    # Pre-llenar datos si el usuario está autenticado
+    usuario_email = ''
+    usuario_telefono = ''
+    if request.user.is_authenticated:
+        try:
+            cliente = Cliente.objects.get(Usuario=request.user.Usuario)
+            usuario_email = cliente.Email
+            usuario_telefono = cliente.Telefono
+        except Cliente.DoesNotExist:
+            pass
+    
+    return render(request, 'checkout.html', {
+        'carrito': carrito,
+        'subtotal': subtotal,
+        'costo_envio': costo_envio,
+        'total': total,
+        'usuario_email': usuario_email,
+        'usuario_telefono': usuario_telefono,
+    })
+
+
+@csrf_exempt
+def procesar_pago(request):
+    """Procesa el pago y crea la orden"""
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Método no permitido'}, status=405)
+    
+    try:
+        data = json.loads(request.body)
+        
+        # Validar datos requeridos
+        required_fields = ['email', 'telefono', 'direccion', 'ciudad', 'region', 'metodo_pago', 'carrito']
+        for field in required_fields:
+            if not data.get(field):
+                return JsonResponse({'error': f'El campo {field} es obligatorio'}, status=400)
+        
+        carrito = data.get('carrito', [])
+        if not carrito:
+            return JsonResponse({'error': 'El carrito está vacío'}, status=400)
+        
+        # Calcular totales
+        subtotal = sum(item.get('subtotal', 0) for item in carrito)
+        costo_envio = 0 if subtotal > 50000 else 5000
+        total = subtotal + costo_envio
+        
+        # Crear la orden
+        orden = Orden.objects.create(
+            cliente=request.user if request.user.is_authenticated else None,
+            email=data['email'],
+            telefono=data['telefono'],
+            direccion=data['direccion'],
+            ciudad=data['ciudad'],
+            region=data['region'],
+            codigo_postal=data.get('codigo_postal', ''),
+            metodo_pago=data['metodo_pago'],
+            subtotal=subtotal,
+            costo_envio=costo_envio,
+            total=total,
+            notas=data.get('notas', ''),
+            estado='PAGADO'  # En producción, esto dependerá de la respuesta del gateway de pago
+        )
+        
+        # Crear los items de la orden
+        for item in carrito:
+            ItemOrden.objects.create(
+                orden=orden,
+                producto_nombre=item['nombre'],
+                producto_descripcion=item.get('descripcion', ''),
+                producto_imagen=item.get('url_imagen', ''),
+                talla=item.get('talla', ''),
+                marca=item.get('marca', ''),
+                precio_unitario=item['precio'],
+                cantidad=item['cantidad'],
+                subtotal=item['subtotal']
+            )
+        
+        # También guardar en el modelo antiguo (Boleta) si lo necesitas
+        boleta = Boleta.objects.create(total=total)
+        for item in carrito:
+            DetalleBoleta.objects.create(
+                boleta=boleta,
+                nombre=item['nombre'],
+                descripcion=item.get('descripcion', ''),
+                precio=item['precio'],
+                cantidad=item['cantidad'],
+                subtotal=item['subtotal'],
+                url_imagen=item.get('url_imagen', '')
+            )
+        
+        return JsonResponse({
+            'status': 'success',
+            'orden_id': orden.id,
+            'numero_orden': orden.numero_orden,
+            'mensaje': '¡Pago procesado exitosamente!'
+        })
+        
+    except Exception as e:
+        logger.error(f"Error al procesar pago: {str(e)}")
+        return JsonResponse({'error': 'Error al procesar el pago'}, status=500)
+
+
+def confirmacion_orden(request, orden_id):
+    """Página de confirmación después del pago"""
+    orden = get_object_or_404(Orden, id=orden_id)
+    items = orden.items.all()
+    
+    return render(request, 'confirmacion_orden.html', {
+        'orden': orden,
+        'items': items
+    })
+
+
+def mis_ordenes(request):
+    """Vista para que el usuario vea sus órdenes"""
+    if not request.user.is_authenticated:
+        messages.warning(request, 'Debes iniciar sesión para ver tus órdenes')
+        return redirect('Login')
+    
+    try:
+        cliente = Cliente.objects.get(Usuario=request.user.Usuario)
+        ordenes = Orden.objects.filter(cliente=cliente).prefetch_related('items')
+    except Cliente.DoesNotExist:
+        ordenes = []
+    
+    return render(request, 'mis_ordenes.html', {'ordenes': ordenes})
+
+
+def detalle_orden(request, orden_id):
+    """Ver detalle de una orden específica"""
+    orden = get_object_or_404(Orden, id=orden_id)
+    
+    # Verificar que el usuario tenga permiso para ver esta orden
+    if request.user.is_authenticated:
+        try:
+            cliente = Cliente.objects.get(Usuario=request.user.Usuario)
+            if orden.cliente != cliente:
+                messages.error(request, 'No tienes permiso para ver esta orden')
+                return redirect('Pagina')
+        except Cliente.DoesNotExist:
+            pass
+    
+    items = orden.items.all()
+    
+    return render(request, 'detalle_orden.html', {
+        'orden': orden,
+        'items': items
+    })  

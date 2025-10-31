@@ -49,6 +49,7 @@
         <div class="d-flex align-items-center gap-2 my-2 my-lg-0">
           {% if user.is_authenticated %}
             <a href="{% url 'Perfil' %}" class="btn btn-outline-secondary btn-sm">Ver perfil</a>
+            <a href="{% url 'mis_ordenes' %}" class="btn btn-outline-info btn-sm">Mis órdenes</a>
             <form id="logout-form" action="{% url 'logout' %}" method="POST" style="display: none;">
               {% csrf_token %}
             </form>
@@ -65,10 +66,17 @@
           {% endif %}
 
           <!-- Carrito -->
-          <div class="position-relative ms-2" onclick="abrirCarrito()" style="cursor:pointer;">
-            <i class="bi bi-cart3 fs-4"></i>
-            <span id="contadorCarrito" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
+          <div class="position-relative ms-2" style="cursor:pointer;">
+            <a href="{% url 'carrito' %}" class="text-dark text-decoration-none">
+              <i class="bi bi-cart3 fs-4"></i>
+              <span id="contadorCarrito"
+                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                0
+              </span>
           </div>
+            </a>
+</div>
+
         </div>
       </div>
     </div>
@@ -142,6 +150,6 @@
   </footer>
 
   {% block extra_js %}{% endblock %}
-  <script src="{% static 'JavaScript/Pagina.js' %}"></script>
+<script src="{% static 'JavaScript/carrito.js' %}" defer></script>
 </body>
 </html>

@@ -88,3 +88,85 @@ class DetalleBoleta(models.Model):
 
     def __str__(self):
         return f"{self.nombre} x{self.cantidad}"
+
+# models.py - AGREGAR AL FINAL
+
+class Orden(models.Model):
+    ESTADO_CHOICES = [
+        ('PENDIENTE', 'Pendiente'),
+        ('PAGADO', 'Pagado'),
+        ('ENVIADO', 'Enviado'),
+        ('ENTREGADO', 'Entregado'),
+        ('CANCELADO', 'Cancelado'),
+    ]
+    
+    METODO_PAGO_CHOICES = [
+        ('TRANSFERENCIA', 'Transferencia Bancaria'),
+        ('WEBPAY', 'WebPay'),
+        ('EFECTIVO', 'Efectivo en tienda'),
+    ]
+    
+    numero_orden = models.CharField(max_length=20, unique=True, editable=False)
+    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, related_name='ordenes', null=True, blank=True)
+    
+    # Datos de contacto (por si compra sin cuenta)
+    email = models.EmailField(max_length=100)
+    telefono = models.CharField(max_length=15)
+    
+    # Dirección de envío
+    direccion = models.CharField(max_length=200)
+    ciudad = models.CharField(max_length=100)
+    region = models.CharField(max_length=100)
+    codigo_postal = models.CharField(max_length=10, blank=True, null=True)
+    
+    # Información de pago
+    metodo_pago = models.CharField(max_length=20, choices=METODO_PAGO_CHOICES, default='TRANSFERENCIA')
+    estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='PENDIENTE')
+    
+    # Montos
+    subtotal = models.IntegerField()
+    costo_envio = models.IntegerField(default=0)
+    total = models.IntegerField()
+    
+    # Fechas
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+    fecha_actualizacion = models.DateTimeField(auto_now=True)
+    
+    # Notas adicionales
+    notas = models.TextField(blank=True, null=True)
+    
+    class Meta:
+        ordering = ['-fecha_creacion']
+        verbose_name = 'Orden'
+        verbose_name_plural = 'Órdenes'
+    
+    def __str__(self):
+        return f"Orden {self.numero_orden} - {self.email}"
+    
+    def save(self, *args, **kwargs):
+        if not self.numero_orden:
+            # Generar número de orden único: ORD-20250130-0001
+            from django.utils import timezone
+            fecha = timezone.now().strftime('%Y%m%d')
+            ultimo = Orden.objects.filter(numero_orden__startswith=f'ORD-{fecha}').count()
+            self.numero_orden = f'ORD-{fecha}-{str(ultimo + 1).zfill(4)}'
+        super().save(*args, **kwargs)
+
+
+class ItemOrden(models.Model):
+    orden = models.ForeignKey(Orden, related_name='items', on_delete=models.CASCADE)
+    producto_nombre = models.CharField(max_length=100)
+    producto_descripcion = models.CharField(max_length=200, blank=True)
+    producto_imagen = models.URLField(max_length=400)
+    talla = models.CharField(max_length=10, blank=True, null=True)
+    marca = models.CharField(max_length=50, blank=True, null=True)
+    precio_unitario = models.IntegerField()
+    cantidad = models.IntegerField(default=1)
+    subtotal = models.IntegerField()
+    
+    def __str__(self):
+        return f"{self.producto_nombre} x{self.cantidad} - Orden {self.orden.numero_orden}"
+    
+    def save(self, *args, **kwargs):
+        self.subtotal = self.precio_unitario * self.cantidad
+        super().save(*args, **kwargs)

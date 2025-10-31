@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Orden {{ orden.numero_orden }} - Zapatería Tomy's{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'Pagina' %}">Inicio</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'mis_ordenes' %}">Mis Órdenes</a></li>
+            <li class="breadcrumb-item active">{{ orden.numero_orden }}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <!-- Estado y número de orden -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h3 class="mb-2">Orden {{ orden.numero_orden }}</h3>
+                            <p class="text-muted mb-0">
+                                Realizada el {{ orden.fecha_creacion|date:"d/m/Y" }} a las {{ orden.fecha_creacion|time:"H:i" }}
+                            </p>
+                        </div>
+                        <div>
+                            {% if orden.estado == 'PENDIENTE' %}
+                                <span class="badge bg-warning fs-6">{{ orden.get_estado_display }}</span>
+                            {% elif orden.estado == 'PAGADO' %}
+                                <span class="badge bg-success fs-6">{{ orden.get_estado_display }}</span>
+                            {% elif orden.estado == 'ENVIADO' %}
+                                <span class="badge bg-info fs-6">{{ orden.get_estado_display }}</span>
+                            {% elif orden.estado == 'ENTREGADO' %}
+                                <span class="badge bg-primary fs-6">{{ orden.get_estado_display }}</span>
+                            {% else %}
+                                <span class="badge bg-danger fs-6">{{ orden.get_estado_display }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Productos -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-box-seam me-2"></i>Productos</h5>
+                </div>
+                <div class="card-body">
+                    {% for item in items %}
+                    <div class="row align-items-center mb-3 pb-3 {% if not forloop.last %}border-bottom{% endif %}">
+                        <div class="col-md-2">
+                            <img src="{{ item.producto_imagen }}" 
+                                 alt="{{ item.producto_nombre }}"
+                                 class="img-fluid rounded"
+                                 style="max-height: 80px; object-fit: cover;">
+                        </div>
+                        <div class="col-md-5">
+                            <h6 class="mb-1">{{ item.producto_nombre }}</h6>
+                            {% if item.producto_descripcion %}
+                            <p class="text-muted small mb-1">{{ item.producto_descripcion }}</p>
+                            {% endif %}
+                            {% if item.talla %}
+                            <span class="badge bg-light text-dark">Talla: {{ item.talla }}</span>
+                            {% endif %}
+                            {% if item.marca %}
+                            <span class="badge bg-light text-dark">{{ item.marca }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-2 text-center">
+                            <p class="mb-0 text-muted small">Precio</p>
+                            <strong>${{ item.precio_unitario|floatformat:0 }}</strong>
+                        </div>
+                        <div class="col-md-1 text-center">
+                            <p class="mb-0 text-muted small">Cant.</p>
+                            <strong>{{ item.cantidad }}</strong>
+                        </div>
+                        <div class="col-md-2 text-end">
+                            <p class="mb-0 text-muted small">Subtotal</p>
+                            <strong class="text-primary">${{ item.subtotal|floatformat:0 }}</strong>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <!-- Resumen de pago -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-credit-card me-2"></i>Resumen</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Subtotal:</span>
+                        <strong>${{ orden.subtotal|floatformat:0 }}</strong>
+                    </div>
+                    <div class="d-flex justify-content-between mb-3">
+                        <span>Envío:</span>
+                        <strong class="{% if orden.costo_envio == 0 %}text-success{% endif %}">
+                            {% if orden.costo_envio == 0 %}
+                                Gratis
+                            {% else %}
+                                ${{ orden.costo_envio|floatformat:0 }}
+                            {% endif %}
+                        </strong>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between mb-3">
+                        <span class="h5">Total:</span>
+                        <strong class="h5 text-primary">${{ orden.total|floatformat:0 }}</strong>
+                    </div>
+                    <p class="mb-1"><strong>Método de Pago:</strong></p>
+                    <p class="text-muted">{{ orden.get_metodo_pago_display }}</p>
+                </div>
+            </div>
+
+            <!-- Información de envío -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-truck me-2"></i>Envío</h5>
+                </div>
+                <div class="card-body">
+                    <p class="mb-1"><strong>Dirección:</strong></p>
+                    <p class="text-muted">
+                        {{ orden.direccion }}<br>
+                        {{ orden.ciudad }}, {{ orden.region }}
+                        {% if orden.codigo_postal %}<br>CP: {{ orden.codigo_postal }}{% endif %}
+                    </p>
+                    <p class="mb-1"><strong>Contacto:</strong></p>
+                    <p class="text-muted mb-1">{{ orden.email }}</p>
+                    <p class="text-muted mb-0">{{ orden.telefono }}</p>
+                </div>
+            </div>
+
+            {% if orden.notas %}
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-sticky me-2"></i>Notas</h5>
+                </div>
+                <div class="card-body">
+                    <p class="mb-0 text-muted">{{ orden.notas }}</p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
