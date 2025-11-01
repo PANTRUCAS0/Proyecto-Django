@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle de Órdenes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .buttons-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #4b79a1, #283e51);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .search-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #searchInput {
+            width: 60%;
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        h2 {
+            text-align: center;
+            margin: 30px 0;
+            color: #333;
+        }
+
+        table {
+            width: 95%;
+            margin: 25px auto;
+            border-collapse: collapse;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            background-color: #ffffff;
+        }
+
+        thead {
+            background: linear-gradient(135deg, #4b79a1, #283e51);
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 12px;
+        }
+
+        th, td {
+            padding: 12px 8px;
+            text-align: center;
+        }
+
+        tbody tr {
+            background-color: #fff;
+            transition: background-color 0.2s ease;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        tbody tr:hover {
+            background-color: #e3f2fd;
+        }
+
+        td {
+            border-bottom: 1px solid #ddd;
+            font-size: 13px;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .no-data {
+            text-align: center;
+            font-style: italic;
+            color: #666;
+            padding: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="buttons-container">
+        <a href="{% url 'Admin' %}" class="btn">Volver</a>
+        <a href="{% url 'exportar_excel' %}" class="btn">Exportar a Excel</a>
+        <a href="https://app.powerbi.com/groups/339e34ae-cd07-485b-b3c2-2aefd412f800/reports/4723d741-250b-4b47-9396-de9404630805/73a0ddaa162bcc6a17cc?experience=power-bi"
+       class="btn" target="_blank">Ver Dashboard Power BI</a>
+    </div>
+
+    <div class="search-container">
+        <input type="text" id="searchInput" 
+               placeholder="Buscar por ID, Producto o Marca...">
+    </div>
+
+    <h2>Detalle de Órdenes</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>N° ORDEN</th>
+                <th>PRODUCTO</th>
+                <th>DESCRIPCIÓN</th>
+                <th>TALLA</th>
+                <th>MARCA</th>
+                <th>PRECIO UNIT.</th>
+                <th>CANTIDAD</th>
+                <th>SUBTOTAL</th>
+                <th>TOTAL ORDEN</th>
+                <th>FECHA</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td><strong>{{ item.orden.id }}</strong></td>
+                <td><strong>{{ item.orden.numero_orden }}</strong></td>
+                <td>{{ item.producto_nombre }}</td>
+                <td>{{ item.producto_descripcion|truncatewords:5 }}</td>
+                <td><strong>{{ item.talla|default:"—" }}</strong></td>
+                <td>{{ item.marca|default:"—" }}</td>
+                <td>${{ item.precio_unitario|floatformat:0 }}</td>
+                <td>{{ item.cantidad }}</td>
+                <td>${{ item.subtotal|floatformat:0 }}</td>
+                <td><strong>${{ item.orden.total|floatformat:0 }}</strong></td>
+                <td>{{ item.orden.fecha_creacion|date:"d/m/Y" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="11" class="no-data">No hay órdenes registradas.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <script>
+    document.getElementById('searchInput').addEventListener('keyup', function() {
+        const filter = this.value.toLowerCase().trim();
+        const rows = document.querySelectorAll('tbody tr');
+
+        rows.forEach(row => {
+            const id = row.children[0]?.textContent.toLowerCase() || '';
+            const producto = row.children[2]?.textContent.toLowerCase() || '';
+            const marca = row.children[5]?.textContent.toLowerCase() || '';
+
+            if (id.includes(filter) || producto.includes(filter) || marca.includes(filter)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+    </script>
+</body>
+</html>

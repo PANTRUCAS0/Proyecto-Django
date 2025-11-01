@@ -106,12 +106,14 @@
           <p class="text-muted small mb-2">{{ producto.descripcion }}</p>
           <p class="fw-bold text-success mb-3">${{ producto.precio }}</p>
           <button class="btn btn-outline-success btn-sm"
-                  data-nombre="{{ producto.nombre }}"
-                  data-descripcion="{{ producto.descripcion|escapejs }}"
-                  data-precio="{{ producto.precio }}"
-                  data-imagen="{{ producto.url_imagen }}"
-                  onclick="agregarProductoDataset(this)">
-            Agregar al carrito
+          data-nombre="{{ producto.nombre }}"
+          data-descripcion="{{ producto.descripcion|escapejs }}"
+          data-precio="{{ producto.precio }}"
+          data-imagen="{{ producto.url_imagen }}"
+          data-talla="{{ producto.talla|default:'—' }}"
+          data-marca="{{ producto.marca|default:'' }}"
+          onclick="agregarProductoDataset(this)">
+          Agregar al carrito
           </button>
         </div>
       </div>

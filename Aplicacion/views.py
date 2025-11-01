@@ -198,6 +198,8 @@ def actualizar_producto(request, producto_id):
             producto.descripcion = data.get('descripcion', producto.descripcion)
             producto.precio = data.get('precio', producto.precio)
             producto.url_imagen = data.get('url_imagen', producto.url_imagen)
+            producto.talla = data.get('talla', producto.talla)
+            producto.marca = data.get('marca', producto.marca)
             producto.save()
             return JsonResponse({'success': True})
         except Producto.DoesNotExist:
@@ -447,20 +449,22 @@ def exportar_excel(request):
     ws = wb.active
     ws.title = "Detalles de Boletas"
 
-    ws.append(["ID", "Nombre", "Descripción", "Precio", "Cantidad", "Subtotal", "ID Boleta", "Fecha Boleta"])
+    ws.append(["id","producto_nombre","producto_descripcion","talla","marca","precio_unitario","cantidad","subtotal"])
 
-    detalles = DetalleBoleta.objects.select_related('boleta').all()
+    detalles = ItemOrden.objects.select_related('orden').all()
+
     for d in detalles:
         ws.append([
             d.id,
-            d.nombre,
-            d.descripcion,
-            d.precio,
+            d.producto_nombre,
+            d.producto_descripcion,
+            d.talla,
+            d.marca,
+            d.precio_unitario,
             d.cantidad,
             d.subtotal,
-            d.boleta.id_boleta if d.boleta else "",
-            d.boleta.fecha_creacion.strftime("%d/%m/%Y") if d.boleta else "",
         ])
+
 
     response = HttpResponse(
         content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
@@ -468,20 +472,6 @@ def exportar_excel(request):
     response['Content-Disposition'] = 'attachment; filename="detalle_boletas.xlsx"'
     wb.save(response)
     return response
-
-def graficos_boletas(request):
-    detalles = DetalleBoleta.objects.select_related('boleta').all()
-    detalles_json = json.dumps([
-        {
-            'nombre': d.nombre,
-            'cantidad': d.cantidad,
-            'subtotal': float(d.subtotal),
-            'boleta_id': d.boleta.id_boleta,
-        } for d in detalles
-    ])
-    return render(request, 'graficos_boletas.html', {
-        'detalles_json': detalles_json
-    })
 
 # ===============================
 # Carrito BD
@@ -646,4 +636,85 @@ def detalle_orden(request, orden_id):
     return render(request, 'detalle_orden.html', {
         'orden': orden,
         'items': items
-    })  
+    })
+
+def guardar_orden(request):
+    try:
+        data = json.loads(request.body)
+        productos = data.get('productos', [])
+        total = data.get('total', 0)
+        
+        # Datos de contacto (puedes obtenerlos del usuario o del request)
+        email = data.get('email', 'cliente@ejemplo.com')
+        telefono = data.get('telefono', '999999999')
+        direccion = data.get('direccion', 'Por definir')
+        ciudad = data.get('ciudad', 'Santiago')
+        region = data.get('region', 'Metropolitana')
+        
+        # Crear la orden
+        orden = Orden.objects.create(
+            email=email,
+            telefono=telefono,
+            direccion=direccion,
+            ciudad=ciudad,
+            region=region,
+            subtotal=total,
+            costo_envio=0,
+            total=total,
+            metodo_pago='TRANSFERENCIA',
+            estado='PENDIENTE'
+        )
+        
+        # Crear los items de la orden
+        for producto in productos:
+            ItemOrden.objects.create(
+                orden=orden,
+                producto_nombre=producto['nombre'],
+                producto_descripcion=producto.get('descripcion', ''),
+                producto_imagen=producto.get('url_imagen', ''),
+                talla=producto.get('talla', '—'),
+                marca=producto.get('marca', ''),
+                precio_unitario=producto['precio'],
+                cantidad=producto['cantidad'],
+                subtotal=producto['subtotal']
+            )
+        
+        return JsonResponse({
+            'status': 'ok',
+            'mensaje': 'Orden guardada correctamente',
+            'numero_orden': orden.numero_orden
+        })
+        
+    except Exception as e:
+        return JsonResponse({
+            'status': 'error',
+            'mensaje': str(e)
+        }, status=400)
+
+def detalle_ordenes(request):
+    items = ItemOrden.objects.select_related('orden').all().order_by('-orden__fecha_creacion')
+    
+    context = {
+        'items': items
+    }
+    return render(request, 'detalle_ordenes.html', context)
+
+# =======================================
+# Api powerBI
+#=======================================
+
+def exportar_datos_json(request):
+    data = list(ItemOrden.objects.values(
+        'orden__id',
+        'orden__numero_orden',
+        'producto_nombre',
+        'producto_descripcion',
+        'talla',
+        'marca',
+        'precio_unitario',
+        'cantidad',
+        'subtotal',
+        'orden__total',
+        'orden__fecha_creacion',
+    ))
+    return JsonResponse(data, safe=False)

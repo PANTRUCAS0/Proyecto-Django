@@ -82,8 +82,10 @@
         <li class="producto" id="producto-{{ producto.id }}">
           <img src="{{ producto.url_imagen }}" alt="{{ producto.nombre }}">
           <h3 class="fw-semibold">{{ producto.nombre }}</h3>
-          <p>{{ producto.descripcion }}</p>
+          <p>Descripción: {{ producto.descripcion }}</p>
           <p class="fw-bold text-success">Precio: ${{ producto.precio }}</p>
+          <p>Talla: {{ producto.talla }}</p>
+          <p>Marca: {{ producto.marca }}</p>
           <div class="botones-producto">
             <button class="btn btn-success btn-sm"
               onclick="abrirModal({{ producto.id }}, '{{ producto.nombre }}', '{{ producto.descripcion }}', {{ producto.precio }}, '{{ producto.url_imagen }}', '{{ producto.talla }}', '{{ producto.marca }}')">
@@ -169,79 +171,77 @@
     </div>
   </div>
 
-  <script>
-    let productoActualId = null;
+<script>
+  let productoActualId = null;
 
-    function abrirModal(id, nombre, descripcion, precio, imagen, talla, marca) {
-      productoActualId = id;
-      document.getElementById('modalNombre').value = nombre;
-      document.getElementById('modalDescripcion').value = descripcion;
-      document.getElementById('modalPrecio').value = precio;
-      document.getElementById('modalImagen').value = imagen;
-      document.getElementById('modalTalla').value = talla;
-      document.getElementById('modalMarca').value = marca;
+  function abrirModal(id, nombre, descripcion, precio, imagen, talla, marca) {
+    productoActualId = id;
+    document.getElementById('modalNombre').value = nombre;
+    document.getElementById('modalDescripcion').value = descripcion;
+    document.getElementById('modalPrecio').value = precio;
+    document.getElementById('modalImagen').value = imagen;
+    document.getElementById('modalTalla').value = talla;
+    document.getElementById('modalMarca').value = marca;
 
-      const modal = new bootstrap.Modal(document.getElementById('modalActualizar'));
-      modal.show();
-    }
+    const modal = new bootstrap.Modal(document.getElementById('modalActualizar'));
+    modal.show();
+  }
 
-    function guardarCambios() {
-      const nombre = document.getElementById('modalNombre').value;
-      const descripcion = document.getElementById('modalDescripcion').value;
-      const precio = parseFloat(document.getElementById('modalPrecio').value);
-      const imagen = document.getElementById('modalImagen').value;
-      const talla = document.getElementById('modalTalla').value;
-      const marca = document.getElementById('modalMarca').value;
+  function guardarCambios() {
+    const nombre = document.getElementById('modalNombre').value;
+    const descripcion = document.getElementById('modalDescripcion').value;
+    const precio = parseFloat(document.getElementById('modalPrecio').value);
+    const imagen = document.getElementById('modalImagen').value;
+    const talla = document.getElementById('modalTalla').value;
+    const marca = document.getElementById('modalMarca').value;
 
-      fetch(`/actualizar_producto/${productoActualId}/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRFToken': '{{ csrf_token }}'
-        },
-        body: JSON.stringify({
-          nombre,
-          descripcion,
-          precio,
-          url_imagen: imagen,
-          talla,
-          marca
-        })
+    fetch(`/actualizar_producto/${productoActualId}/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': '{{ csrf_token }}'
+      },
+      body: JSON.stringify({
+        nombre,
+        descripcion,
+        precio,
+        url_imagen: imagen,
+        talla,
+        marca
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          const li = document.getElementById(`producto-${productoActualId}`);
-          li.querySelector('h3').textContent = nombre;
-          li.querySelector('p').textContent = descripcion;
-          li.querySelector('.fw-bold').textContent = `Precio: $${precio}`;
-          li.querySelector('img').src = imagen;
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        const modal = bootstrap.Modal.getInstance(document.getElementById('modalActualizar'));
+        modal.hide();
 
-          const modal = bootstrap.Modal.getInstance(document.getElementById('modalActualizar'));
-          modal.hide();
+        // ✅ Recargar la página para mostrar los cambios actualizados
+        location.reload();
+      } else {
+        alert('❌ Error al actualizar el producto.');
+      }
+    })
+    .catch(error => console.error('Error:', error));
+  }
+
+  function eliminarProducto(productoId) {
+    if (confirm("¿Estás seguro de que deseas eliminar este producto?")) {
+      fetch(`/eliminar_producto/${productoId}/`, {
+        method: 'DELETE',
+        headers: { 'X-CSRFToken': '{{ csrf_token }}' }
+      })
+      .then(response => {
+        if (response.ok) {
+          document.getElementById(`producto-${productoId}`).remove();
         } else {
-          alert('❌ Error al actualizar el producto.');
+          console.error('Error al eliminar el producto');
         }
       })
       .catch(error => console.error('Error:', error));
     }
+  }
+</script>
 
-    function eliminarProducto(productoId) {
-      if (confirm("¿Estás seguro de que deseas eliminar este producto?")) {
-        fetch(`/eliminar_producto/${productoId}/`, {
-          method: 'DELETE',
-          headers: { 'X-CSRFToken': '{{ csrf_token }}' }
-        })
-        .then(response => {
-          if (response.ok) {
-            document.getElementById(`producto-${productoId}`).remove();
-          } else {
-            console.error('Error al eliminar el producto');
-          }
-        })
-        .catch(error => console.error('Error:', error));
-      }
-    }
-  </script>
 </body>
 </html>

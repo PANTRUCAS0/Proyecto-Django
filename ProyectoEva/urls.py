@@ -48,11 +48,10 @@ urlpatterns = [
     path('boleta/', views.boleta, name='boleta'),
     path('guardar_boleta/', views.guardar_boleta, name='guardar_boleta'),
 
-    path('detalle_boleta/', views.detalle_boleta, name='detalle_boleta'),
+    path('detalle_ordenes', views.detalle_ordenes, name='detalle_ordenes'),
 
     path('exportar_excel/', views.exportar_excel, name='exportar_excel'),
 
-    path('graficos_boletas/', views.graficos_boletas, name='graficos_boletas'),
     # Checkout y pagos
     path('checkout/', views.checkout, name='checkout'),
     path('procesar-pago/', views.procesar_pago, name='procesar_pago'),
@@ -60,7 +59,9 @@ urlpatterns = [
     
     # Órdenes del usuario
     path('mis-ordenes/', views.mis_ordenes, name='mis_ordenes'),
-    path('orden/<int:orden_id>/', views.detalle_orden, name='detalle_orden')
+    path('orden/<int:orden_id>/', views.detalle_orden, name='detalle_orden'),
+
+    path('api/ordenes/', views.exportar_datos_json, name='api_ordenes'),
 ]
 
 
