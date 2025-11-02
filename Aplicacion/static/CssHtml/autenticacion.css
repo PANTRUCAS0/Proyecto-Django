@@ -1,0 +1,228 @@
+/* static/CssHtml/auth.css */
+
+/* ===== LAYOUT DE AUTENTICACIÓN ===== */
+body.auth-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter', sans-serif;
+    padding: 2rem 1rem;
+}
+
+body.auth-page.login {
+    background: linear-gradient(135deg, #FF6B35 0%, #000000 100%);
+}
+
+body.auth-page.register {
+    background: linear-gradient(135deg, #000000 0%, #FF6B35 100%);
+}
+
+/* ===== CONTENEDOR ===== */
+.auth-container {
+    background: #FFFFFF;
+    border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    max-width: 500px;
+    width: 100%;
+    animation: slideUp 0.6s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== HEADER ===== */
+.auth-header {
+    padding: 2.5rem 2rem;
+    text-align: center;
+    color: #FFFFFF;
+}
+
+.auth-header.login {
+    background: linear-gradient(135deg, #FF6B35, #FF8C61);
+}
+
+.auth-header.register {
+    background: linear-gradient(135deg, #000000, #1A1A1A);
+}
+
+.auth-header h1 {
+    font-size: 2rem;
+    font-weight: 900;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.auth-header p {
+    margin: 0.5rem 0 0 0;
+    font-weight: 500;
+    opacity: 0.9;
+    font-size: 0.95rem;
+}
+
+/* ===== BODY ===== */
+.auth-body {
+    padding: 2rem;
+}
+
+/* ===== FORMULARIOS ===== */
+.auth-body .form-floating {
+    margin-bottom: 1.25rem;
+}
+
+.auth-body .form-control {
+    border: 2px solid #E9ECEF;
+    border-radius: 12px;
+    padding: 1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.auth-body .form-control:focus {
+    border-color: #FF6B35;
+    box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.1);
+}
+
+.auth-body .form-floating label {
+    font-weight: 600;
+    color: #6C757D;
+}
+
+/* ===== VALIDACIÓN ===== */
+.validation-message {
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.validation-message.valid {
+    color: #28A745;
+    background: #D4EDDA;
+}
+
+.validation-message.invalid {
+    color: #DC3545;
+    background: #F8D7DA;
+}
+
+/* ===== BOTONES ===== */
+.btn-auth {
+    background: linear-gradient(135deg, #FF6B35, #FF8C61);
+    border: none;
+    color: #FFFFFF;
+    font-weight: 800;
+    font-size: 1rem;
+    padding: 1rem;
+    border-radius: 12px;
+    width: 100%;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+}
+
+.btn-auth:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+}
+
+/* ===== DIVIDER ===== */
+.auth-divider {
+    text-align: center;
+    margin: 2rem 0;
+    position: relative;
+}
+
+.auth-divider::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    height: 1px;
+    background: #E9ECEF;
+}
+
+.auth-divider span {
+    background: #FFFFFF;
+    padding: 0 1rem;
+    position: relative;
+    color: #6C757D;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* ===== LINKS ===== */
+.auth-link {
+    text-align: center;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid #E9ECEF;
+}
+
+.auth-link a {
+    color: #FF6B35;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.auth-link a:hover {
+    color: #000000;
+}
+
+/* ===== BACK HOME ===== */
+.back-home {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.back-home a {
+    color: #FFFFFF;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.back-home a:hover {
+    gap: 1rem;
+}
+
+/* ===== ALERTAS ===== */
+.alert-custom {
+    border-radius: 12px;
+    border: none;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 576px) {
+    .auth-header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .auth-body {
+        padding: 1.5rem;
+    }
+}

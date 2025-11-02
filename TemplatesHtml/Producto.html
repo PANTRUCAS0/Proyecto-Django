@@ -1,247 +1,285 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lista de Productos</title>
-
-  <!-- Bootstrap -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-  <style>
-    body {
-      margin: 0;
-      background-color: #f8f9fa;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    #contenedor {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 40px 20px;
-    }
-
-    h2 {
-      margin-bottom: 20px;
-      color: #333;
-    }
-
-    ul#listaProductos {
-      list-style: none;
-      padding: 0;
-      margin-top: 30px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 25px;
-      width: 100%;
-      max-width: 1200px;
-    }
-
-    li.producto {
-      background-color: #fff;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      padding: 20px;
-      text-align: center;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    li.producto:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
-    }
-
-    img {
-      width: 100%;
-      max-width: 220px;
-      height: 220px;
-      object-fit: contain;
-      border-radius: 10px;
-      margin: 0 auto 10px;
-      display: block;
-    }
-
-    .botones-producto {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 10px;
-      flex-wrap: wrap;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Productos | Tomy's Admin</title>
+    
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <!-- Estilos -->
+    <link rel="stylesheet" href="{% static 'CssHtml/estilos_globales.css' %}">
+    <link rel="stylesheet" href="{% static 'CssHtml/admin.css' %}">
 </head>
-<body>
-  <div id="contenedor">
-    <h2 class="fw-bold">Lista de Productos</h2>
-    <a href="{% url 'Admin' %}" class="btn btn-primary mb-3">Volver al Panel</a>
-
-    <ul id="listaProductos">
-      {% for producto in productos %}
-        <li class="producto" id="producto-{{ producto.id }}">
-          <img src="{{ producto.url_imagen }}" alt="{{ producto.nombre }}">
-          <h3 class="fw-semibold">{{ producto.nombre }}</h3>
-          <p>Descripción: {{ producto.descripcion }}</p>
-          <p class="fw-bold text-success">Precio: ${{ producto.precio }}</p>
-          <p>Talla: {{ producto.talla }}</p>
-          <p>Marca: {{ producto.marca }}</p>
-          <div class="botones-producto">
-            <button class="btn btn-success btn-sm"
-              onclick="abrirModal({{ producto.id }}, '{{ producto.nombre }}', '{{ producto.descripcion }}', {{ producto.precio }}, '{{ producto.url_imagen }}', '{{ producto.talla }}', '{{ producto.marca }}')">
-              <i class='bi bi-pencil-square'></i> Actualizar
-            </button>
-            <button class="btn btn-danger btn-sm" onclick="eliminarProducto({{ producto.id }})">
-              <i class='bi bi-trash3'></i> Eliminar
-            </button>
-          </div>
-        </li>
-      {% endfor %}
-    </ul>
-  </div>
-
-  <!-- 🔹 Modal Bootstrap para actualizar producto -->
-  <div class="modal fade" id="modalActualizar" tabindex="-1" aria-labelledby="modalActualizarLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content shadow-lg border-0 rounded-3">
-
-        <!-- Encabezado -->
-        <div class="modal-header bg-primary text-white">
-          <h5 class="modal-title fw-semibold" id="modalActualizarLabel">Actualizar Producto</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+<body class="admin-page">
+    <!-- Header -->
+    <div class="admin-header">
+        <div class="container">
+            <h1>Gestión de Productos</h1>
         </div>
-
-        <!-- Cuerpo -->
-        <div class="modal-body">
-          <form id="formActualizar">
-            <div class="mb-3">
-              <label for="modalNombre" class="form-label fw-semibold">Nombre</label>
-              <input type="text" id="modalNombre" class="form-control" placeholder="Nombre del producto">
-            </div>
-
-            <div class="mb-3">
-              <label for="modalDescripcion" class="form-label fw-semibold">Descripción</label>
-              <textarea id="modalDescripcion" class="form-control" rows="2" placeholder="Descripción breve"></textarea>
-            </div>
-
-            <div class="mb-3">
-              <label for="modalPrecio" class="form-label fw-semibold">Precio</label>
-              <input type="number" id="modalPrecio" class="form-control" placeholder="Precio en CLP">
-            </div>
-
-            <div class="mb-3">
-              <label for="modalImagen" class="form-label fw-semibold">URL Imagen</label>
-              <input type="text" id="modalImagen" class="form-control" placeholder="https://ejemplo.com/imagen.jpg">
-            </div>
-
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label for="modalTalla" class="form-label fw-semibold">Talla</label>
-                <select id="modalTalla" class="form-select">
-                  <option value="">Seleccione talla</option>
-                  <option value="38">38</option>
-                  <option value="39">39</option>
-                  <option value="40">40</option>
-                  <option value="41">41</option>
-                  <option value="42">42</option>
-                  <option value="43">43</option>
-                </select>
-              </div>
-
-              <div class="col-md-6 mb-3">
-                <label for="modalMarca" class="form-label fw-semibold">Marca</label>
-                <select id="modalMarca" class="form-select">
-                  <option value="">Seleccione marca</option>
-                  <option value="Nike">Nike</option>
-                  <option value="Adidas">Adidas</option>
-                  <option value="Puma">Puma</option>
-                  <option value="Yeezy">Yeezy</option>
-                </select>
-              </div>
-            </div>
-          </form>
-        </div>
-
-        <!-- Footer -->
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-success fw-semibold" onclick="guardarCambios()">Guardar Cambios</button>
-        </div>
-      </div>
     </div>
-  </div>
 
-<script>
-  let productoActualId = null;
+    <div class="container">
+        <!-- Botones superiores -->
+        <div class="admin-button-group">
+            <a href="{% url 'Admin' %}" class="btn-secondary-admin">
+                <i class="bi bi-arrow-left-circle-fill"></i>
+                Volver al Panel
+            </a>
+            <a href="{% url 'AgregarProducto' %}" class="btn-primary-admin">
+                <i class="bi bi-plus-circle-fill"></i>
+                Agregar Producto
+            </a>
+        </div>
 
-  function abrirModal(id, nombre, descripcion, precio, imagen, talla, marca) {
-    productoActualId = id;
-    document.getElementById('modalNombre').value = nombre;
-    document.getElementById('modalDescripcion').value = descripcion;
-    document.getElementById('modalPrecio').value = precio;
-    document.getElementById('modalImagen').value = imagen;
-    document.getElementById('modalTalla').value = talla;
-    document.getElementById('modalMarca').value = marca;
+        <!-- Grid de Productos -->
+        {% if productos %}
+            <div class="row g-4">
+                {% for producto in productos %}
+                <div class="col-12 col-md-6 col-lg-4" id="producto-{{ producto.id }}">
+                    <div class="card h-100 shadow-sm producto-card">
+                        <!-- Imagen -->
+                        <div class="card-img-container" style="background: #F8F9FA; padding: 2rem; height: 250px; display: flex; align-items: center; justify-content: center;">
+                            <img src="{{ producto.url_imagen }}" 
+                                 alt="{{ producto.nombre }}"
+                                 style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                        </div>
+                        
+                        <!-- Contenido -->
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">{{ producto.nombre }}</h5>
+                            <p class="text-muted small mb-2">{{ producto.descripcion|truncatewords:10 }}</p>
+                            
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="badge bg-dark">Talla: {{ producto.talla|default:"—" }}</span>
+                                <span class="badge" style="background: #FF6B35;">{{ producto.marca|default:"Sin marca" }}</span>
+                            </div>
+                            
+                            <div class="text-center my-3">
+                                <h3 class="text-primary mb-0" style="color: #FF6B35 !important; font-weight: 900;">
+                                    ${{ producto.precio|floatformat:0 }}
+                                </h3>
+                            </div>
+                            
+                            <!-- Botones -->
+                            <div class="d-grid gap-2">
+                                <button class="btn-admin btn-admin-edit" 
+                                        data-producto-id="{{ producto.id }}"
+                                        data-nombre="{{ producto.nombre }}"
+                                        data-descripcion="{{ producto.descripcion }}"
+                                        data-precio="{{ producto.precio }}"
+                                        data-imagen="{{ producto.url_imagen }}"
+                                        data-talla="{{ producto.talla }}"
+                                        data-marca="{{ producto.marca }}"
+                                        onclick="abrirModalEditar(this)">
+                                    <i class="bi bi-pencil-square"></i>
+                                    Editar
+                                </button>
+                                <button class="btn-admin btn-admin-delete" 
+                                        data-producto-id="{{ producto.id }}"
+                                        onclick="eliminarProducto(this)">
+                                    <i class="bi bi-trash3-fill"></i>
+                                    Eliminar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="admin-table-container">
+                <div class="empty-state">
+                    <i class="bi bi-inbox"></i>
+                    <h3>No hay productos registrados</h3>
+                    <p>Comienza agregando tu primer producto</p>
+                    <a href="{% url 'AgregarProducto' %}" class="btn-primary-admin">
+                        <i class="bi bi-plus-circle-fill"></i>
+                        Agregar Primer Producto
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
 
-    const modal = new bootstrap.Modal(document.getElementById('modalActualizar'));
-    modal.show();
-  }
+    <!-- Modal para Editar -->
+    <div class="modal fade" id="modalEditarProducto" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content" style="border-radius: 20px; border: none; overflow: hidden;">
+                <div class="modal-header" style="background: linear-gradient(135deg, #FF6B35, #FF8C61); color: white; border: none;">
+                    <h5 class="modal-title fw-bold">
+                        <i class="bi bi-pencil-square me-2"></i>Editar Producto
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="formEditarProducto">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">
+                                    <i class="bi bi-tag-fill text-primary me-2"></i>Nombre
+                                </label>
+                                <input type="text" class="form-control" id="editNombre" required>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">
+                                    <i class="bi bi-currency-dollar text-success me-2"></i>Precio
+                                </label>
+                                <input type="number" class="form-control" id="editPrecio" required>
+                            </div>
+                            
+                            <div class="col-12">
+                                <label class="form-label fw-bold">
+                                    <i class="bi bi-image-fill text-info me-2"></i>URL Imagen
+                                </label>
+                                <input type="url" class="form-control" id="editImagen" required>
+                            </div>
+                            
+                            <div class="col-12">
+                                <label class="form-label fw-bold">
+                                    <i class="bi bi-file-text-fill text-warning me-2"></i>Descripción
+                                </label>
+                                <textarea class="form-control" id="editDescripcion" rows="3" required></textarea>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">
+                                    <i class="bi bi-rulers text-secondary me-2"></i>Talla
+                                </label>
+                                <select class="form-select" id="editTalla">
+                                    <option value="">Seleccione talla</option>
+                                    <option value="38">38</option>
+                                    <option value="39">39</option>
+                                    <option value="40">40</option>
+                                    <option value="41">41</option>
+                                    <option value="42">42</option>
+                                    <option value="43">43</option>
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">
+                                    <i class="bi bi-award-fill text-danger me-2"></i>Marca
+                                </label>
+                                <select class="form-select" id="editMarca">
+                                    <option value="">Seleccione marca</option>
+                                    <option value="Nike">Nike</option>
+                                    <option value="Adidas">Adidas</option>
+                                    <option value="Puma">Puma</option>
+                                    <option value="Yeezy">Yeezy</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="guardarCambios()" style="background: #FF6B35; border: none;">
+                        <i class="bi bi-check-circle-fill me-2"></i>Guardar Cambios
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-  function guardarCambios() {
-    const nombre = document.getElementById('modalNombre').value;
-    const descripcion = document.getElementById('modalDescripcion').value;
-    const precio = parseFloat(document.getElementById('modalPrecio').value);
-    const imagen = document.getElementById('modalImagen').value;
-    const talla = document.getElementById('modalTalla').value;
-    const marca = document.getElementById('modalMarca').value;
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let productoActualId = null;
+        let modalEditar = null;
 
-    fetch(`/actualizar_producto/${productoActualId}/`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRFToken': '{{ csrf_token }}'
-      },
-      body: JSON.stringify({
-        nombre,
-        descripcion,
-        precio,
-        url_imagen: imagen,
-        talla,
-        marca
-      })
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        const modal = bootstrap.Modal.getInstance(document.getElementById('modalActualizar'));
-        modal.hide();
+        document.addEventListener('DOMContentLoaded', function() {
+            modalEditar = new bootstrap.Modal(document.getElementById('modalEditarProducto'));
+        });
 
-        // ✅ Recargar la página para mostrar los cambios actualizados
-        location.reload();
-      } else {
-        alert('❌ Error al actualizar el producto.');
-      }
-    })
-    .catch(error => console.error('Error:', error));
-  }
-
-  function eliminarProducto(productoId) {
-    if (confirm("¿Estás seguro de que deseas eliminar este producto?")) {
-      fetch(`/eliminar_producto/${productoId}/`, {
-        method: 'DELETE',
-        headers: { 'X-CSRFToken': '{{ csrf_token }}' }
-      })
-      .then(response => {
-        if (response.ok) {
-          document.getElementById(`producto-${productoId}`).remove();
-        } else {
-          console.error('Error al eliminar el producto');
+        function abrirModalEditar(btn) {
+            productoActualId = btn.getAttribute('data-producto-id');
+            document.getElementById('editNombre').value = btn.getAttribute('data-nombre');
+            document.getElementById('editDescripcion').value = btn.getAttribute('data-descripcion');
+            document.getElementById('editPrecio').value = btn.getAttribute('data-precio');
+            document.getElementById('editImagen').value = btn.getAttribute('data-imagen');
+            document.getElementById('editTalla').value = btn.getAttribute('data-talla') || '';
+            document.getElementById('editMarca').value = btn.getAttribute('data-marca') || '';
+            
+            modalEditar.show();
         }
-      })
-      .catch(error => console.error('Error:', error));
-    }
-  }
-</script>
 
+        function guardarCambios() {
+            const data = {
+                nombre: document.getElementById('editNombre').value,
+                descripcion: document.getElementById('editDescripcion').value,
+                precio: parseFloat(document.getElementById('editPrecio').value),
+                url_imagen: document.getElementById('editImagen').value,
+                talla: document.getElementById('editTalla').value,
+                marca: document.getElementById('editMarca').value
+            };
+
+            fetch(`/actualizar_producto/${productoActualId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    modalEditar.hide();
+                    location.reload();
+                } else {
+                    alert('❌ Error al actualizar el producto');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('❌ Error de red');
+            });
+        }
+
+        function eliminarProducto(btn) {
+            const productoId = btn.getAttribute('data-producto-id');
+            
+            if (!confirm("¿Estás seguro de eliminar este producto?")) return;
+
+            fetch(`/eliminar-producto/${productoId}/`, {
+                method: 'DELETE',
+                headers: { 'X-CSRFToken': '{{ csrf_token }}' }
+            })
+            .then(response => {
+                if (response.ok) {
+                    const card = document.getElementById(`producto-${productoId}`);
+                    card.style.animation = 'fadeOut 0.5s ease';
+                    setTimeout(() => card.remove(), 500);
+                } else {
+                    alert('❌ Error al eliminar el producto');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('❌ Error de red');
+            });
+        }
+    </script>
+
+    <style>
+        .producto-card {
+            transition: all 0.3s ease;
+        }
+
+        .producto-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(255, 107, 53, 0.2) !important;
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; transform: scale(1); }
+            to { opacity: 0; transform: scale(0.9); }
+        }
+    </style>
 </body>
 </html>

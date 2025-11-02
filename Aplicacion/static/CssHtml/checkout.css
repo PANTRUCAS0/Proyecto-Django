@@ -1,0 +1,176 @@
+/* static/CssHtml/checkout.css */
+
+/* ===== CHECKOUT PAGE ===== */
+.checkout-page {
+    background: #F8F9FA;
+    min-height: 100vh;
+    padding: 3rem 0;
+}
+
+.checkout-page h2 {
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #000000;
+    margin-bottom: 2rem;
+}
+
+/* ===== FORMULARIO ===== */
+.checkout-form-card {
+    border-radius: 20px;
+    border: none;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    background: #FFFFFF;
+    overflow: hidden;
+}
+
+.checkout-form-card .card-body {
+    padding: 2.5rem;
+}
+
+.checkout-form-card .card-title {
+    font-weight: 800;
+    color: #000000;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.form-label {
+    font-weight: 700;
+    color: #000000;
+    margin-bottom: 0.75rem;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-control,
+.form-select {
+    border: 2px solid #E9ECEF;
+    border-radius: 12px;
+    padding: 0.875rem 1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #FF6B35;
+    box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.1);
+}
+
+/* ===== MÉTODOS DE PAGO ===== */
+.payment-methods h5 {
+    font-weight: 800;
+    color: #000000;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.form-check {
+    padding: 1rem;
+    border: 2px solid #E9ECEF;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-check:hover {
+    border-color: #FF6B35;
+    background: #FFF5F2;
+}
+
+.form-check-input:checked ~ .form-check-label {
+    color: #FF6B35;
+    font-weight: 800;
+}
+
+.form-check-label {
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* ===== RESUMEN DEL CHECKOUT ===== */
+.checkout-summary {
+    border-radius: 20px;
+    border: none;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    background: #FFFFFF;
+    position: sticky;
+    top: 100px;
+}
+
+.checkout-summary .card-title {
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #000000;
+}
+
+#items-resumen {
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+#items-resumen::-webkit-scrollbar {
+    width: 6px;
+}
+
+#items-resumen::-webkit-scrollbar-thumb {
+    background: #FF6B35;
+    border-radius: 3px;
+}
+
+.checkout-summary .h5 {
+    font-weight: 800;
+}
+
+#total-display {
+    color: #FF6B35 !important;
+    font-weight: 900 !important;
+    font-size: 2rem !important;
+}
+
+/* ===== BOTÓN FINALIZAR ===== */
+#btn-finalizar-compra {
+    background: linear-gradient(135deg, #FF6B35, #FF8C61) !important;
+    border: none !important;
+    color: #FFFFFF !important;
+    font-weight: 800 !important;
+    padding: 1.25rem !important;
+    font-size: 1.1rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    transition: all 0.3s ease !important;
+}
+
+#btn-finalizar-compra:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4) !important;
+}
+
+/* ===== ALERT INFO ===== */
+.alert-info {
+    border-radius: 12px !important;
+    border: 2px solid #17A2B8 !important;
+    background: #D1ECF1 !important;
+    font-weight: 600 !important;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .checkout-page {
+        padding: 2rem 0;
+    }
+    
+    .checkout-form-card .card-body {
+        padding: 1.5rem;
+    }
+    
+    .checkout-summary {
+        position: static;
+        margin-top: 2rem;
+    }
+}

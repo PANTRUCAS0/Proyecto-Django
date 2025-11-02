@@ -4,228 +4,177 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administrador</title>
-    <link rel="stylesheet" href="{% static 'estilos.css' %}">
-    <style>
-        header {
-            background: linear-gradient(135deg, #3498db, #2980b9);
-            color: #fff;
-            padding: 25px 0;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-bottom: 4px solid #2471a3;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-
-        body {
-            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f5f7fa;
-            color: #333;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        header h1 {
-            margin: 0;
-            font-size: 2rem;
-            letter-spacing: 1px;
-        }
-
-        table {
-            width: 90%;
-            max-width: 1000px;
-            margin: 40px auto;
-            border-collapse: collapse;
-            background-color: #fff;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-            border-radius: 10px;
-            overflow: hidden;
-            animation: fadeIn 0.6s ease-in-out;
-        }
-
-        caption {
-            font-size: 1.3rem;
-            color: #d68910;
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
-
-        th {
-            background-color: #3498db;
-            color: white;
-            padding: 14px 10px;
-            text-transform: uppercase;
-            font-size: 0.9rem;
-        }
-
-        td {
-            padding: 12px;
-            border-bottom: 1px solid #eee;
-            text-align: center;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f9fbfd;
-        }
-
-        tr:hover {
-            background-color: #eaf4ff;
-            transition: background-color 0.3s ease;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            margin: 15px 10px;
-            border-radius: 8px;
-            background-color: #3498db;
-            color: #fff;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 15px;
-            border: none;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
-
-        .btn-actualizar {
-            background-color: #27ae60;
-            color: white;
-            border-radius: 6px;
-            padding: 8px 14px;
-            font-weight: 600;
-        }
-
-        .btn-actualizar:hover {
-            transform: scale(1.05);
-            opacity: 0.9;
-        }
-
-        .btn-eliminar {
-            background-color: #c0392b;
-            color: white;
-            border-radius: 6px;
-            padding: 8px 14px;
-            font-weight: 600;
-        }
-
-        .btn-eliminar:hover {
-            transform: scale(1.05);
-            opacity: 0.9;
-        }
-
-        h3 {
-            color: #d68910;
-        }
-
-        .botonera {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @media (max-width: 768px) {
-            table {
-                font-size: 14px;
-            }
-            th, td {
-                padding: 8px;
-            }
-            .btn {
-                font-size: 14px;
-                padding: 8px 14px;
-            }
-        }
-    </style>
+    <title>Panel de Administración | Tomy's</title>
+    
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <!-- Estilos -->
+    <link rel="stylesheet" href="{% static 'CssHtml/estilos_globales.css' %}">
+    <link rel="stylesheet" href="{% static 'CssHtml/admin.css' %}">
 </head>
-<body>
-    <header>
-        <h1>Panel de Administración</h1>
-    </header>
-
-    <main>
-        {% if DatosT %}
-            <table id="administrado">
-                <caption>Datos de Clientes</caption>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Usuario</th>
-                        <th>Contraseña</th>
-                        <th>Teléfono</th>
-                        <th>Email</th>
-                        <th colspan="2">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for cl in DatosT %}
-                        <tr id="cliente-{{ cl.id }}">
-                            <td>{{ cl.id }}</td>
-                            <td>{{ cl.Usuario }}</td>
-                            <td>{{ cl.Contraseña }}</td>
-                            <td>{{ cl.Telefono }}</td>
-                            <td>{{ cl.Email }}</td>
-                            <td>
-                                <a class="btn btn-actualizar" href="{% url 'ActulizarCL' cliente_id=cl.id %}">Actualizar</a>
-                            </td>
-                            <td>
-                                <button class="btn btn-eliminar" onclick="eliminarCliente({{ cl.id }})">Eliminar</button>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% else %}
-            <h3>No hay ningún usuario registrado.</h3>
-        {% endif %}
-    </main>
-
-    <div class="botonera">
-        <a href="{% url 'Pagina' %}" class="btn">Volver al Inicio</a>
-        <a href="{% url 'AgregarProducto' %}" class="btn">Agregar Producto</a>
-        <a href="{% url 'mostrarProductos' %}" class="btn">Ver Productos</a>
-        <a href="{% url 'detalle_ordenes' %}" class="btn">Detalle Boleta</a>
+<body class="admin-page">
+    <!-- Header -->
+    <div class="admin-header">
+        <div class="container">
+            <h1>Panel de Administración</h1>
+        </div>
     </div>
 
-    <script>
-function eliminarCliente(clienteId) {
-    if (!confirm("¿Estás seguro de que deseas eliminar este cliente?")) {
-        return;
-    }
+    <div class="container">
+        <!-- Stats Cards -->
+        <div class="stats-container">
+            <div class="stat-card">
+                <i class="bi bi-people-fill stat-icon"></i>
+                <h3>Total Clientes</h3>
+                <p class="stat-value">{{ DatosT|length }}</p>
+            </div>
+            <div class="stat-card" style="border-left-color: #28A745;">
+                <i class="bi bi-box-seam-fill stat-icon" style="color: #28A745;"></i>
+                <h3>Productos</h3>
+                <p class="stat-value">-</p>
+            </div>
+            <div class="stat-card" style="border-left-color: #007BFF;">
+                <i class="bi bi-cart-fill stat-icon" style="color: #007BFF;"></i>
+                <h3>Órdenes</h3>
+                <p class="stat-value">-</p>
+            </div>
+        </div>
 
-    fetch(`/eliminar/${clienteId}/`, {   // Nota el '/' al final
-        method: 'POST',
-        headers: {
-            'X-CSRFToken': '{{ csrf_token }}',
-            'Content-Type': 'application/json'
+        <!-- Botones Principales -->
+        <div class="admin-button-group">
+            <a href="{% url 'Pagina' %}" class="btn-secondary-admin">
+                <i class="bi bi-house-fill"></i>
+                Volver al Inicio
+            </a>
+            <a href="{% url 'AgregarProducto' %}" class="btn-primary-admin">
+                <i class="bi bi-plus-circle-fill"></i>
+                Agregar Producto
+            </a>
+            <a href="{% url 'mostrarProductos' %}" class="btn-primary-admin">
+                <i class="bi bi-grid-fill"></i>
+                Ver Productos
+            </a>
+            <a href="{% url 'detalle_ordenes' %}" class="btn-primary-admin">
+                <i class="bi bi-receipt-cutoff"></i>
+                Detalle Órdenes
+            </a>
+        </div>
+
+        <!-- Tabla de Clientes -->
+        {% if DatosT %}
+            <div class="admin-table-container">
+                <div class="table-header">
+                    <h2>Clientes Registrados</h2>
+                    <span class="badge">{{ DatosT|length }} usuarios</span>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Usuario</th>
+                                <th>Contraseña</th>
+                                <th>Teléfono</th>
+                                <th>Email</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for cl in DatosT %}
+                                <tr id="cliente-{{ cl.id }}">
+                                    <td><strong>#{{ cl.id }}</strong></td>
+                                    <td>
+                                        <i class="bi bi-person-circle me-2" style="color: #FF6B35;"></i>
+                                        {{ cl.Usuario }}
+                                    </td>
+                                    <td>{{ cl.Contraseña }}</td>
+                                    <td>
+                                        <i class="bi bi-telephone-fill me-1" style="color: #6C757D;"></i>
+                                        {{ cl.Telefono }}
+                                    </td>
+                                    <td>
+                                        <i class="bi bi-envelope-fill me-1" style="color: #6C757D;"></i>
+                                        {{ cl.Email }}
+                                    </td>
+                                    <td>
+                                        <div class="admin-actions">
+                                            <a href="{% url 'ActulizarCL' cliente_id=cl.id %}" class="btn-admin btn-admin-edit">
+                                                <i class="bi bi-pencil-square"></i>
+                                                Editar
+                                            </a>
+                                            <button class="btn-admin btn-admin-delete" data-cliente-id="{{ cl.id }}">
+                                                <i class="bi bi-trash3-fill"></i>
+                                                Eliminar
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% else %}
+            <div class="admin-table-container">
+                <div class="empty-state">
+                    <i class="bi bi-inbox"></i>
+                    <h3>No hay usuarios registrados</h3>
+                    <p>Los clientes registrados aparecerán aquí</p>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Delegación de eventos para los botones de eliminar
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.btn-admin-delete').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const clienteId = this.getAttribute('data-cliente-id');
+                    eliminarCliente(clienteId);
+                });
+            });
+        });
+
+        function eliminarCliente(clienteId) {
+            if (!confirm("¿Estás seguro de eliminar este cliente?")) return;
+
+            fetch(`/eliminar/${clienteId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'ok') {
+                    const fila = document.getElementById(`cliente-${clienteId}`);
+                    if (fila) {
+                        fila.style.animation = 'fadeOut 0.5s ease';
+                        setTimeout(() => fila.remove(), 500);
+                    }
+                } else {
+                    alert("Error: " + (data.message || "No se pudo eliminar"));
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("Error de red");
+            });
         }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'ok') {
-            const fila = document.getElementById(`cliente-${clienteId}`);
-            if (fila) fila.remove();
-        } else {
-            alert("Error: " + (data.message || "No se pudo eliminar el cliente."));
-        }
-    })
-    .catch(error => console.error('Error:', error));
-}
     </script>
+    
+    <style>
+        @keyframes fadeOut {
+            from { opacity: 1; transform: translateX(0); }
+            to { opacity: 0; transform: translateX(-20px); }
+        }
+    </style>
 </body>
 </html>

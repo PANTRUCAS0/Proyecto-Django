@@ -1,0 +1,415 @@
+/* static/CssHtml/ordenes.css */
+
+/* ===== PÁGINA DE ÓRDENES ===== */
+.ordenes-page {
+    background: #F8F9FA;
+    min-height: 100vh;
+    padding: 3rem 0;
+}
+
+.ordenes-page h2 {
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #000000;
+    margin-bottom: 2rem;
+}
+
+/* ===== CONFIRMACIÓN DE ORDEN ===== */
+.confirmation-icon {
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, #28A745, #20C997);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 2rem;
+    animation: scaleIn 0.5s ease;
+}
+
+.confirmation-icon i {
+    color: #FFFFFF;
+    font-size: 3rem;
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.confirmation-title {
+    font-weight: 900;
+    color: #000000;
+    margin-bottom: 1rem;
+    font-size: 2.5rem;
+}
+
+.lead {
+    color: #6C757D;
+    font-weight: 600;
+}
+
+/* ===== TARJETAS DE ORDEN ===== */
+.orden-card {
+    border-radius: 20px;
+    border: none;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    background: #FFFFFF;
+    margin-bottom: 2rem;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.orden-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(255, 107, 53, 0.2);
+}
+
+.orden-card .card-header {
+    background: linear-gradient(135deg, #FF6B35, #FF8C61);
+    color: #FFFFFF;
+    padding: 1.5rem;
+    border: none;
+}
+
+.orden-card .card-header h5 {
+    font-weight: 800;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.orden-card .card-body {
+    padding: 2rem;
+}
+
+/* ===== DETALLES DE LA ORDEN ===== */
+.orden-detail-label {
+    font-weight: 700;
+    color: #000000;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.25rem;
+}
+
+.orden-detail-value {
+    color: #1A1A1A;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.orden-number {
+    color: #FF6B35;
+    font-size: 1.5rem;
+    font-weight: 900;
+}
+
+/* ===== BADGES DE ESTADO ===== */
+.badge {
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.bg-success {
+    background: linear-gradient(135deg, #28A745, #20C997) !important;
+}
+
+.bg-warning {
+    background: linear-gradient(135deg, #FFC107, #FFB300) !important;
+}
+
+.bg-info {
+    background: linear-gradient(135deg, #17A2B8, #138496) !important;
+}
+
+.bg-primary {
+    background: linear-gradient(135deg, #007BFF, #0056B3) !important;
+}
+
+.bg-danger {
+    background: linear-gradient(135deg, #DC3545, #C82333) !important;
+}
+
+/* ===== TABLA DE PRODUCTOS ===== */
+.table {
+    margin-top: 1.5rem;
+}
+
+.table thead {
+    background: #F8F9FA;
+}
+
+.table th {
+    font-weight: 800;
+    color: #000000;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    padding: 1rem;
+    border-bottom: 2px solid #E9ECEF;
+}
+
+.table td {
+    padding: 1rem;
+    vertical-align: middle;
+    font-weight: 600;
+    color: #1A1A1A;
+}
+
+.table tbody tr {
+    transition: all 0.3s ease;
+}
+
+.table tbody tr:hover {
+    background: #FFF5F2;
+}
+
+.table img {
+    border-radius: 10px;
+    border: 2px solid #F8F9FA;
+}
+
+/* ===== TOTALES ===== */
+.total-section {
+    background: #F8F9FA;
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-top: 1.5rem;
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+}
+
+.total-row strong {
+    font-weight: 800;
+}
+
+.total-final {
+    font-size: 1.75rem;
+    color: #FF6B35;
+    font-weight: 900;
+}
+
+/* ===== ALERTAS ===== */
+.alert {
+    border-radius: 16px;
+    border: none;
+    padding: 1.5rem;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.alert-info {
+    background: linear-gradient(135deg, #D1ECF1, #BEE5EB);
+    color: #0C5460;
+}
+
+.alert-info .alert-heading {
+    font-weight: 800;
+    color: #000000;
+}
+
+.alert-warning {
+    background: linear-gradient(135deg, #FFF3CD, #FFE69C);
+    color: #856404;
+}
+
+.alert-warning .alert-heading {
+    font-weight: 800;
+    color: #000000;
+}
+
+.alert ul {
+    margin-bottom: 0.5rem;
+}
+
+.alert li {
+    font-weight: 600;
+}
+
+/* ===== BOTONES ===== */
+.btn-outline-primary {
+    border: 2px solid #FF6B35;
+    color: #FF6B35;
+    font-weight: 700;
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-outline-primary:hover {
+    background: #FF6B35;
+    border-color: #FF6B35;
+    color: #FFFFFF;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 107, 53, 0.3);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #FF6B35, #FF8C61);
+    border: none;
+    color: #FFFFFF;
+    font-weight: 700;
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 107, 53, 0.3);
+}
+
+/* ===== LISTA DE ÓRDENES ===== */
+.orden-item-card {
+    border-radius: 16px;
+    border: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    background: #FFFFFF;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.orden-item-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(255, 107, 53, 0.2);
+}
+
+.orden-item-card .card-body {
+    padding: 1.5rem;
+}
+
+.orden-numero {
+    font-weight: 900;
+    color: #000000;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.orden-fecha {
+    color: #6C757D;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.orden-productos img {
+    border-radius: 8px;
+    border: 2px solid #F8F9FA;
+    transition: all 0.3s ease;
+}
+
+.orden-productos img:hover {
+    transform: scale(1.1);
+    border-color: #FF6B35;
+}
+
+.orden-total {
+    color: #FF6B35;
+    font-weight: 900;
+    font-size: 1.5rem;
+}
+
+/* ===== BREADCRUMB ===== */
+.breadcrumb {
+    background: transparent;
+    padding: 0;
+    margin-bottom: 2rem;
+}
+
+.breadcrumb-item {
+    font-weight: 600;
+}
+
+.breadcrumb-item a {
+    color: #FF6B35;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.breadcrumb-item a:hover {
+    color: #000000;
+}
+
+.breadcrumb-item.active {
+    color: #6C757D;
+}
+
+/* ===== EMPTY STATE ===== */
+.empty-orders {
+    text-align: center;
+    padding: 5rem 2rem;
+}
+
+.empty-orders i {
+    font-size: 6rem;
+    color: #E9ECEF;
+    margin-bottom: 2rem;
+}
+
+.empty-orders h4 {
+    color: #000000;
+    font-weight: 800;
+    margin-bottom: 1rem;
+}
+
+.empty-orders p {
+    color: #6C757D;
+    font-weight: 600;
+    margin-bottom: 2rem;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .confirmation-title {
+        font-size: 1.8rem;
+    }
+    
+    .orden-card .card-body {
+        padding: 1.5rem;
+    }
+    
+    .table {
+        font-size: 0.9rem;
+    }
+    
+    .orden-total {
+        font-size: 1.2rem;
+    }
+}
+
+/* ===== ANIMACIONES ===== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.orden-card,
+.orden-item-card {
+    animation: fadeInUp 0.5s ease;
+}

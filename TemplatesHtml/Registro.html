@@ -2,227 +2,104 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Registro | Zapatería Thomys</title>
-<style>
-    /* === ESTILOS GENERALES === */
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        margin: 0;
-        padding: 0;
-        background: linear-gradient(135deg, #e3f2fd, #ffffff);
-        color: #333;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        min-height: 100vh;
-        overflow-x: hidden;
-        animation: fadeIn 1s ease forwards;
-    }
-    header {
-        background-color: #3498db;
-        padding: 30px 20px;
-        color: #fff;
-        text-align: center;
-        width: 100%;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        animation: slideDown 1s ease forwards;
-    }
-    header h2 { margin: 5px 0; font-size: 1.6rem; font-weight: 600; }
-
-    form {
-        background-color: #ffffff;
-        margin-top: 40px;
-        padding: 40px 30px;
-        border-radius: 12px;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-        width: 90%;
-        max-width: 400px;
-        text-align: left;
-        animation: slideUp 1.2s ease forwards;
-        position: relative;
-    }
-
-    label { font-weight: 600; display: block; margin-bottom: 8px; color: #444; }
-    input {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 5px;
-        border: 1.5px solid #3498db;
-        border-radius: 6px;
-        box-sizing: border-box;
-        font-size: 15px;
-        transition: border-color 0.3s, box-shadow 0.3s;
-    }
-    input:focus { outline: none; border-color: #2d89c7; box-shadow: 0 0 6px rgba(52, 152, 219, 0.4); }
-
-    button {
-        width: 100%;
-        padding: 12px;
-        border: none;
-        border-radius: 8px;
-        background-color: #3498db;
-        color: #fff;
-        font-weight: bold;
-        font-size: 16px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        margin-top: 10px;
-    }
-    button:hover { background-color: #2d89c7; transform: translateY(-2px); box-shadow: 0 6px 14px rgba(0,0,0,0.15); }
-    .btn-secundario { background-color: #555; }
-    .btn-secundario:hover { background-color: #444; }
-    a { text-decoration: none; color: #fff; }
-
-    /* === MENSAJES DE VALIDACIÓN CON CHECK/X === */
-    .guia {
-        font-size: 0.9rem;
-        margin-bottom: 12px;
-        padding: 8px 12px;
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-weight: 500;
-        transition: all 0.3s ease;
-    }
-    .guia .icono { font-weight: bold; font-size: 1.1rem; }
-    .guia.valido { color: #2ecc71; }
-    .guia.valido .icono::before { content: "✅"; }
-    .guia.invalido { color: #e74c3c; }
-    .guia.invalido .icono::before { content: "❌"; }
-
-    /* === ALERTAS DE DJANGO === */
-    .alerta-exito { background-color: #2ecc71; color: #fff; padding: 12px; border-radius: 8px; text-align: center; font-weight: bold; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-    .alerta-error { background-color: #e74c3c; }
-
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes slideDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
-
-    @media (max-width: 480px) {
-        header h2 { font-size: 1.3rem; }
-        form { padding: 30px 20px; }
-        button { font-size: 15px; }
-    }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro | Zapatería Tomy's</title>
+    
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <!-- Estilos -->
+    <link rel="stylesheet" href="{% static 'CssHtml/estilos_globales.css' %}">
+    <link rel="stylesheet" href="{% static 'CssHtml/autenticacion.css' %}">
 </head>
-<body>
+<body class="auth-page register">
+    <div class="auth-container">
+        <div class="auth-header register">
+            <h1>CREAR CUENTA</h1>
+            <p>Únete a la comunidad Tomy's</p>
+        </div>
 
-<header>
-    <h2>Ingrese sus datos</h2>
-    <h2>para registrarse</h2>
-    <h2>en nuestra tienda virtual</h2>
-</header>
+        <div class="auth-body">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-custom {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
 
-<form method="post" onsubmit="return validarFormulario()">
-    {% csrf_token %}
+            <form method="post" onsubmit="return validarFormulario()">
+                {% csrf_token %}
 
-    <!-- ALERTAS DE DJANGO -->
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alerta-exito {% if message.tags == 'error' %}alerta-error{% endif %}">
-                {{ message }}
+                <!-- Usuario -->
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="Usuario" name="Usuario" placeholder="Usuario" required>
+                    <label for="Usuario">
+                        <i class="bi bi-person-fill me-2"></i>Usuario
+                    </label>
+                </div>
+                <div id="mensajeUsuario" class="validation-message invalid">
+                    <i class="bi bi-x-circle"></i>
+                    <span>Mínimo 3 caracteres</span>
+                </div>
+
+                <!-- Contraseña -->
+                <div class="form-floating">
+                    <input type="password" class="form-control" id="Contraseña" name="Contraseña" placeholder="Contraseña" required>
+                    <label for="Contraseña">
+                        <i class="bi bi-lock-fill me-2"></i>Contraseña
+                    </label>
+                </div>
+                <div id="mensajeContrasena" class="validation-message invalid">
+                    <i class="bi bi-x-circle"></i>
+                    <span>Mínimo 5 caracteres, 1 número y 1 carácter especial</span>
+                </div>
+
+                <!-- Email -->
+                <div class="form-floating">
+                    <input type="email" class="form-control" id="Email" name="Email" placeholder="Email" required>
+                    <label for="Email">
+                        <i class="bi bi-envelope-fill me-2"></i>Email
+                    </label>
+                </div>
+                <div id="mensajeEmail" class="validation-message invalid">
+                    <i class="bi bi-x-circle"></i>
+                    <span>Email válido requerido</span>
+                </div>
+
+                <!-- Teléfono -->
+                <div class="form-floating">
+                    <input type="tel" class="form-control" id="Telefono" name="Telefono" placeholder="Teléfono" required>
+                    <label for="Telefono">
+                        <i class="bi bi-telephone-fill me-2"></i>Teléfono
+                    </label>
+                </div>
+                <div id="mensajeTelefono" class="validation-message invalid">
+                    <i class="bi bi-x-circle"></i>
+                    <span>9 dígitos exactos</span>
+                </div>
+
+                <button type="submit" class="btn btn-auth">
+                    <i class="bi bi-person-plus me-2"></i>Crear Cuenta
+                </button>
+            </form>
+
+            <div class="auth-link">
+                ¿Ya tienes cuenta? <a href="{% url 'Login' %}">Iniciar sesión</a>
             </div>
-        {% endfor %}
-    {% endif %}
+        </div>
+    </div>
 
-    <!-- Usuario -->
-    <label for="Usuario">Usuario:</label>
-    <input type="text" id="Usuario" name="Usuario" placeholder="Ingrese su nombre de usuario" required>
-    <p id="mensajeUsuario" class="guia invalido"><span class="icono"></span> El usuario debe tener mínimo 3 caracteres.</p>
+    <div class="back-home">
+        <a href="{% url 'Pagina' %}">
+            <i class="bi bi-arrow-left"></i>Volver a la tienda
+        </a>
+    </div>
 
-    <!-- Contraseña -->
-    <label for="Contraseña">Contraseña:</label>
-    <input type="password" id="Contraseña" name="Contraseña" placeholder="Cree una contraseña segura" required>
-    <p id="mensajeContrasena" class="guia invalido"><span class="icono"></span> Debe tener mínimo 5 caracteres, 1 número y 1 carácter especial.</p>
-
-    <!-- Email -->
-    <label for="Email">Correo electrónico:</label>
-    <input type="email" id="Email" name="Email" placeholder="Ingrese su correo electrónico" required>
-    <p id="mensajeEmail" class="guia invalido"><span class="icono"></span> El email debe ser válido.</p>
-
-    <!-- Teléfono -->
-    <label for="Telefono">Teléfono:</label>
-    <input type="text" id="Telefono" name="Telefono" placeholder="Ingrese su número de teléfono" required>
-    <p id="mensajeTelefono" class="guia invalido"><span class="icono"></span> EL numero de telefono debe ser válido.</p>
-
-    <button type="submit">Registrarse</button>
-    <button type="button" class="btn-secundario">
-        <a href="{% url 'Pagina' %}">Volver al inicio</a>
-    </button>
-</form>
-
-<script>
-    // === CAMPOS ===
-    const usuarioInput = document.getElementById("Usuario");
-    const contrasenaInput = document.getElementById("Contraseña");
-    const emailInput = document.getElementById("Email");
-    const telefonoInput = document.getElementById("Telefono");
-
-    // === EVENTOS INPUT ===
-    usuarioInput.addEventListener("input", validarUsuario);
-    contrasenaInput.addEventListener("input", validarContrasena);
-    emailInput.addEventListener("input", validarEmail);
-    telefonoInput.addEventListener("input", validarTelefono);
-
-    // === FUNCIONES DE VALIDACIÓN ===
-    function validarUsuario() {
-        const mensaje = document.getElementById("mensajeUsuario");
-        if (usuarioInput.value.trim().length >= 3) {
-            mensaje.classList.remove("invalido"); mensaje.classList.add("valido");
-        } else {
-            mensaje.classList.remove("valido"); mensaje.classList.add("invalido");
-        }
-    }
-
-    function validarContrasena() {
-        const regex = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-zA-Z]).{5,}$/;
-        const mensaje = document.getElementById("mensajeContrasena");
-        if (regex.test(contrasenaInput.value)) {
-            mensaje.classList.remove("invalido"); mensaje.classList.add("valido");
-        } else {
-            mensaje.classList.remove("valido"); mensaje.classList.add("invalido");
-        }
-    }
-
-    function validarEmail() {
-        const mensaje = document.getElementById("mensajeEmail");
-        if (emailInput.value.includes("@") && emailInput.value.includes(".")) {
-            mensaje.classList.remove("invalido"); mensaje.classList.add("valido");
-        } else {
-            mensaje.classList.remove("valido"); mensaje.classList.add("invalido");
-        }
-    }
-function validarTelefono() {
-    const mensaje = document.getElementById("mensajeTelefono");
-    const telefono = telefonoInput.value.trim();
-    const regex = /^\d{9}$/; // EXACTAMENTE 9 dígitos
-    if (regex.test(telefono)) {
-        mensaje.classList.remove("invalido");
-        mensaje.classList.add("valido");
-    } else {
-        mensaje.classList.remove("valido");
-        mensaje.classList.add("invalido");
-    }
-}
-
-
-    // === VALIDAR TODO AL ENVIAR ===
-    function validarFormulario() {
-        validarUsuario();
-        validarContrasena();
-        validarEmail();
-        validarTelefono();
-
-        const mensajes = document.querySelectorAll(".guia");
-        for (let m of mensajes) {
-            if (m.classList.contains("invalido")) return false; // bloquea envío si hay error
-        }
-        return true; // permite enviar
-    }
-</script>
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'JavaScript/autenticacion_validacion.js' %}"></script>
 </body>
 </html>

@@ -2,121 +2,112 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - Superusuario</title>
-
-  <!-- Bootstrap -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(135deg, #e3f2fd, #ffffff);
-      color: #333;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-      justify-content: center;
-      animation: fadeIn 1s ease forwards;
-    }
-
-    header {
-      background-color: #3498db;
-      padding: 20px;
-      color: white;
-      width: 100%;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-      text-align: center;
-    }
-
-    h1 {
-      font-size: 28px;
-      font-weight: bold;
-      margin: 0;
-    }
-
-    .card {
-      border-radius: 12px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-      animation: slideUp 1.2s ease forwards;
-    }
-
-    .btn-custom {
-      background-color: #db5b34;
-      color: #fff;
-      font-weight: bold;
-      font-size: 16px;
-      transition: all 0.3s ease;
-    }
-
-    .btn-custom:hover {
-      background-color: #c24e2e;
-      transform: translateY(-2px);
-    }
-
-    /* Animaciones */
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login | Tomy's</title>
+    
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <!-- Estilos -->
+    <link rel="stylesheet" href="{% static 'CssHtml/estilos_globales.css' %}">
+    <link rel="stylesheet" href="{% static 'CssHtml/admin_autenticacion.css' %}">
 </head>
-<body>
-  <header>
-    <h1>Inicio de Sesión de Administrador</h1>
-  </header>
-
-  <div class="container mt-4">
-    <div class="card p-4 mx-auto" style="max-width: 400px;">
-      <form method="post">
-        {% csrf_token %}
-
-        <!-- ALERTAS DE DJANGO -->
-        {% if messages %}
-          {% for message in messages %}
-            <div class="alert {% if message.tags == 'success' %}alert-success{% else %}alert-danger{% endif %} text-center" role="alert">
-              {{ message }}
+<body class="admin-login">
+    <div class="admin-login-container">
+        <div class="admin-login-header">
+            <div class="admin-icon">
+                <i class="bi bi-shield-lock-fill"></i>
             </div>
-          {% endfor %}
-        {% endif %}
-
-        <div class="mb-3 text-start">
-          <label for="Usuario" class="form-label fw-semibold">Usuario:</label>
-          <input type="text" id="Usuario" name="Usuario" class="form-control border-primary" placeholder="Ingrese su usuario" required>
+            <h1>ADMIN PANEL</h1>
+            <p>Acceso Restringido</p>
         </div>
 
-        <div class="mb-3 text-start">
-          <label for="Contraseña" class="form-label fw-semibold">Contraseña:</label>
-          <input type="password" id="Contraseña" name="Contraseña" class="form-control border-primary" placeholder="Ingrese su contraseña" required>
-        </div>
+        <div class="admin-login-body">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-custom {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
 
-        <button type="submit" class="btn btn-custom w-100">Iniciar Sesión Admin</button>
-      </form>
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="form-floating">
+                    <input type="text" 
+                           class="form-control" 
+                           id="Usuario" 
+                           name="Usuario" 
+                           placeholder="Usuario" 
+                           required 
+                           autocomplete="username">
+                    <label for="Usuario">
+                        <i class="bi bi-person-badge me-2"></i>Usuario Administrador
+                    </label>
+                </div>
+
+                <div class="form-floating">
+                    <input type="password" 
+                           class="form-control" 
+                           id="Contraseña" 
+                           name="Contraseña" 
+                           placeholder="Contraseña" 
+                           required 
+                           autocomplete="current-password">
+                    <label for="Contraseña">
+                        <i class="bi bi-key-fill me-2"></i>Contraseña
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-admin-login">
+                    <i class="bi bi-shield-check me-2"></i>
+                    <span>Acceder al Panel</span>
+                </button>
+            </form>
+
+            <div class="security-badge">
+                <i class="bi bi-shield-fill-check"></i>
+                <p>Área protegida - Solo personal autorizado</p>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <script>
-    // Ocultar alertas automáticamente
-    setTimeout(() => {
-      const alerta = document.querySelector('.alert');
-      if (alerta) {
-        alerta.style.transition = 'opacity 0.5s';
-        alerta.style.opacity = '0';
-        setTimeout(() => alerta.remove(), 500);
-      }
-    }, 3000);
-  </script>
+    <div class="back-home">
+        <a href="{% url 'Pagina' %}">
+            <i class="bi bi-arrow-left"></i>
+            Volver a la tienda
+        </a>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Auto-ocultar alertas después de 3 segundos
+        setTimeout(() => {
+            const alerts = document.querySelectorAll('.alert-custom');
+            alerts.forEach(alert => {
+                alert.style.animation = 'slideOut 0.5s ease';
+                setTimeout(() => alert.remove(), 500);
+            });
+        }, 3000);
+    </script>
+    
+    <style>
+        @keyframes slideOut {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+        }
+    </style>
 </body>
 </html>

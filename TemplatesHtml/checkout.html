@@ -4,7 +4,10 @@
 {% block title %}Checkout - Zapatería Tomy's{% endblock %}
 
 {% block content %}
-<div class="container py-5">
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'CssHtml/checkout.css' %}">
+{% endblock %}
+<div class="container checkout-page py-5">
     <h2 class="mb-4">Finalizar Compra</h2>
     
     <div class="row g-4">

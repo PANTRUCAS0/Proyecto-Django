@@ -1,66 +1,71 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Orden Confirmada - Zapatería Tomy's{% endblock %}
+{% block title %}Orden Confirmada | Tomy's{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'CssHtml/ordenes.css' %}">
+{% endblock %}
 
 {% block content %}
-<div class="container py-5">
+<div class="container ordenes-page">
     <div class="row justify-content-center">
-        <div class="col-lg-8">
+        <div class="col-lg-10">
             <!-- Mensaje de éxito -->
             <div class="text-center mb-5">
-                <div class="mb-4">
-                    <i class="bi bi-check-circle-fill text-success" style="font-size: 5rem;"></i>
+                <div class="confirmation-icon">
+                    <i class="bi bi-check-circle-fill"></i>
                 </div>
-                <h1 class="mb-3">¡Orden Confirmada!</h1>
-                <p class="lead text-muted">Gracias por tu compra. Hemos recibido tu orden correctamente.</p>
+                <h1 class="confirmation-title">¡ORDEN CONFIRMADA!</h1>
+                <p class="lead">Gracias por tu compra. Hemos recibido tu orden correctamente.</p>
             </div>
 
             <!-- Detalles de la orden -->
-            <div class="card shadow-sm mb-4">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">
-                        <i class="bi bi-receipt me-2"></i>Detalles de tu Orden
+            <div class="orden-card">
+                <div class="card-header">
+                    <h5>
+                        <i class="bi bi-receipt me-2"></i>DETALLES DE TU ORDEN
                     </h5>
                 </div>
                 <div class="card-body">
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <p class="mb-1"><strong>Número de Orden:</strong></p>
-                            <p class="text-primary fs-5">{{ orden.numero_orden }}</p>
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-3">
+                            <p class="orden-detail-label">Número de Orden:</p>
+                            <p class="orden-number">{{ orden.numero_orden }}</p>
                         </div>
-                        <div class="col-md-6">
-                            <p class="mb-1"><strong>Fecha:</strong></p>
-                            <p>{{ orden.fecha_creacion|date:"d/m/Y H:i" }}</p>
-                        </div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <p class="mb-1"><strong>Email:</strong></p>
-                            <p>{{ orden.email }}</p>
-                        </div>
-                        <div class="col-md-6">
-                            <p class="mb-1"><strong>Teléfono:</strong></p>
-                            <p>{{ orden.telefono }}</p>
+                        <div class="col-md-6 mb-3">
+                            <p class="orden-detail-label">Fecha:</p>
+                            <p class="orden-detail-value">{{ orden.fecha_creacion|date:"d/m/Y H:i" }}</p>
                         </div>
                     </div>
 
-                    <div class="mb-3">
-                        <p class="mb-1"><strong>Dirección de Envío:</strong></p>
-                        <p>{{ orden.direccion }}<br>
-                           {{ orden.ciudad }}, {{ orden.region }}
-                           {% if orden.codigo_postal %} - {{ orden.codigo_postal }}{% endif %}
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-3">
+                            <p class="orden-detail-label">Email:</p>
+                            <p class="orden-detail-value">{{ orden.email }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <p class="orden-detail-label">Teléfono:</p>
+                            <p class="orden-detail-value">{{ orden.telefono }}</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <p class="orden-detail-label">Dirección de Envío:</p>
+                        <p class="orden-detail-value">
+                            {{ orden.direccion }}<br>
+                            {{ orden.ciudad }}, {{ orden.region }}
+                            {% if orden.codigo_postal %} - {{ orden.codigo_postal }}{% endif %}
                         </p>
                     </div>
 
                     <div class="row">
-                        <div class="col-md-6">
-                            <p class="mb-1"><strong>Método de Pago:</strong></p>
-                            <p>{{ orden.get_metodo_pago_display }}</p>
+                        <div class="col-md-6 mb-3">
+                            <p class="orden-detail-label">Método de Pago:</p>
+                            <p class="orden-detail-value">{{ orden.get_metodo_pago_display }}</p>
                         </div>
-                        <div class="col-md-6">
-                            <p class="mb-1"><strong>Estado:</strong></p>
+                        <div class="col-md-6 mb-3">
+                            <p class="orden-detail-label">Estado:</p>
                             <span class="badge bg-success">{{ orden.get_estado_display }}</span>
                         </div>
                     </div>
@@ -68,10 +73,10 @@
             </div>
 
             <!-- Productos ordenados -->
-            <div class="card shadow-sm mb-4">
+            <div class="orden-card">
                 <div class="card-header">
-                    <h5 class="mb-0">
-                        <i class="bi bi-box-seam me-2"></i>Productos Ordenados
+                    <h5>
+                        <i class="bi bi-box-seam me-2"></i>PRODUCTOS ORDENADOS
                     </h5>
                 </div>
                 <div class="card-body">
@@ -92,8 +97,8 @@
                                         <div class="d-flex align-items-center">
                                             <img src="{{ item.producto_imagen }}" 
                                                  alt="{{ item.producto_nombre }}" 
-                                                 class="rounded me-3"
-                                                 style="width: 60px; height: 60px; object-fit: cover;">
+                                                 style="width: 60px; height: 60px; object-fit: cover;"
+                                                 class="me-3">
                                             <div>
                                                 <strong>{{ item.producto_nombre }}</strong>
                                                 {% if item.talla %}
@@ -103,7 +108,7 @@
                                         </div>
                                     </td>
                                     <td>${{ item.precio_unitario|floatformat:0 }}</td>
-                                    <td>{{ item.cantidad }}</td>
+                                    <td><strong>{{ item.cantidad }}</strong></td>
                                     <td><strong>${{ item.subtotal|floatformat:0 }}</strong></td>
                                 </tr>
                                 {% endfor %}
@@ -111,27 +116,31 @@
                         </table>
                     </div>
 
-                    <div class="text-end mt-3">
-                        <p class="mb-2">
-                            <strong>Subtotal:</strong> ${{ orden.subtotal|floatformat:0 }}
-                        </p>
-                        <p class="mb-2">
-                            <strong>Envío:</strong> 
-                            {% if orden.costo_envio == 0 %}
-                                <span class="text-success">Gratis</span>
-                            {% else %}
-                                ${{ orden.costo_envio|floatformat:0 }}
-                            {% endif %}
-                        </p>
+                    <div class="total-section">
+                        <div class="total-row">
+                            <strong>Subtotal:</strong>
+                            <span>${{ orden.subtotal|floatformat:0 }}</span>
+                        </div>
+                        <div class="total-row">
+                            <strong>Envío:</strong>
+                            <span class="{% if orden.costo_envio == 0 %}text-success{% endif %}">
+                                {% if orden.costo_envio == 0 %}
+                                    Gratis
+                                {% else %}
+                                    ${{ orden.costo_envio|floatformat:0 }}
+                                {% endif %}
+                            </span>
+                        </div>
                         <hr>
-                        <h4 class="text-primary">
-                            <strong>Total: ${{ orden.total|floatformat:0 }}</strong>
-                        </h4>
+                        <div class="total-row">
+                            <strong class="h4 mb-0">Total:</strong>
+                            <span class="total-final">${{ orden.total|floatformat:0 }}</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Información adicional según método de pago -->
+            <!-- Información según método de pago -->
             {% if orden.metodo_pago == 'TRANSFERENCIA' %}
             <div class="alert alert-info">
                 <h5 class="alert-heading">
@@ -148,7 +157,7 @@
                 </ul>
                 <p class="mb-0">
                     <strong>Importante:</strong> Usa el número de orden <strong>{{ orden.numero_orden }}</strong> 
-                    como referencia en la transferencia.
+                    como referencia.
                 </p>
             </div>
             {% elif orden.metodo_pago == 'EFECTIVO' %}
@@ -157,9 +166,8 @@
                     <i class="bi bi-cash me-2"></i>Pago en Tienda
                 </h5>
                 <p class="mb-0">
-                    Puedes retirar tu pedido y pagar en efectivo en nuestra tienda. 
-                    Por favor presenta el número de orden <strong>{{ orden.numero_orden }}</strong> 
-                    cuando vengas a retirar.
+                    Retira tu pedido en nuestra tienda y paga en efectivo. 
+                    Presenta el número <strong>{{ orden.numero_orden }}</strong>.
                 </p>
             </div>
             {% endif %}
@@ -176,7 +184,7 @@
                 {% endif %}
             </div>
 
-            <!-- Nota de confirmación por email -->
+            <!-- Nota de email -->
             <div class="alert alert-light text-center mt-4">
                 <i class="bi bi-envelope me-2"></i>
                 Hemos enviado un correo de confirmación a <strong>{{ orden.email }}</strong>

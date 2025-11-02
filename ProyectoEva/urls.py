@@ -32,6 +32,7 @@ urlpatterns = [
     path('Perfil/', views.Perfil, name='Perfil'),
 
     path('Admin/', views.Admin, name='Admin'),
+    path('admin/', views.Admin, name='admin'),
     path('LoginAdmin/', views.login_admin, name='LoginAdmin'),  
 
     path('ActulizarCL/<int:cliente_id>/', views.actualizar_cliente, name='ActulizarCL'),
@@ -48,7 +49,7 @@ urlpatterns = [
     path('boleta/', views.boleta, name='boleta'),
     path('guardar_boleta/', views.guardar_boleta, name='guardar_boleta'),
 
-    path('detalle_ordenes', views.detalle_ordenes, name='detalle_ordenes'),
+    path('detalle_ordenes/', views.detalle_ordenes, name='detalle_ordenes'),
 
     path('exportar_excel/', views.exportar_excel, name='exportar_excel'),
 
