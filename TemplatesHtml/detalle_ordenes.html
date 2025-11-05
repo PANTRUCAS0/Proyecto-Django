@@ -118,17 +118,30 @@
     </div>
 
     <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.getElementById('searchInput').addEventListener('keyup', function() {
-            const filter = this.value.toLowerCase().trim();
-            const rows = document.querySelectorAll('.searchable-row');
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+document.getElementById('searchInput').addEventListener('keyup', function() {
+    const filter = this.value.toLowerCase().trim();
+    const rows = document.querySelectorAll('.searchable-row');
 
-            rows.forEach(row => {
-                const text = row.textContent.toLowerCase();
-                row.style.display = text.includes(filter) ? '' : 'none';
-            });
-        });
-    </script>
+    rows.forEach(row => {
+        const id = row.querySelector('td:nth-child(1)')?.textContent.toLowerCase().replace('#', '').trim() || "";
+        const producto = row.querySelector('td:nth-child(3)')?.textContent.toLowerCase() || "";
+        const marca = row.querySelector('td:nth-child(6)')?.textContent.toLowerCase() || "";
+
+        let match = false;
+
+        // buscamos coincidencia exacta del ID
+        if (!isNaN(filter) && filter !== "") {
+            match = id === filter;
+        } else {
+            // busca coincidencias parciales en producto o marca
+            match = producto.includes(filter) || marca.includes(filter);
+        }
+
+        row.style.display = match ? '' : 'none';
+    });
+});
+</script>
 </body>
 </html>

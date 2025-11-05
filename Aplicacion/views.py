@@ -156,8 +156,14 @@ def Admin(request):
         return redirect('LoginAdmin')
 
     datos = Cliente.objects.all()
-    return render(request, 'Admin.html', {"DatosT": datos})
+    total_productos = Producto.objects.count()  # cuenta todos los productos
+    total_ordenes = ItemOrden.objects.values('id').distinct().count()
 
+    return render(request, 'Admin.html', {
+        "DatosT": datos,
+        "total_productos": total_productos,
+        "total_ordenes": total_ordenes
+    })
 # ===============================
 # Productos
 # ===============================
@@ -717,4 +723,5 @@ def exportar_datos_json(request):
         'orden__total',
         'orden__fecha_creacion',
     ))
-    return JsonResponse(data, safe=False)
+
+    return JsonResponse(response_data, safe=False)
