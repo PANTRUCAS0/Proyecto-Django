@@ -257,20 +257,30 @@ def actualizar_cliente(request, cliente_id):
 # Chatbot
 # ===============================
 INFO_TIENDA = (
-    "Horario: Lun–Vie 9:00–18:00; Sáb 10:00–14:00.\n"
-    "Envíos: a todo Chile, 2–5 días hábiles.\n"
-    "Cambios/Devoluciones: 10 días con boleta y sin uso.\n"
-    "Tallas: 36 a 45.\n"
-    "Métodos de pago: tarjetas y transferencias.\n"
+    "🕓 Horario de atención: Lunes a Viernes de 9:00 a 18:00, y Sábados de 10:00 a 14:00.\n"
+    "🚚 Envíos a todo Chile: entre 2 y 5 días hábiles.\n"
+    "🔄 Cambios y devoluciones: dentro de 10 días hábiles, presentando boleta y con el producto sin uso.\n"
+    "📏 Tallas disponibles: del 38 al 43.\n"
+    "💳 Métodos de pago: tarjetas de débito, crédito y transferencias bancarias.\n"
+    "👟 Marcas disponibles: Nike, Adidas, Yeezy y Puma.\n"
+    "📦 Despachamos desde Santiago con número de seguimiento incluido.\n"
+    "📞 Atención al cliente: consultas por correo o chat en horario hábil.\n"
 )
 
 def build_prompt(pregunta: str) -> str:
     return (
-        "Eres el asistente de Zapatería Thomys. Usa SOLO la información provista abajo.\n"
-        "⚠️ Responde en TEXTO PLANO, sin Markdown, sin tachados, sin símbolos especiales pero si puedes usar emojis amigables y que tengan que ver con la respuesta.\n"
-        "Si la pregunta es ajena a la zapatería, responde exactamente: "
+        "Eres el asistente oficial de Zapatería Thomy’s, una tienda de calzado en línea en Chile. "
+        "Tu única función es responder preguntas relacionadas con la zapatería: horarios, envíos, cambios, tallas, marcas o métodos de pago. "
+        "Si la pregunta no tiene relación con esos temas, responde EXACTAMENTE con la frase: "
         "\"Lo siento, solo puedo ayudarte con dudas sobre la zapatería\".\n\n"
-        f"INFO:\n{INFO_TIENDA}\n\nPREGUNTA:\n{pregunta}\n"
+        "Sigue estas reglas estrictamente:\n"
+        "- Usa solo la información provista más abajo (no inventes nada extra).\n"
+        "- Responde en texto plano, sin Markdown, sin tildes raras ni símbolos especiales innecesarios.\n"
+        "- Puedes usar emojis amigables y relevantes (por ejemplo, 🕓, 👟, 💳, 🚚) pero nunca fuera de contexto.\n"
+        "- Si no estás seguro o la pregunta es ambigua, responde con: "
+        "\"¿Podrías especificar mejor tu duda sobre la zapatería?\".\n\n"
+        f"INFORMACIÓN DE LA TIENDA:\n{INFO_TIENDA}\n\n"
+        f"PREGUNTA DEL USUARIO:\n{pregunta}\n"
     )
 
 def call_openrouter(prompt: str) -> str:
