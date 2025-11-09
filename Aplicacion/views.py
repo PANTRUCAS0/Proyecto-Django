@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
+from django.http import HttpResponse
 
 from .models import Cliente, Producto, Boleta, DetalleBoleta
 
@@ -734,4 +735,19 @@ def exportar_datos_json(request):
         'orden__fecha_creacion',
     ))
 
-    return JsonResponse(response_data, safe=False)
+    return JsonResponse(data, safe=False)
+
+# =======================================
+# Indexacion
+#=======================================
+
+def robots_txt(request):
+    lines = [
+        "User-agent: *",
+        "Allow: /",
+        "Disallow: /admin/",
+        "Disallow: /carrito/",
+        "",
+        "Sitemap: https://tomys.xyz/sitemap.xml",
+    ]
+    return HttpResponse("\n".join(lines), content_type="text/plain")
