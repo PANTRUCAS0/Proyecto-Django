@@ -62,7 +62,11 @@ urlpatterns = [
     path('mis-ordenes/', views.mis_ordenes, name='mis_ordenes'),
     path('orden/<int:orden_id>/', views.detalle_orden, name='detalle_orden'),
 
+    # Api powerBI
     path('api/ordenes/', views.exportar_datos_json, name='api_ordenes'),
+
+    #Indexacion
+    path('robots.txt', views.robots_txt, name='robots'),
 ]
 
 
