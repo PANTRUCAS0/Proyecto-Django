@@ -751,3 +751,25 @@ def robots_txt(request):
         "Sitemap: https://tomys.xyz/sitemap.xml",
     ]
     return HttpResponse("\n".join(lines), content_type="text/plain")
+
+def sitemap_xml(request):
+    urls = [
+        {'loc': 'https://tomys.xyz/', 'changefreq': 'daily', 'priority': '1.0'},
+        {'loc': 'https://tomys.xyz/Producto/', 'changefreq': 'weekly', 'priority': '0.8'},
+        {'loc': 'https://tomys.xyz/Registro/', 'changefreq': 'monthly', 'priority': '0.5'},
+        {'loc': 'https://tomys.xyz/Login/', 'changefreq': 'monthly', 'priority': '0.5'},
+    ]
+    
+    xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
+    xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+    
+    for url in urls:
+        xml += f'''<url>
+<loc>{url['loc']}</loc>
+<changefreq>{url['changefreq']}</changefreq>
+<priority>{url['priority']}</priority>
+</url>\n'''
+    
+    xml += '</urlset>'
+    
+    return HttpResponse(xml, content_type='application/xml'
