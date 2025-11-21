@@ -186,33 +186,74 @@ document.addEventListener('DOMContentLoaded', function() {
 
   render();
 });
-// ```
 
-// ---
-
-// ## 🎯 Lo que cambió:
-
-// 1. ✅ **Agregué `{% csrf_token %}`** en `carrito.html`
-// 2. ✅ **Moví el evento del botón DENTRO del `DOMContentLoaded`** para que tenga acceso a `loadCart()`
-// 3. ✅ **Agregué `getCookie()` dentro del scope** para capturar el CSRF token
-// 4. ✅ **Agregué más console.log** para debugging
-
-// ---
-
-// ## 🧪 Ahora prueba:
-
-// 1. Guarda los archivos
-// 2. **Refresca con Ctrl + Shift + R**
-// 3. Ve al carrito
-// 4. Abre la consola (F12)
-// 5. Haz clic en "Continuar compra"
-
-// Deberías ver en la consola:
-// ```
-// 📦 carrito_pagina.js iniciado
-// 🔍 Carrito cargado: [...]
-// ✅ Botón checkout encontrado
-// 🛒 Click en continuar compra
-// 📦 Carrito a enviar: [...]
-// 🔑 CSRF Token: xxxxxxxxx
-// 📤 Enviando formulario a checkout
+function actualizarResumen() {
+    const items = obtenerCarrito();
+    let total = 0;
+    
+    items.forEach(item => {
+        total += item.subtotal || 0;
+    });
+    
+    const limiteMaximo = 5000000;
+    
+    // Actualizar displays
+    document.getElementById('summary-total').textContent = `$${total.toLocaleString('es-CL')}`;
+    document.getElementById('summary-count').textContent = items.length;
+    document.getElementById('summary-subtotal').textContent = `$${total.toLocaleString('es-CL')}`;
+    
+    // ✅ VALIDACIÓN DE LÍMITE MÁXIMO
+    const btnCheckout = document.getElementById('btn-checkout');
+    let alertContainer = document.getElementById('alert-limite');
+    
+    if (total > limiteMaximo) {
+        // Mostrar alerta si no existe
+        if (!alertContainer) {
+            const alert = document.createElement('div');
+            alert.id = 'alert-limite';
+            alert.className = 'alert alert-warning mt-3';
+            alert.style.borderRadius = '16px';
+            alert.style.border = '2px solid #FFC107';
+            alert.style.fontWeight = '600';
+            alert.innerHTML = `
+                <div class="d-flex align-items-start">
+                    <i class="bi bi-exclamation-triangle-fill me-3" style="font-size: 1.5rem; color: #FFC107;"></i>
+                    <div>
+                        <strong style="color: #856404;">Límite excedido</strong>
+                        <p class="mb-0 mt-1" style="color: #856404;">
+                            El monto máximo por compra es <strong>$5.000.000</strong>.<br>
+                            Para compras mayoristas, contacta a 
+                            <a href="mailto:ventas@tomys.cl" style="color: #FF6B35; font-weight: 700;">ventas@tomys.cl</a>
+                        </p>
+                    </div>
+                </div>
+            `;
+            
+            const summaryCard = document.querySelector('.summary-card .card-body');
+            if (summaryCard) {
+                summaryCard.appendChild(alert);
+            }
+        }
+        
+        // Deshabilitar botón
+        if (btnCheckout) {
+            btnCheckout.disabled = true;
+            btnCheckout.style.opacity = '0.5';
+            btnCheckout.style.cursor = 'not-allowed';
+            btnCheckout.title = 'Monto excede el límite permitido';
+        }
+    } else {
+        // Remover alerta si existe
+        if (alertContainer) {
+            alertContainer.remove();
+        }
+        
+        // Habilitar botón
+        if (btnCheckout) {
+            btnCheckout.disabled = false;
+            btnCheckout.style.opacity = '1';
+            btnCheckout.style.cursor = 'pointer';
+            btnCheckout.title = '';
+        }
+    }
+}

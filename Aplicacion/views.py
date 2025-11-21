@@ -499,13 +499,22 @@ def exportar_excel(request):
 from .models import Orden, ItemOrden
 
 def checkout(request):
-    """Vista del formulario de checkout"""
+    """Vista del formulario de checkout con validación de límite"""
     carrito = json.loads(request.POST.get('carrito', '[]')) if request.method == 'POST' else []
     
     # Calcular totales
     subtotal = sum(item.get('subtotal', 0) for item in carrito)
-    costo_envio = 0 if subtotal > 50000 else 5000  # Envío gratis sobre $50.000
+    costo_envio = 0 if subtotal > 50000 else 5000
     total = subtotal + costo_envio
+    
+    # VALIDACIÓN DE LÍMITE MÁXIMO $5.000.000
+    if total > 5000000:
+        messages.error(
+            request,
+            '⚠️ El monto máximo por compra es $5.000.000. '
+            'Para compras mayoristas, contacta a ventas@tomys.cl o llama al +56 9 39339556'
+        )
+        return redirect('carrito')
     
     # Pre-llenar datos si el usuario está autenticado
     usuario_email = ''
@@ -530,7 +539,7 @@ def checkout(request):
 
 @csrf_exempt
 def procesar_pago(request):
-    """Procesa el pago y crea la orden"""
+    """Procesa el pago y crea la orden con validación de límite máximo"""
     if request.method != 'POST':
         return JsonResponse({'error': 'Método no permitido'}, status=405)
     
@@ -551,6 +560,17 @@ def procesar_pago(request):
         subtotal = sum(item.get('subtotal', 0) for item in carrito)
         costo_envio = 0 if subtotal > 50000 else 5000
         total = subtotal + costo_envio
+        
+        # ✅ VALIDACIÓN DE LÍMITE MÁXIMO $5.000.000
+        LIMITE_MAXIMO = 5000000
+        if total > LIMITE_MAXIMO:
+            return JsonResponse({
+                'error': 'limite_excedido',
+                'mensaje': f'El monto total (${total:,}) excede el límite máximo permitido de ${LIMITE_MAXIMO:,}',
+                'detalle': 'Para compras mayoristas, contacta a ventas@tomys.cl o llama al +56 9 XXXX XXXX',
+                'total': total,
+                'limite': LIMITE_MAXIMO
+            }, status=400)
         
         # Crear la orden
         orden = Orden.objects.create(
@@ -600,12 +620,18 @@ def procesar_pago(request):
             'status': 'success',
             'orden_id': orden.id,
             'numero_orden': orden.numero_orden,
-            'mensaje': '¡Pago procesado exitosamente!'
+            'mensaje': '¡Pago procesado exitosamente!',
+            'total': int(total)
         })
         
     except Exception as e:
+        import logging
+        logger = logging.getLogger(__name__)
         logger.error(f"Error al procesar pago: {str(e)}")
-        return JsonResponse({'error': 'Error al procesar el pago'}, status=500)
+        return JsonResponse({
+            'error': 'Error al procesar el pago',
+            'detalle': str(e)
+        }, status=500)
 
 
 def confirmacion_orden(request, orden_id):
@@ -772,4 +798,4 @@ def sitemap_xml(request):
     
     xml += '</urlset>'
     
-    return HttpResponse(xml, content_type='application/xml'
+    return HttpResponse(xml, content_type='application/xml')

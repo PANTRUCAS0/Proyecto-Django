@@ -1,7 +1,7 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
 from django.utils import timezone
-
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class ClienteManager(BaseUserManager):
@@ -71,7 +71,12 @@ url_por_defecto = 'https://ejemplo.com/imagen_por_defecto.jpg'
 class Boleta(models.Model):
     id_boleta = models.AutoField(primary_key=True)
     fecha_creacion = models.DateTimeField(default=timezone.now)
-    total = models.IntegerField(default=0)
+    total = models.DecimalField(
+        max_digits=12,
+        decimal_places=0,
+        default=0,
+        validators=[MaxValueValidator(5000000)]  # Límite $5M
+    )
 
     def __str__(self):
         return f"Boleta #{self.id_boleta} - {self.fecha_creacion.strftime('%d/%m/%Y %H:%M')}"
@@ -81,10 +86,10 @@ class DetalleBoleta(models.Model):
     boleta = models.ForeignKey(Boleta, related_name="detalles", on_delete=models.CASCADE)
     nombre = models.CharField(max_length=30)
     descripcion = models.CharField(max_length=100)
-    precio = models.IntegerField()
+    precio = models.DecimalField(max_digits=10, decimal_places=0)
     cantidad = models.IntegerField(default=1)
-    subtotal = models.IntegerField()
-    url_imagen = models.URLField(default=url_por_defecto, max_length=400)
+    subtotal = models.DecimalField(max_digits=12, decimal_places=0)
+    url_imagen = models.URLField(default='https://ejemplo.com/imagen_por_defecto.jpg', max_length=400)
 
     def __str__(self):
         return f"{self.nombre} x{self.cantidad}"
@@ -107,9 +112,8 @@ class Orden(models.Model):
     ]
     
     numero_orden = models.CharField(max_length=20, unique=True, editable=False)
-    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, related_name='ordenes', null=True, blank=True)
-    
-    # Datos de contacto (por si compra sin cuenta)
+    cliente = models.ForeignKey('Cliente', on_delete=models.CASCADE, related_name='ordenes', null=True, blank=True)
+     # Datos de contacto
     email = models.EmailField(max_length=100)
     telefono = models.CharField(max_length=15)
     
@@ -123,10 +127,18 @@ class Orden(models.Model):
     metodo_pago = models.CharField(max_length=20, choices=METODO_PAGO_CHOICES, default='TRANSFERENCIA')
     estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='PENDIENTE')
     
-    # Montos
-    subtotal = models.IntegerField()
-    costo_envio = models.IntegerField(default=0)
-    total = models.IntegerField()
+    # Montos (CAMBIADO A DECIMAL)
+    subtotal = models.DecimalField(
+        max_digits=12,
+        decimal_places=0,
+        validators=[MaxValueValidator(5000000)]
+    )
+    costo_envio = models.DecimalField(max_digits=10, decimal_places=0, default=0)
+    total = models.DecimalField(
+        max_digits=12,
+        decimal_places=0,
+        validators=[MaxValueValidator(5000000)]  # Límite $5M
+    )
     
     # Fechas
     fecha_creacion = models.DateTimeField(auto_now_add=True)
@@ -145,7 +157,6 @@ class Orden(models.Model):
     
     def save(self, *args, **kwargs):
         if not self.numero_orden:
-            # Generar número de orden único: ORD-20250130-0001
             from django.utils import timezone
             fecha = timezone.now().strftime('%Y%m%d')
             ultimo = Orden.objects.filter(numero_orden__startswith=f'ORD-{fecha}').count()
@@ -160,9 +171,9 @@ class ItemOrden(models.Model):
     producto_imagen = models.URLField(max_length=400)
     talla = models.CharField(max_length=10, blank=True, null=True)
     marca = models.CharField(max_length=50, blank=True, null=True)
-    precio_unitario = models.IntegerField()
+    precio_unitario = models.DecimalField(max_digits=10, decimal_places=0)
     cantidad = models.IntegerField(default=1)
-    subtotal = models.IntegerField()
+    subtotal = models.DecimalField(max_digits=12, decimal_places=0)
     
     def __str__(self):
         return f"{self.producto_nombre} x{self.cantidad} - Orden {self.orden.numero_orden}"
